@@ -1,0 +1,16 @@
+#  python3 /home/547/sfm547/hazimp/core_hazimp/hazimp.py -c /g/data1/w85/QFES_SWHA/configuration/hazimp/001-04162.yaml
+
+ - template: wind_v4
+ 
+ - vulnerability_filename: /g/data1/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_wJCU.xml
+ 
+ - load_exposure: 
+    file_name: /g/data1/w85/QFES_SWHA/exposure/Gladstone_ResidentialExposure_NEXISV10.csv
+    exposure_latitude: LATITUDE
+    exposure_longitude: LONGITUDE  
+ 
+ - load_wind_ascii: /g/data1/w85/QFES_SWHA/wind/local/001-04162/local_wind.tif
+ 
+ - calc_struct_loss:
+    replacement_value_label: REPLACEMENT_VALUE
+ - save: /g/data1/w85/QFES_SWHA/impact/QFES_001-04162.csv
