@@ -1,3 +1,12 @@
+# Directories
+.vscode/
+tracks/
+wind/
+multipliers/
+exposure/
+vulnerability/
+impact/
+
 
 # Log files
 *.log
