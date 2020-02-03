@@ -1,18 +1,17 @@
 #!/bin/bash
 #PBS -Pw85
-#PBS -qexpress
-#PBS -N tc-006-05866
+#PBS -qnormal
+#PBS -N tc-007-09962
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=01:00:00
-#PBS -lmem=16GB,ncpus=16,jobfs=4000MB
-#PBS -joe
+#PBS -lmem=32GB,ncpus=16,jobfs=4000MB
 #PBS -lstorage=gdata/w85
+#PBS -joe
 
-module purge
-module load pbs
-module load dot
-
+#module purge
+#module load pbs
+#module load dot
 module load python3/3.7.4
 module load netcdf/4.6.3
 module load hdf5/1.10.5
@@ -29,40 +28,25 @@ export PATH=/g/data/w85/.local/bin:$PATH
 
 # Needs to be resolved, but this suppresses an error related to HDF5 libs
 export HDF5_DISABLE_VERSION_CHECK=2
-
+SOFTWARE=/g/data/w85/software
 
 module list
 DATE=`date +%Y%m%d%H%M`
-SIMULATION=006-05866
-OUTPUT=/g/data/w85/QFES_SWHA/wind/regional/$SIMULATION
-CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$SIMULATION.ini
-
-# Add path to where TCRM is installed. Separate installations
-# for master branch
-SOFTWARE=/g/data/w85/software
-
-# Add to the Python path. e need to ensure we set the paths in the correct order
-# to access the locally installed version of the GDAL bindings
-export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master:$SOFTWARE/tcrm/master/Utilities
-
-# Suppresses an error related to HDF5 libraries:
-export HDF5_DISABLE_VERSION_CHECK=2
-
-
+SIMULATION=007-09962-2d
+OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$SIMULATION
+CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$SIMULATION\_pm.ini
+PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master:$SOFTWARE/tcrm/master/Utilities
 echo $PYTHONPATH
 echo $CONFIGFILE
 echo $OUTPUT
 echo $GEOS_ROOT
-
-# Ensure output directory exists. If not, create it:
 
 if [ ! -d "$OUTPUT" ]; then
    mkdir $OUTPUT
 fi
 
 # Run the complete simulation:
-python3 $SOFTWARE/tcrm/master/tcevent.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 $SOFTWARE/tcrm/master/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini
-

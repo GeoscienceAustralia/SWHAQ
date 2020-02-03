@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -Pw85
 #PBS -qexpress
-#PBS -N tc-006-05866
+#PBS -N tc-005-03812
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=01:00:00
@@ -33,13 +33,14 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 module list
 DATE=`date +%Y%m%d%H%M`
-SIMULATION=006-05866
+SIMULATION=005-03812
 OUTPUT=/g/data/w85/QFES_SWHA/wind/regional/$SIMULATION
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$SIMULATION.ini
 
 # Add path to where TCRM is installed. Separate installations
 # for master branch
 SOFTWARE=/g/data/w85/software
+
 
 # Add to the Python path. e need to ensure we set the paths in the correct order
 # to access the locally installed version of the GDAL bindings
