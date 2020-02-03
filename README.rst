@@ -26,7 +26,7 @@ Shane Martin: shane.martin@ga.gov.au
 
 
 This directory contains input, output and model configuration files used for
- the Severe Wind Hazard Assessment for Queensland project (2019-2020). 
+the Severe Wind Hazard Assessment for Queensland project (2019-2020). 
 
 Directory structure:
 --------------------
@@ -44,16 +44,19 @@ Top-level structure of the data in this collection ::
     `-- regional -- regional wind fields, subdirectories for each scenario
 
 
-* This folder is under version control to track changes to configuration files.
+\* This folder is under version control to track changes to configuration files.
 
 
 configuration:
 --------------
 
-tcrm: Configuration files for running TCRM
-pm: Configuration files for running the processMultipliers code
-hazimp: Configuration files for running HazImp
-jobs: Job scripts to run processes on gadi.nci.org.au
+tcrm:: Configuration files for running TCRM
+
+pm:: Configuration files for running the processMultipliers code
+
+hazimp:: Configuration files for running HazImp
+
+jobs:: Job scripts to run processes on gadi.nci.org.au
 
 exposure:
 ---------
@@ -67,8 +70,9 @@ multipliers:
 
 Local wind multipliers for all of Queensland.
 
-input: input land cover (terrain) data and DEMs
-output: Tiled output for each domain
+input:: input land cover (terrain) data and DEMs
+
+output:: Tiled output for each domain
 
 tracks:
 -------
@@ -95,4 +99,4 @@ craig.arthur@ga.gov.au
 Last updated:
 -------------
 
-2019-02-28
+2020-02-03
