@@ -12,8 +12,8 @@ impact/
 *.log
 
 # PBS job files
-**/*.o[0-9*]
-**/*.e[0-9*]
+**/*.o[0-9]*
+**/*.e[0-9]*
 
 # emacs backup files
 *.ini~
