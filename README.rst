@@ -16,8 +16,8 @@ of Environment and Science Queensland (DES).
 This repository holds scripts and configuration files used in the modelling and
 analysis components of the project. References are made to other code bases
 maintained by Geoscience Australia - e.g. 
-[TCRM](https://github.com/GeoscienceAustralia/tcrm) and 
-[HazImp](https://github.com/GeoscienceAustralia/hazimp).
+`TCRM <https://github.com/GeoscienceAustralia/tcrm>`_ and 
+`HazImp <https://github.com/GeoscienceAustralia/hazimp>`_.
 
 Contact:
 Craig Arthur: craig.arthur@ga.gov.au
