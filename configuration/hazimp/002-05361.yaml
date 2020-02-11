@@ -5,7 +5,7 @@
  - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_wJCU.xml
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4_updated.csv
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
