@@ -55,7 +55,7 @@ sns.set_palette(palette)
 # The output files for the impact scenarios are stored in the project
 # directory, and are stored as csv files.
 
-data_path = r"\\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact"
+data_path = "../data/impact"
 
 events = ['007-02914', '016-04518', '011-01326']
 

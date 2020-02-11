@@ -37,7 +37,7 @@ def transpose(inputList):
     
 ########################################################################
 # input directory where exposure .xls files for each category exist
-dir = r'\\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\exposure\local_wind'
+dir = "../data/exposure"
 ########################################################################
 
 dirlist =  [x[0] for x in os.walk(dir)]
