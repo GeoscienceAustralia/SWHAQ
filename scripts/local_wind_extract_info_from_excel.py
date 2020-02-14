@@ -20,13 +20,18 @@
 #
 ######################################################################
 
+import os
+import logging
 import xlrd 
 import numpy as np
 import pandas as pd
-import os
 import re
 from builtins import str
 import pdb
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s: %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
 
 # function to transpose table
 def transpose(inputList):
@@ -43,35 +48,35 @@ dir = "../data/exposure"
 dirlist =  [x[0] for x in os.walk(dir)]
 dirlist.pop(0)
 for dir in dirlist:
-    print(('Processing {}'.format(dir)))
+    logging.info(('Processing {}'.format(dir)))
 
     fileList = []
     uniqueNameList = []
     nameCheck = re.compile('AEIP_Data_.*Cat[0-9].*\.xlsx')
-    print((os.listdir(dir)))
+    logging.debug((os.listdir(dir)))
     # create a list of all excel files that match the regex above
     for file in [f for f in os.listdir(dir) if nameCheck.search(f)]:
         fileList.append(os.path.join(dir, file))
         
-    print(fileList)
+    logging.debug(fileList)
     # for each file, remove the category off the filename and store if list if not there already    
     for file in fileList:
         eventName = os.path.basename(file).split(".")[0].rsplit('_', 1)[0]
         eventName = os.path.basename(file).split(".")[0].rsplit('_', 1)[1].rsplit(' ', 1)[0]
-        print(eventName)
+        logging.info(eventName)
         if eventName not in uniqueNameList:
             uniqueNameList.append(eventName)
     
     # loop through each item in uniqueNameList
     for uniqueEvent in uniqueNameList:
-        print(('Processing {}'.format(uniqueEvent)))
+        logging.info(('Processing {}'.format(uniqueEvent)))
         # create an empty dataframe results from each category will be appended to
         masterdf = pd.DataFrame(columns=['Description','Cat1','Cat2','Cat3','Cat4','Cat5','Order'])
         # loop through each file    
         for file in fileList:
             # if file matchs uniqueEvent, continue processing
             if uniqueEvent in file:
-                print(('\tExtracting info from {}'.format(os.path.basename(file))))
+                logging.info(('Extracting info from {}'.format(os.path.basename(file))))
                 # extract the cat number and store in a variable
                 cat = os.path.basename(file).split(".")[0].split(" ")[-1]
     
@@ -79,7 +84,7 @@ for dir in dirlist:
                 workbook = xlrd.open_workbook(file, encoding_override='utf-8') 
                 all_worksheets = workbook.sheet_names() 
                 for worksheet_name in all_worksheets:
-                    print(worksheet_name)
+                    logging.info(worksheet_name)
                     # if the worksheet is Building Exposure extract the info and the transpose the table
                     if worksheet_name == 'Building Exposure':
                         BldExposure = []
@@ -98,11 +103,9 @@ for dir in dirlist:
                         #for row in transposedWorksheet:
                         for row in worksheetAsAList:
                             if row[1].decode('utf-8') in fieldsToExtract:
-                                #print(row[1].decode('utf-8'), row[2].decode('utf-8'))
                                 BldExposure.append([row[1].decode('utf-8'), float(row[2].decode('utf-8'))])
                         # create a dataframe of the extracted info        
                         BldExposuredf = pd.DataFrame(BldExposure, columns=['CAT', 'COUNT'])
-                        #print(BldExposuredf)
 
                     # if worksheet is Infrastructure Exposure extract the relevent fields to a list
                     if worksheet_name == 'Institution Exposure':
@@ -233,7 +236,7 @@ for dir in dirlist:
                 masterdf = masterdf.append(finalDf)
     
                 
-        print('\tMerging extracted data')
+        logging.info('\tMerging extracted data')
 
         # ensure all count and order fields are flaot not object
         for col in ['Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5', 'Order']:
@@ -277,8 +280,7 @@ for dir in dirlist:
         writer = pd.ExcelWriter(os.path.join(dir, outputFile))
         masterdf.to_excel(writer,'Exposure_Summary', index=False)
         writer.save()
-        print(('\tOutput written: {}'.format(os.path.join(dir, outputFile))))
-        print('\n')
+        logging.info(('Output written: {}'.format(os.path.join(dir, outputFile))))
     
 
-print('Complete')
+logging.info('Complete')
