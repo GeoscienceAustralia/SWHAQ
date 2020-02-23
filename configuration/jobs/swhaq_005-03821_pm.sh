@@ -61,3 +61,4 @@ python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONF
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini
+

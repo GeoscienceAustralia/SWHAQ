@@ -1,0 +1,10 @@
+/g/data/w85/software/hazimp/hazimp/config.py:53: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  the_conf = yaml.load(config_file_handle)
+INFO:hazimp.pipeline:Executing LoadCsvExposure
+INFO:hazimp.pipeline:Executing LoadRaster
+INFO:hazimp.pipeline:Executing LoadXmlVulnerability
+INFO:hazimp.pipeline:Executing SimpleLinker
+INFO:hazimp.pipeline:Executing SelectVulnFunction
+INFO:hazimp.pipeline:Executing LookUp
+INFO:hazimp.pipeline:Executing MultipleDimensionMult
+INFO:hazimp.pipeline:Executing SaveExposure

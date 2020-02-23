@@ -1,0 +1,28 @@
+/g/data/w85/software/hazimp/hazimp/config.py:53: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  the_conf = yaml.load(config_file_handle)
+INFO:hazimp.pipeline:Executing LoadCsvExposure
+INFO:hazimp.pipeline:Executing LoadRaster
+INFO:hazimp.pipeline:Executing LoadXmlVulnerability
+INFO:hazimp.pipeline:Executing SimpleLinker
+INFO:hazimp.pipeline:Executing SelectVulnFunction
+INFO:hazimp.pipeline:Executing LookUp
+INFO:hazimp.pipeline:Executing MultipleDimensionMult
+INFO:hazimp.pipeline:Executing SaveExposure
+Traceback (most recent call last):
+  File "/g/data/w85/software/hazimp/hazimp/main.py", line 85, in <module>
+    cli()
+  File "/g/data/w85/software/hazimp/hazimp/main.py", line 82, in cli
+    start(config_file=CMD_LINE_ARGS.config_file[0])
+  File "/g/data/w85/software/hazimp/hazimp/main.py", line 65, in start
+    the_pipeline.run(cont_in)
+  File "/g/data/w85/software/hazimp/hazimp/pipeline.py", line 72, in run
+    job(context)
+  File "/g/data/w85/software/hazimp/hazimp/workflow.py", line 54, in __call__
+    self.job_instance(*args, **job_kwargs)
+  File "/g/data/w85/software/hazimp/hazimp/jobs/jobs.py", line 692, in __call__
+    context.save_exposure_atts(file_name, use_parallel=use_parallel)
+  File "/g/data/w85/software/hazimp/hazimp/context.py", line 175, in save_exposure_atts
+    save_csv(write_dict, filename)
+  File "/g/data/w85/software/hazimp/hazimp/context.py", line 247, in save_csv
+    hnd = open(filename, 'wt')
+PermissionError: [Errno 13] Permission denied: '/g/data/w85/QFES_SWHA/impact/QFES_011-01326.csv'

@@ -39,12 +39,12 @@ CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$SIMULATION.ini
 
 # Add path to where TCRM is installed. Separate installations
 # for py3 branch
-#SOFTWARE=/g/data/w85/software
-SOFTWARE=$HOME
+SOFTWARE=/g/data/w85/software
+BRANCH=master
 
 # Add to the Python path. e need to ensure we set the paths in the correct order
 # to access the locally installed version of the GDAL bindings
-export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm:$SOFTWARE/tcrm/Utilities
+export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/$BRANCH:$SOFTWARE/tcrm/$BRANCH/Utilities
 
 # Suppresses an error related to HDF5 libraries:
 export HDF5_DISABLE_VERSION_CHECK=2
@@ -62,7 +62,7 @@ if [ ! -d "$OUTPUT" ]; then
 fi
 
 # Run the complete simulation:
-python3 $SOFTWARE/tcrm/tcevent.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 $SOFTWARE/tcrm/$BRANCH/tcevent.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini

@@ -13,4 +13,4 @@
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
- - save: /g/data/w85/QFES_SWHA/impact_/QFES_007-09962.csv
+ - save: /g/data/w85/QFES_SWHA/impact_/QFES_007-09962.csv 
