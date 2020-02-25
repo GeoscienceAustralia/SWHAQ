@@ -4,7 +4,7 @@
 #PBS -N tc-007-09962
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=04:00:00
+#PBS -lwalltime=05:00:00
 #PBS -lmem=16GB,ncpus=1,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85

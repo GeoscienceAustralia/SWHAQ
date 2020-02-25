@@ -3,7 +3,7 @@
 #PBS -qexpress
 #PBS -N 016-04518-hazimp
 #PBS -m ae
-#PBS -M craig.arthur@ga.gov.au
+#PBS -M shane.martin@ga.gov.au
 #PBS -lwalltime=02:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
@@ -30,6 +30,7 @@ export PATH=/g/data/w85/.local/bin:$PATH
 
 # Needs to be resolved, but this suppresses an error related to HDF5 libs
 export HDF5_DISABLE_VERSION_CHECK=2
+
 SOFTWARE=/g/data/w85/software
 
 # Add HazImp code to the path:
@@ -42,7 +43,7 @@ DATE=`date +%Y%m%d%H%M`
 SIMULATION=016-04518
 
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/hazimp/$SIMULATION.yaml
-OUTPUT=/g/data/w85/QFES_SWHA/impact_
+OUTPUT=/g/data/w85/QFES_SWHA/impact
 
 echo $PYTHONPATH
 echo $CONFIGFILE

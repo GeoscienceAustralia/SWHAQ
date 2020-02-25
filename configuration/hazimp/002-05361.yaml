@@ -1,11 +1,9 @@
-#  python3 /home/547/sfm547/hazimp/core_hazimp/hazimp.py -c /g/data1/w85/QFES_SWHA/configuration/hazimp/001-00406.yaml
-
  - template: wind_v4
  
  - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_wJCU.xml
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4_updated.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4_updated-SM-47-61-9.csv
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
