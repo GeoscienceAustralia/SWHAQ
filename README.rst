@@ -36,9 +36,14 @@ Top-level structure of the data in this collection ::
   /g/data/w85/QFES_SWHA/
   |-- configuration* -- configuration files for TCRM, processMultipliers, HazImp
   |-- exposure -- exposure database files (CSV, extracted from NEXIS)
+  |-- hazard -- hazard simulation data for current and future climate scenarios
+  |-- impact -- outputs of the impact calculations for scenario analysis.
   |-- multipliers -- local wind multiplier data, subdirectories for each community
+  |-- notebooks -- IPython notebooks used for analysis and processing
+  |-- scripts -- various Python, shell and other scripts used in the processing
   |-- tracks -- Event tracks, top-level contains netcdf-format files
   | `-- shapefile -- Event tracks, ESRI shapefile format
+  |-- vulnearbility -- Vulnerability models used for the impact analyses
   `-- wind
    |-- local -- local wind fields, subdirectories for each scenario
     `-- regional -- regional wind fields, subdirectories for each scenario
@@ -64,6 +69,14 @@ exposure:
 Input exposure files, using the TCRM formats extracted from NEXIS. These 
 contain building point information used to calculate impacts, plus other 
 sources of exposure information used in this and related projects
+
+hazard:
+-------
+
+`TCRM <https://github.com/GeoscienceAustralia/tcrm.git>_` generated hazard data for 
+a range of future climate scenarios. The future climate information is derived 
+using tropical cyclone-like vortices (TCLVs), extracted from regional climate 
+models run by the University of Queensland. 
 
 multipliers:
 ------------
@@ -99,4 +112,4 @@ craig.arthur@ga.gov.au
 Last updated:
 -------------
 
-2020-02-03
+2020-03-02
