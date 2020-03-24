@@ -4,8 +4,8 @@
 #PBS -N tc-007-03074
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=01:00:00
-#PBS -lmem=16GB,ncpus=16,jobfs=4000MB
+#PBS -lwalltime=03:00:00
+#PBS -lmem=64GB,ncpus=1,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85
 
@@ -30,24 +30,19 @@ export PATH=/g/data/w85/.local/bin:$PATH
 # Needs to be resolved, but this suppresses an error related to HDF5 libs
 export HDF5_DISABLE_VERSION_CHECK=2
 
-
 module list
 DATE=`date +%Y%m%d%H%M`
 SIMULATION=007-03074
-OUTPUT=/g/data/w85/QFES_SWHA/wind/regional/$SIMULATION
-CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$SIMULATION.ini
+OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$SIMULATION
+CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$SIMULATION\_pm.ini
 
-# Add path to where TCRM is installed. Separate installations
-# for py3 branch
+# Add path to where TCRM is installed.
 SOFTWARE=/g/data/w85/software
+BRANCH=master
 
-# Add to the Python path. e need to ensure we set the paths in the correct order
+# Add to the Python path. We need to ensure we set the paths in the correct order
 # to access the locally installed version of the GDAL bindings
-export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master:$SOFTWARE/tcrm/master/Utilities
-
-# Suppresses an error related to HDF5 libraries:
-export HDF5_DISABLE_VERSION_CHECK=2
-
+export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/$BRANCH:$SOFTWARE/tcrm/$BRANCH/Utilities
 
 echo $PYTHONPATH
 echo $CONFIGFILE
@@ -61,8 +56,7 @@ if [ ! -d "$OUTPUT" ]; then
 fi
 
 # Run the complete simulation:
-python3 $SOFTWARE/tcrm/master/tcevent.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini
-
