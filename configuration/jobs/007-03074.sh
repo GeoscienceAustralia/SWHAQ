@@ -62,6 +62,7 @@ fi
 
 # Run the complete simulation:
 python3 $SOFTWARE/tcrm/master/tcevent.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 /g/data/w85/software/track2shp.py -id $SIMULATION > $OUTPUT/$SIMULATION.track.stdout.$DATE 2>&1
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini

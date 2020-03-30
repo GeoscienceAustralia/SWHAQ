@@ -36,8 +36,6 @@ SOFTWARE=/g/data/w85/software
 # Add HazImp code to the path:
 export PYTHONPATH=$SOFTWARE/hazimp:$PYTHONPATH
 
-# Add other Python Dependencies to the path:
-# export PYTHONPATH=$SOFTWARE/Python_Dependencies/lib/python3.6/site-packages:$SOFTWARE/Python_Dependencies/lib/python3.7/site-packages:$PYTHONPATH
 
 cd $SOFTWARE/hazimp/
 

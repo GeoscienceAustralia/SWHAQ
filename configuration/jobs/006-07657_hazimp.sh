@@ -23,7 +23,7 @@ module load openmpi/4.0.1
 
 # Need to ensure we get the correct paths to access the local version of gdal bindings. 
 # The module versions are compiled against Python3.6, so we can't use them
-export PYTHONPATH=/g/data/w85/.local/lib/python3.7/site-packages:$PYTHONPATH
+export PYTHONPATH=/g/data/w85/.local/lib/python3.7/site-packages:/g/data/w85/.local/lib/python3.6/site-packages:$PYTHONPATH
 
 # Add the local Python-based scripts to the path:
 export PATH=/g/data/w85/.local/bin:$PATH
@@ -35,9 +35,6 @@ SOFTWARE=/g/data/w85/software
 
 # Add HazImp code to the path:
 export PYTHONPATH=$SOFTWARE/hazimp:$PYTHONPATH
-
-# Add other Python Dependencies to the path:
-export PYTHONPATH=$SOFTWARE/Python_Dependencies/lib/python3.6/site-packages:$SOFTWARE/Python_Dependencies/lib/python3.7/site-packages:$PYTHONPATH
 
 cd $SOFTWARE/hazimp/
 
