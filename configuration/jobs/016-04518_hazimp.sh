@@ -3,7 +3,7 @@
 #PBS -qexpress
 #PBS -N 016-04518-hazimp
 #PBS -m ae
-#PBS -M shane.martin@ga.gov.au
+#PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=02:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
