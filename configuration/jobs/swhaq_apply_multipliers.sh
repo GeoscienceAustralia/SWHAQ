@@ -10,11 +10,19 @@
 #PBS -lstorage=gdata/w85
 #PBS -v EVENTID
 
-
+# This job script is used to run the `processMultipliers.py`
+# script on gadi. It has been tailored for use in the Severe
+# Wind Hazard Assessment project for Queensland, which means
+# some of the paths and file names are specific to that project
+#
 #  * To use: 
 #  - make appropriate changes to the PBS options above
 #  - submit the job with the appropriate value of EVENTID, eg:
 #     `qsub -v EVENTID=001-00406 swhaq_apply_multipliers.sh`
+# 
+# Contact:
+# Craig Arthur, craig.arthur@ga.gov.au
+# 2020-05-15
 
 module purge
 module load pbs
@@ -65,6 +73,10 @@ if [ ! -f "$CONFIGFILE" ]; then
     echo $CONFIGFILE
     exit 1
 fi
+
+# Record the version of code used
+REV=`git -C $SOFTWARE/tcrm/$BRANCH/ log -1 '%h %ci'`
+echo "Using TCRM revision: $REV"
 
 # Run the complete simulation:
 python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
