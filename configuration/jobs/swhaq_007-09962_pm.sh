@@ -8,10 +8,12 @@
 #PBS -lmem=32GB,ncpus=16,jobfs=4000MB
 #PBS -lstorage=gdata/w85
 #PBS -joe
+#PBS -lstorage=gdata/w85
 
-#module purge
-#module load pbs
-#module load dot
+module purge
+module load pbs
+module load dot
+
 module load python3/3.7.4
 module load netcdf/4.6.3
 module load hdf5/1.10.5
@@ -35,13 +37,28 @@ DATE=`date +%Y%m%d%H%M`
 SIMULATION=007-09962
 OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$SIMULATION
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$SIMULATION\_pm.ini
-PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master:$SOFTWARE/tcrm/master/Utilities
+
+# Add path to where TCRM is installed.
+SOFTWARE=/g/data/w85/software
+BRANCH=master
+
+# Add to the Python path. We need to ensure we set the paths in the correct order
+# to access the locally installed version of the GDAL bindings
+export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/$BRANCH:$SOFTWARE/tcrm/$BRANCH/Utilities
+
 echo $PYTHONPATH
 echo $CONFIGFILE
 echo $OUTPUT
 echo $GEOS_ROOT
+
+# Ensure output directory exists. If not, create it:
+
+if [ ! -d "$OUTPUT" ]; then
+   mkdir $OUTPUT
+fi
+
 # Run the complete simulation:
-python3 $SOFTWARE/tcrm/master/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
 
 cd $OUTPUT
 cp $CONFIGFILE ./$SIMULATION.$DATE.ini

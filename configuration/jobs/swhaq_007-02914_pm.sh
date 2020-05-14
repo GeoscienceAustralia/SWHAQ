@@ -9,9 +9,9 @@
 #PBS -joe
 #PBS -lstorage=gdata/w85
 
-#module purge
-#module load pbs
-#module load dot
+module purge
+module load pbs
+module load dot
 module load python3/3.7.4
 module load netcdf/4.6.3
 module load hdf5/1.10.5
