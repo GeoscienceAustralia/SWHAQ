@@ -3,7 +3,7 @@
 #PBS -qexpress
 #PBS -N 015-09711
 #PBS -m ae
-#PBS -M shane.martin@ga.gov.au
+#PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=02:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
@@ -36,8 +36,6 @@ SOFTWARE=/g/data/w85/software
 # Add HazImp code to the path:
 export PYTHONPATH=$SOFTWARE/hazimp:$PYTHONPATH
 
-# Add other Python Dependencies to the path:
-# export PYTHONPATH=$SOFTWARE/Python_Dependencies/lib/python3.6/site-packages:$SOFTWARE/Python_Dependencies/lib/python3.7/site-packages:$PYTHONPATH
 
 cd $SOFTWARE/hazimp/
 

@@ -1,13 +1,28 @@
 #!/bin/bash
 #PBS -Pw85
 #PBS -qexpress
-#PBS -N tc-011-01326
+#PBS -N swhaqmultipliers
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=03:00:00
-#PBS -lmem=64GB,ncpus=1,jobfs=4000MB
+#PBS -lwalltime=01:00:00
+#PBS -lmem=32GB,ncpus=1,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85
+#PBS -v EVENTID
+
+# This job script is used to run the `processMultipliers.py`
+# script on gadi. It has been tailored for use in the Severe
+# Wind Hazard Assessment project for Queensland, which means
+# some of the paths and file names are specific to that project
+#
+#  * To use: 
+#  - make appropriate changes to the PBS options above
+#  - submit the job with the appropriate value of EVENTID, eg:
+#     `qsub -v EVENTID=001-00406 swhaq_apply_multipliers.sh`
+# 
+# Contact:
+# Craig Arthur, craig.arthur@ga.gov.au
+# 2020-05-15
 
 module purge
 module load pbs
@@ -32,9 +47,9 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 module list
 DATE=`date +%Y%m%d%H%M`
-SIMULATION=011-01326
-OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$SIMULATION
-CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$SIMULATION\_pm.ini
+SIMULATION=001-00406
+OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$EVENTID
+CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$EVENTID\_pm.ini
 
 # Add path to where TCRM is installed.
 SOFTWARE=/g/data/w85/software
@@ -49,14 +64,22 @@ echo $CONFIGFILE
 echo $OUTPUT
 echo $GEOS_ROOT
 
-# Ensure output directory exists. If not, create it:
-
 if [ ! -d "$OUTPUT" ]; then
    mkdir $OUTPUT
 fi
 
+if [ ! -f "$CONFIGFILE" ]; then
+    echo "Configuration file does not exist:"
+    echo $CONFIGFILE
+    exit 1
+fi
+
+# Record the version of code used
+REV=`git -C $SOFTWARE/tcrm/$BRANCH/ log -1 '%h %ci'`
+echo "Using TCRM revision: $REV"
+
 # Run the complete simulation:
-python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$SIMULATION.stdout.$DATE 2>&1
+python3 $SOFTWARE/tcrm/$BRANCH/ProcessMultipliers/processMultipliers.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
 
 cd $OUTPUT
-cp $CONFIGFILE ./$SIMULATION.$DATE.ini
+cp $CONFIGFILE ./$EVENTID.$DATE.ini

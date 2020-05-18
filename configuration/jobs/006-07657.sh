@@ -3,7 +3,7 @@
 #PBS -qexpress
 #PBS -N tc-006-07657
 #PBS -m ae
-#PBS -M shane.martin@ga.gov.au
+#PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=01:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
