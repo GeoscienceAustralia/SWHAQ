@@ -241,7 +241,21 @@ def qdm(vobs, vref, vfut, dist=stats.lognorm):
 
     :returns: `vfutb` a `numpy.array` of bias corrected future values. 
     """
-    
+
+    if not isinstance(vobs, (list, np.ndarray,)):
+        raise TypeError("Incorrect input type for observed values") 
+    if not isinstance(vref, (list, np.ndarray,)):
+        raise TypeError("Incorrect input type for reference period values")
+    if not isinstance(vfut, (list, np.ndarray,)):
+        raise TypeError("Incorrect input type for future period values")
+
+    if any(np.isnan(vobs)):
+        raise ValueError("Input observation array contains NaN values")
+    if any(np.isnan(vref)):
+        raise ValueError("Input reference array contains NaN values")
+    if any(np.isnan(vfut)):
+        raise ValueError("Input future array contains NaN values") 
+
     pobs = dist.fit(vobs, loc=0, scale=1)
     pref = dist.fit(vref, loc=0, scale=1)
     pfut = dist.fit(vfut, loc=0, scale=1)
@@ -317,833 +331,835 @@ def calculateFitParams(datadict, dist=stats.lognorm):
                                ignore_index=True)
     return params
 
-path = "../data/tclv/"
-regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
-labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
-catpal = sns.blend_palette([(0.000, 0.627, 0.235), (0.412, 0.627, 0.235), 
-                            (0.663, 0.780, 0.282), (0.957, 0.812, 0.000), 
-                            (0.925, 0.643, 0.016), (0.835, 0.314, 0.118),
-                            (0.780, 0.086, 0.118)], 6)
-dist = stats.lognorm
+if __name__ == '__main__':
+
+    path = "../data/tclv/"
+    regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
+    labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
+    catpal = sns.blend_palette([(0.000, 0.627, 0.235), (0.412, 0.627, 0.235), 
+                                (0.663, 0.780, 0.282), (0.957, 0.812, 0.000), 
+                                (0.925, 0.643, 0.016), (0.835, 0.314, 0.118),
+                                (0.780, 0.086, 0.118)], 6)
+    dist = stats.lognorm
 
 
-# The variables are referenced in the following way::
-#
-# * `s` = simulated
-# * `ref` = reference time period (1981-2010)
-# * `fut` = future time period (2021-2040, 2041-2060, 2061-2080 or 2081-2100)
-# * `obstc` = observed TC events (using IBTrACS, 1981-2010)
-# * `b` = bias-corrected
-#
-# Firstly load the IBTrACS data and extract the relevant tracks for the region
-# of interest. We retain only those tracks that have a vaild $\Delta p$ value
-# and enter the simulation domain.
+    # The variables are referenced in the following way::
+    #
+    # * `s` = simulated
+    # * `ref` = reference time period (1981-2010)
+    # * `fut` = future time period (2021-2040, 2041-2060, 2061-2080 or 2081-2100)
+    # * `obstc` = observed TC events (using IBTrACS, 1981-2010)
+    # * `b` = bias-corrected
+    #
+    # Firstly load the IBTrACS data and extract the relevant tracks for the region
+    # of interest. We retain only those tracks that have a vaild $\Delta p$ value
+    # and enter the simulation domain.
 
-best = pd.read_csv('../data/ibtracs.since1980.list.v04r00.csv', 
-                       skiprows=[1],
-                       usecols=[0,6,8,9,11,95,113],
-                       na_values=[' '],
-                       parse_dates=[1])
-best.rename(columns={'SID':'num', 'LAT': 'lat', 'LON':'lon',
-                     'WMO_PRES':'pmin', 'BOM_WIND':'vmax',
-                     'BOM_POCI':'poci'}, inplace=True)
-best = best[best.poci.notnull() & best.pmin.notnull()]
-best['pdiff'] = best.poci - best.pmin
-best = best[best.pdiff > 1]
-obstc = filter_tracks_domain(best, 135, 160, -25, -10)
-obsparams = stats.lognorm.fit(obstc.pdiff, loc=0, scale=1)
+    best = pd.read_csv('../data/ibtracs.since1980.list.v04r00.csv', 
+                        skiprows=[1],
+                        usecols=[0,6,8,9,11,95,113],
+                        na_values=[' '],
+                        parse_dates=[1])
+    best.rename(columns={'SID':'num', 'LAT': 'lat', 'LON':'lon',
+                        'WMO_PRES':'pmin', 'BOM_WIND':'vmax',
+                        'BOM_POCI':'poci'}, inplace=True)
+    best = best[best.poci.notnull() & best.pmin.notnull()]
+    best['pdiff'] = best.poci - best.pmin
+    best = best[best.pdiff > 1]
+    obstc = filter_tracks_domain(best, 135, 160, -25, -10)
+    obsparams = stats.lognorm.fit(obstc.pdiff, loc=0, scale=1)
 
-# Plot the tracks of all the historical tracks that enter the selected domain
-# and have a $p_{oci}$ defined in the historical record. This variable was not
-# widely reported, and then only those events that are in the Bureau of
-# Meteorology's area of responsibility have this field (this leads to the
-# artificial boundary at 160$^\circ$E). 
-fig = plt.figure(figsize=(12,12))
-ax = plt.axes(projection=ccrs.PlateCarree())
-ax.coastlines(resolution='10m', color='black', linewidth=1)
-ax.add_feature(feature.BORDERS)
-gl = ax.gridlines(linestyle=":", draw_labels=True)
-ax.add_feature(feature.LAND, zorder=0)
-for k, v in obstc.groupby('num'):
-    ax.plot(v['lon'], v['lat'])
+    # Plot the tracks of all the historical tracks that enter the selected domain
+    # and have a $p_{oci}$ defined in the historical record. This variable was not
+    # widely reported, and then only those events that are in the Bureau of
+    # Meteorology's area of responsibility have this field (this leads to the
+    # artificial boundary at 160$^\circ$E). 
+    fig = plt.figure(figsize=(12,12))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.coastlines(resolution='10m', color='black', linewidth=1)
+    ax.add_feature(feature.BORDERS)
+    gl = ax.gridlines(linestyle=":", draw_labels=True)
+    ax.add_feature(feature.LAND, zorder=0)
+    for k, v in obstc.groupby('num'):
+        ax.plot(v['lon'], v['lat'])
 
-ax.add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
-                                fill=False, edgecolor='k', linewidth=3,
-                                transform=ccrs.PlateCarree())
-             )
-plt.savefig(pjoin(path, "observed_tracks.png"), bbox_inches='tight')
+    ax.add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
+                                    fill=False, edgecolor='k', linewidth=3,
+                                    transform=ccrs.PlateCarree())
+                )
+    plt.savefig(pjoin(path, "observed_tracks.png"), bbox_inches='tight')
 
 
-# First we explore the distribution of $\Delta p_c$ for the reference period
-# (1981-2010) in each of the models, and the best track archive. The figure
-# below shows the histogram of $\Delta p_c$, with a fitted lognormal
-# distribution to each. 
+    # First we explore the distribution of $\Delta p_c$ for the reference period
+    # (1981-2010) in each of the models, and the best track archive. The figure
+    # below shows the histogram of $\Delta p_c$, with a fitted lognormal
+    # distribution to each. 
 
-refdata = loadTCLVdata(path, 1981, 2010)
-refparams = calculateFitParams(refdata)
+    refdata = loadTCLVdata(path, 1981, 2010)
+    refparams = calculateFitParams(refdata)
 
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
-ax = axes.flatten()
-bins = np.arange(0, 100, 5)
-refparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    ax = axes.flatten()
+    bins = np.arange(0, 100, 5)
+    refparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
 
-for i, (m, df) in enumerate(refdata.items()):
-    sns.distplot(df.pdiff, ax=ax[i], kde=False, norm_hist=True)
-    model, rcp = m.split(' ')
-    popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
+    for i, (m, df) in enumerate(refdata.items()):
+        sns.distplot(df.pdiff, ax=ax[i], kde=False, norm_hist=True)
+        model, rcp = m.split(' ')
+        popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
 
-    fitline = stats.lognorm.pdf(np.arange(0, 101), *popt, )
-    ax[i].plot(np.arange(0,101), fitline, color='r')
-    ax[i].set_title("{0}\n({1:.4f}, {2:.4f}, {3:.4f})".format(m, *popt))
+        fitline = stats.lognorm.pdf(np.arange(0, 101), *popt, )
+        ax[i].plot(np.arange(0,101), fitline, color='r')
+        ax[i].set_title("{0}\n({1:.4f}, {2:.4f}, {3:.4f})".format(m, *popt))
 
-fig.tight_layout()
-plt.savefig(pjoin(path, "reference_distribution.png"), bbox_inches='tight')
+    fig.tight_layout()
+    plt.savefig(pjoin(path, "reference_distribution.png"), bbox_inches='tight')
 
-fig, ax = plt.subplots(1, 2, figsize=(12,5), sharey=True)
-x = np.arange(0, 100)
+    fig, ax = plt.subplots(1, 2, figsize=(12,5), sharey=True)
+    x = np.arange(0, 100)
 
-for index, row in refparams[refparams['RCP']=='RCP45'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if row.Model == 'ENS':
-        ax[0].plot(x, fitline, color='b')
-    else:
+    for index, row in refparams[refparams['RCP']=='RCP45'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if row.Model == 'ENS':
+            ax[0].plot(x, fitline, color='b')
+        else:
+            ax[0].plot(x, fitline, color='k')
+            
+    ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
+    ax[0].set_title("RCP4.5")
+
+
+    for index, row in refparams[refparams['RCP']=='RCP85'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if index == 1:
+            ax[1].plot(x, fitline, color='k', label='Reference')
+        elif row.Model == 'ENS':
+            ax[1].plot(x, fitline, color='b', label='Ensemble')
+        else:
+            ax[1].plot(x, fitline, color='k')
+            
+    ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
+    ax[1].set_title("RCP8.5")
+    fig.tight_layout()
+    ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[0].set_ylabel("Probability")
+    ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].legend()
+    plt.savefig(pjoin(path, 'uncorrected_distribution_by_RCP_reference.png'), bbox_inches='tight')
+
+
+    # Many of the models produce $\Delta p_c$ distributions that follow a lognormal
+    # distribution, but all are markedly different from the IBTrACS distribution
+    # (which is also a lognormal distribution). All the models have a lower mean
+    # compared to the IBTrACS data, indicative that the models are unable to
+    # replicate the larger $\Delta p_c$ values in the observed record. There appears
+    # to be two families of models, but I'm yet to explore which is which, and
+    # further to that, whether these are consistent between the reference period and
+    # the future period (but we could do that based on figures below).
+    #
+
+    # We now load up the data for a future period and look at the distributions of
+    # $\Delta p_c$ for the future data. For this demonstration, the future period is
+    # 2081-2100.
+
+    start=2081
+    end=2100
+
+    futdata = loadTCLVdata(path, start, end)
+    futparams = calculateFitParams(futdata)
+
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    ax = axes.flatten()
+    for i, (m, df) in enumerate(futdata.items()):
+        model, rcp = m.split(' ')
+        sns.distplot(df.pdiff, ax=ax[i], kde=False, norm_hist=True)
+        popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
+        fitline = stats.lognorm.pdf(np.arange(0, 101), *popt, )
+        ax[i].plot(np.arange(0,101), fitline, color='r')
+        ax[i].set_title("{0}\n({1:.4f}, {2:.4f}, {3:.4f})".format(m, *popt))
+
+    fig.tight_layout()
+    plt.savefig(pjoin(path, f"future_distribution.{start}-{end}.png"), bbox_inches='tight')
+
+    fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
+    x = np.arange(0, 100)
+
+    for index, row in futparams[refparams['RCP']=='RCP45'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if row.Model == 'ENS':
+            ax[0].plot(x, fitline, color='b')
+        else:
+            ax[0].plot(x, fitline, color='k')
+        
+    ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
+    ax[0].set_title("RCP4.5")
+
+
+    for index, row in futparams[refparams['RCP']=='RCP85'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if index == 1:
+            ax[1].plot(x, fitline, color='k', label='Projected')
+        elif row.Model == 'ENS':
+            ax[1].plot(x, fitline, color='b', label='Ensemble')
+        else:
+            ax[1].plot(x, fitline, color='k')
+            
+    ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
+    ax[1].set_title("RCP8.5")
+    fig.tight_layout()
+    ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].legend()
+    None
+    plt.savefig(pjoin(path, f'uncorrected_distribution_by_RCP_future.{start}-{end}png'), bbox_inches='tight')
+
+
+
+
+    # When looking at the mean parameter fits for the two representative
+    # concentration pathways (RCPs), there is a larger different between the two, as
+    # the trend signal is different between the two RCPs.
+
+    # Following are the $\delta_{fut}$ values for each individual model - i.e. the
+    # relationship between the quantiles in the reference period and the quantiles
+    # in the future period. It is here where we can see the range of outcomes across
+    # the suite of models, and between the two selected emission scenarios. 
+    #
+    # Some models (e.g. ACCESS1-0, MPI-ESM-LRQ) show little difference between
+    # reference and future quantiles, and also between the emission scenarios. The
+    # CSIRO-MK3.6 and GFDL-ESM2M display a consistent difference across emission
+    # scenarios, suggesting an absence of climate sensitivity (at least for $\Delta
+    # p_c$) in those models. The NorESM1-M displays an overall decline in intensity
+    # into the future. Counterintuitively, the ACCESS1-3 shows a stronger response
+    # in the RCP4.5 emission scenario compared to the RCP8.5, with a siginficant
+    # increase in the upper quantiles of $\Delta p_c$.
+
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
+    ax = axes.flatten()
+    x = np.linspace(0, 1, 101)
+    for i, (m, refdf) in enumerate(refdata.items()):
+        futdf = futdata[m]
+        model, rcp = m.split(' ')
+
+        srefdata = refdf.pdiff.values
+        sfutdata = futdf.pdiff.values
+        srefq = np.quantile(srefdata, x)
+        sfutq = np.quantile(sfutdata, x)
+        ax[i].scatter(srefq, sfutq, alpha=0.5)
+        ax[i].plot([0, 50], [0,50], '--', color='k', alpha=0.5)
+        ax[i].set_title(m, size='small')
+        ax[i].set_xlim((0, 50))
+        ax[i].set_ylim((0, 50))
+        ax[i].set_aspect('equal')
+        
+    fig.tight_layout()
+    fig.text(0.5, 0.01, "Reference quantiles (hPa)", ha='center', va='center')
+    fig.text(0.01, 0.5, "Future quantiles (hPa)", ha='center', va='center', rotation='vertical')
+    plt.savefig(pjoin(path, f'ref_fut_quantiles.{start}-{end}.png'), bbox_inches='tight')
+
+
+    # As a demonstration of the scaling process in practice, here we display the
+    # individual $\Delta p_c$ values for the reference and projection, as well as
+    # the observed $\Delta p_c$ values. On each, we add a line at the 99th
+    # percentile for each collection of data. The relative change in the $Q(0.99)$
+    # between the reference period and the future period is 2.1. 
+
+    refdf = refdata['ACCESS1-3Q RCP45']
+    futdf = futdata['ACCESS1-3Q RCP45']
+
+    refq099 = np.quantile(refdf.pdiff, 0.99)
+    futq099 = np.quantile(futdf.pdiff, 0.99)
+    obsq099 = np.quantile(obstc.pdiff, 0.99)
+    delta = futq099/refq099 
+
+    fig, ax = plt.subplots(1, 2, figsize=(16, 8), sharey=True)
+    ax[0].scatter(refdf.datetime, refdf.pdiff, s=1, c='r')
+    ax[0].scatter(futdf.datetime, futdf.pdiff, s=1, c='r')
+    ax[0].set_xlim(datetime(1981, 1, 1), datetime(2100, 1, 1))
+    ax[0].axhline(refq099, xmin=0, xmax=0.833333, linestyle='--', color='0.5')
+    ax[0].axhline(refq099, xmin=0, xmax=0.25, linestyle='--', color='k')
+    ax[0].axhline(futq099, xmin=0.83333, xmax=1, linestyle='--', color='k')
+    ax[1].scatter(obstc.ISO_TIME, obstc.pdiff, s=1, c='b')
+    ax[1].axhline(obsq099, xmin=0, xmax=0.83333, linestyle='--', color='0.5')
+    ax[1].axhline(obsq099, xmin=0, xmax=0.3333, linestyle='--', color='k')
+    ax[1].axhline(obsq099*delta, xmin = 0.83333, xmax=1, linestyle='--', color='k')
+    ax[1].set_xlim(datetime(1981, 1, 1), datetime(2100, 1, 1))
+    ax[0].set_ylabel(r"$\Delta p_c$ hPa")
+    ax[0].set_xlabel("Year")
+    ax[1].set_xlabel("Year")
+    ax[0].set_title('Modelled')
+    ax[1].set_title('Observed')
+
+    styles = mpatches.ArrowStyle.get_styles()
+    def to_texstring(s):
+        s = s.replace("<", r"$<$")
+        s = s.replace(">", r"$>$")
+        s = s.replace("|", r"$|$")
+        return s
+
+    x=datetime(2080, 1, 1)
+    y = 0.5 * (refq099 + futq099)
+    tx=datetime(2060, 1, 1)
+    ty=0.5 * (refq099 + futq099)
+    stylename = '-['
+    ax[0].annotate(r'$\delta_{fut}$' + ' = {0:.2f}'.format(delta), (x, y),
+                (tx, ty), xycoords='data',
+                    ha="right", va="center",
+                    size=1.4,
+                    arrowprops=dict(arrowstyle=stylename,
+                                    fc="b", ec="b",
+                                    connectionstyle="arc3,rad=-0.05",
+                                    ),
+                fontsize='x-small', color='b',
+                bbox=dict(boxstyle="square", fc="w", alpha=0.5))
+
+    ax[0].annotate(r"$Q_{ref}(0.99)$" + " = {0:.1f}".format(refq099), 
+                (datetime(1995, 1, 1), refq099),
+                (datetime(2000, 1, 1), 3*refq099),
+                ha="center", va="center", size=1.4,
+                arrowprops=dict(arrowstyle='->',
+                                    fc="b", ec="b", shrinkB=1.5,
+                                    connectionstyle="arc3,rad=-0.0",
+                                    ),
+                fontsize='x-small', color='b',
+                bbox=dict(boxstyle="square", fc="w", alpha=0.5))
+
+    ax[0].annotate(r"$Q_{fut}(0.99)$" + " = {0:.1f}".format(futq099), 
+                (datetime(2090, 1, 1), futq099),
+                (datetime(2080, 1, 1), 2*futq099),
+                ha="center", va="center", size=1.4,
+                arrowprops=dict(arrowstyle='->',
+                                    fc="b", ec="b", shrinkB=1.5,
+                                    connectionstyle="arc3,rad=-0.0",
+                                    ),
+                fontsize='x-small', color='b',
+                bbox=dict(boxstyle="square", fc="w", alpha=0.5))
+
+    ax[1].annotate(r"$Q_{obs}(0.99)$" + " = {0:.1f}".format(obsq099),
+                (datetime(1995, 1, 1), obsq099),
+                (datetime(1995, 1, 1), 1.5*obsq099), 
+                ha="center", va='center', size=1.4,
+                arrowprops=dict(arrowstyle="->",
+                                fc='b', ec='b', shrinkB=1.5,
+                                connectionstyle='arc3,rad=-0.05'),
+                fontsize='x-small', color='b',
+                bbox=dict(boxstyle="square", fc="w", alpha=0.5))
+
+    ax[1].annotate(r"$Q_{futb}(0.99)$" + " = {0:.1f}".format(obsq099 * delta),
+                (datetime(2090, 1, 1), obsq099 * delta),
+                (datetime(2060, 1, 1), 1.5*obsq099), 
+                ha="center", va='center', size=1.4,
+                arrowprops=dict(arrowstyle="->",
+                                fc='b', ec='b', shrinkB=1.5,
+                                connectionstyle='arc3,rad=0.5'),
+                fontsize='x-small', color='b',
+                bbox=dict(boxstyle="square", fc="w", alpha=0.5))
+    plt.savefig(pjoin(path, 'illustration_qdm.png'), bbox_inches='tight')
+    None
+
+    # Just print the values for a visual check
+    print("Reference quantile:", refq099)
+    print("Projected quantile: ", futq099)
+    print("Observed quantile: ", obsq099)
+    print("Bias corrected projection quantile: ", obsq099*delta)
+    print("Ratio of observed to reference quantiles: ", obsq099 / refq099)
+
+
+    # ### Applying the QDM
+    # 
+    # We begin by running the QDM algorithm for the reference period. 
+    # This should give $\delta = 1$, as the 'reference' and 'future' 
+    # data are the same. This should simplify down to a regular quantile 
+    # mapping for the distribution between observed and reference 
+    # period $\Delta p_c$, and allow for a mapping that can bring the 
+    # simulated reference period data to a similar distribution to the 
+    # observed data.
+
+
+    obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    ax = axes.flatten()
+    brefdata = {}
+    brefparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
+    for i, (m, refdf) in enumerate(refdata.items()):
+        futdf = futdata[m]
+        model, rcp = m.split(' ')
+
+        srefdata = refdf.pdiff.values
+        brefdata[m] = qdm(obsdata, srefdata, srefdata)
+        
+        popt = stats.lognorm.fit(brefdata[m], loc=0, scale=1)
+        brefparams = brefparams.append({'Model':model, 'RCP':rcp,
+                                        'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
+                                    ignore_index=True)
+        ax[i].scatter(srefdata, brefdata[m], alpha=0.5)
+        ax[i].plot([-5, 100], [-5, 100], '--')
+        ax[i].set_xlabel("raw-tclv (hPa)")
+        ax[i].set_ylabel("corrected-tclv (hPa)")
+        ax[i].set_title(m)
+        ax[i].set_xlim((-5, 100))
+        ax[i].set_ylim((-5, 200))
+        
+    fig.tight_layout()
+
+
+    # Now we apply the QDM algorithm to the future data to determine the bias
+    # corrections for each individual model. 
+
+    obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    ax = axes.flatten()
+    bfutparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
+    bfutdata = {}
+    for i, (m, refdf) in enumerate(refdata.items()):
+        futdf = futdata[m]
+        model, rcp = m.split(' ')
+        srefdata = refdf.pdiff.values
+        sfutdata = futdf.pdiff.values
+        bfutdata[m] = qdm(obsdata, srefdata, sfutdata)
+        popt = stats.lognorm.fit(bfutdata[m], loc=0, scale=1)
+        bfutparams = bfutparams.append({'Model':model, 'RCP':rcp,
+                                        'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
+                                    ignore_index=True)
+        ax[i].scatter(sfutdata, bfutdata[m], alpha=0.5)
+        ax[i].plot([-5, 100], [-5, 100], '--')
+        ax[i].set_xlabel("raw-tclv (hPa)")
+        ax[i].set_ylabel("corrected-tclv (hPa)")
+        ax[i].set_title(m)
+        ax[i].set_xlim((-5, 100))
+        ax[i].set_ylim((-5, 200))
+        
+    fig.tight_layout()
+
+
+
+    # Here we compare the distributions of the reference and future $\Delta p_c$
+    # values for each model. This is based on the uncorrected data.
+
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
+    ax = axes.flatten()
+
+    x = np.arange(0, 51)
+    for i, row in enumerate(refparams.itertuples()):
+        m = row.Model
+        r = row.RCP
+        refpopt = (row.mu, row.sigma, row.zeta)
+        futrow = futparams[(futparams.Model==m) & (futparams.RCP==r)]
+        futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
+        refpdf = stats.lognorm.pdf(x, *refpopt)
+        futpdf = stats.lognorm.pdf(x, *futpopt)
+        ks, pv = stats.ks_2samp(refpdf, futpdf)
+        ax[i].plot(x, refpdf, 'k', label='Reference')
+        ax[i].plot(x, futpdf, 'r', label='Future')
+        ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
+        ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
+        if i==0: ax[i].legend(loc=1)
+
+    fig.tight_layout()
+    plt.savefig(pjoin(path, f"uncorrected.{start}-{end}.png"), bbox_inches='tight')
+
+
+    # Note the ACCESS1-3, CSIRO Mk 3.6.0, GFDL-ESM2M, HadGEM2 and MIROC5 models have a very narrow distribution. This collection of models also have a lower grouping of annual frequency in the reference period - around 13-14 TCLV's per year. The remaining models have a mean annual frequency around 20 in the reference period. 
+
+    # Now repeat for the bias-corrected data. In these, the label includes the Kolmogorov-Smirnov (K-S) test statistic and corresponding p-value for a two-sided K-S test for the two distrbutions. A small test statistic, or large p-value, means we cannot reject the null hypothesis that the two samples are drawn from the same distribution.
+
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
+    ax = axes.flatten()
+
+    x = np.arange(0, 101)
+    for i, row in enumerate(brefparams.itertuples()):
+        m = row.Model
+        r = row.RCP
+        refpopt = (row.mu, row.sigma, row.zeta)
+        futrow = bfutparams[(bfutparams.Model==m) & (bfutparams.RCP==r)]
+        futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
+        refpdf = stats.lognorm.pdf(x, *refpopt)
+        futpdf = stats.lognorm.pdf(x, *futpopt)
+        ks, pv = stats.ks_2samp(refpdf, futpdf)
+        ax[i].plot(x, refpdf, 'k', label='Reference')
+        ax[i].plot(x, futpdf, 'r', label='Future')
+        ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
+        ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
+        if i==0: ax[i].legend(loc=1 )
+
+    fig.tight_layout()
+    plt.savefig(pjoin(path, f"corrected.{start}-{end}.png"), bbox_inches='tight')
+
+
+    # There are a range of responses between the reference period and the 
+    # future period. In some models (e.g. ACCESS 1.3 RCP4.5, NorESM1-M RCP4.5) 
+    # there is virtually no difference in the distributions. In many cases, 
+    # there is a shift towards higher $\Delta p_c$ values in the future period. 
+    # In a small number (GFDL-ESM2M RCP8.5, CSIRO Mk3.6 RCP4.5), the $\Delta p_c$ 
+    # distribution shifts towards lower values. The IBTrACS distribution is shown 
+    # in the lower right corner for reference.  
+
+    fig, ax = plt.subplots(1,2, figsize=(12,5), sharey=True)
+    x = np.arange(0, 101, 0.5)
+    for i, row in enumerate(brefparams.itertuples()):
+        refpopt = (row.mu, row.sigma, row.zeta)
+        refpdf = stats.lognorm.pdf(x, *refpopt)
+        if i == 0:
+            ax[0].plot(x, refpdf, 'k', label="Reference", alpha=0.5)
+        else:
+            ax[0].plot(x, refpdf, 'k', alpha=0.5)
+
+    for i, row in enumerate(bfutparams.itertuples()):
+        futpopt =(row.mu, row.sigma, row.zeta)
+        futpdf = stats.lognorm.pdf(x, *futpopt)
+        if i == 0:
+            ax[1].plot(x, futpdf, 'k', label="Projected", alpha=0.5)
+        else:
+            ax[1].plot(x, futpdf, 'k', alpha=0.5)
+        
+    ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='IBTrACS')
+    ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='IBTrACS')    
+    ax[0].legend(loc=1)
+    ax[1].legend(loc=1)
+
+    ax[0].set_xlabel(r'$\Delta p_c$ (hPa)')
+    ax[1].set_xlabel(r'$\Delta p_c$ (hPa)')
+    ax[0].set_ylabel("Probability")
+    fig.tight_layout()
+    plt.savefig(pjoin(path, f"corrected_distributions.{start}-{end}.png"), bbox_inches='tight')
+
+
+    # The left panel shows the distribution of bias-corrected $\Delta p_c$
+    # values for the reference period (1981-2010, black) and the distribution 
+    # of the IBTrACS data (red). The corrected model distributions very 
+    # closely line up to the observed distrbution, as is the intention of the algorithm. 
+    # 
+    # The right panel shows the corresponding distributions for the future 
+    # period bias-corrected $\Delta p_c$ values. There is a significant 
+    # variation of the projected distributions of $\Delta p_c$. 
+
+    fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
+    x = np.arange(0, 100)
+
+    for index, row in bfutparams[refparams['RCP']=='RCP45'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
         ax[0].plot(x, fitline, color='k')
-        
-ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
-ax[0].set_title("RCP4.5")
+    ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
+    ax[0].set_title("RCP4.5")
 
 
-for index, row in refparams[refparams['RCP']=='RCP85'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if index == 1:
-        ax[1].plot(x, fitline, color='k', label='Reference')
-    elif row.Model == 'ENS':
-        ax[1].plot(x, fitline, color='b', label='Ensemble')
-    else:
-        ax[1].plot(x, fitline, color='k')
-        
-ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
-ax[1].set_title("RCP8.5")
-fig.tight_layout()
-ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[0].set_ylabel("Probability")
-ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].legend()
-plt.savefig(pjoin(path, 'uncorrected_distribution_by_RCP_reference.png'), bbox_inches='tight')
+    for index, row in bfutparams[refparams['RCP']=='RCP85'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if index == 1:
+            ax[1].plot(x, fitline, color='k', label='Projected')
+        else:
+            ax[1].plot(x, fitline, color='k')
+    ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
+    ax[1].set_title("RCP8.5")
+    fig.tight_layout()
+    ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].legend()
+    None
+    plt.savefig(pjoin(path, f"corrected_distribution_by_RCP_future.{start}-{end}.png"), bbox_inches='tight')
 
+    fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
+    x = np.arange(0, 100)
 
-# Many of the models produce $\Delta p_c$ distributions that follow a lognormal
-# distribution, but all are markedly different from the IBTrACS distribution
-# (which is also a lognormal distribution). All the models have a lower mean
-# compared to the IBTrACS data, indicative that the models are unable to
-# replicate the larger $\Delta p_c$ values in the observed record. There appears
-# to be two families of models, but I'm yet to explore which is which, and
-# further to that, whether these are consistent between the reference period and
-# the future period (but we could do that based on figures below).
-#
-
-# We now load up the data for a future period and look at the distributions of
-# $\Delta p_c$ for the future data. For this demonstration, the future period is
-# 2081-2100.
-
-start=2081
-end=2100
-
-futdata = loadTCLVdata(path, start, end)
-futparams = calculateFitParams(futdata)
-
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
-ax = axes.flatten()
-for i, (m, df) in enumerate(futdata.items()):
-    model, rcp = m.split(' ')
-    sns.distplot(df.pdiff, ax=ax[i], kde=False, norm_hist=True)
-    popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
-    fitline = stats.lognorm.pdf(np.arange(0, 101), *popt, )
-    ax[i].plot(np.arange(0,101), fitline, color='r')
-    ax[i].set_title("{0}\n({1:.4f}, {2:.4f}, {3:.4f})".format(m, *popt))
-
-fig.tight_layout()
-plt.savefig(pjoin(path, f"future_distribution.{start}-{end}.png"), bbox_inches='tight')
-
-fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
-x = np.arange(0, 100)
-
-for index, row in futparams[refparams['RCP']=='RCP45'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if row.Model == 'ENS':
-        ax[0].plot(x, fitline, color='b')
-    else:
+    for index, row in bfutparams[refparams['RCP']=='RCP45'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
         ax[0].plot(x, fitline, color='k')
-    
-ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
-ax[0].set_title("RCP4.5")
+    ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
+    ax[0].set_title("RCP4.5")
 
 
-for index, row in futparams[refparams['RCP']=='RCP85'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if index == 1:
-        ax[1].plot(x, fitline, color='k', label='Projected')
-    elif row.Model == 'ENS':
-        ax[1].plot(x, fitline, color='b', label='Ensemble')
-    else:
-        ax[1].plot(x, fitline, color='k')
-        
-ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
-ax[1].set_title("RCP8.5")
-fig.tight_layout()
-ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].legend()
-None
-plt.savefig(pjoin(path, f'uncorrected_distribution_by_RCP_future.{start}-{end}png'), bbox_inches='tight')
+    for index, row in bfutparams[refparams['RCP']=='RCP85'].iterrows():
+        popt = (row.mu, row.sigma, row.zeta)
+        fitline = stats.lognorm.pdf(x, *popt)
+        if index == 1:
+            ax[1].plot(x, fitline, color='k', label='Projected')
+        else:
+            ax[1].plot(x, fitline, color='k')
+    ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
+    ax[1].set_title("RCP8.5")
+    fig.tight_layout()
+    ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
+    ax[1].legend()
+    None
+    plt.savefig(pjoin(path, f"corrected_distribution_by_RCP_future.{start}-{end}.png"), 
+                bbox_inches='tight')
 
 
+    # Now let's unpack the two families and see what the projections of each look like.
 
+    group145 = ['ACCESS1-3Q RCP45', 'CSIRO-Mk3-6-0Q RCP45', 'GFDL-ESM2MQ RCP45', 'HadGEM2Q RCP45', 'MIROC5Q RCP45']
+    group185 = ['ACCESS1-3Q RCP85', 'CSIRO-Mk3-6-0Q RCP85', 'GFDL-ESM2MQ RCP85', 'HadGEM2Q RCP85', 'MIROC5Q RCP85']
+    group245 = ['ACCESS1-0Q RCP45', 'CCSM4Q RCP45', 'CNRM-CM5Q RCP45', 'GFDL-CM3Q RCP45', 'MPI-ESM-LRQ RCP45', 'NorESM1-MQ RCP45', ]
+    group285 = ['ACCESS1-0Q RCP85', 'CCSM4Q RCP85', 'CNRM-CM5Q RCP85', 'GFDL-CM3Q RCP85', 'MPI-ESM-LRQ RCP85', 'NorESM1-MQ RCP85', ]
 
-# When looking at the mean parameter fits for the two representative
-# concentration pathways (RCPs), there is a larger different between the two, as
-# the trend signal is different between the two RCPs.
+    refgrpdata = {}
+    futgrpdata = {}
 
-# Following are the $\delta_{fut}$ values for each individual model - i.e. the
-# relationship between the quantiles in the reference period and the quantiles
-# in the future period. It is here where we can see the range of outcomes across
-# the suite of models, and between the two selected emission scenarios. 
-#
-# Some models (e.g. ACCESS1-0, MPI-ESM-LRQ) show little difference between
-# reference and future quantiles, and also between the emission scenarios. The
-# CSIRO-MK3.6 and GFDL-ESM2M display a consistent difference across emission
-# scenarios, suggesting an absence of climate sensitivity (at least for $\Delta
-# p_c$) in those models. The NorESM1-M displays an overall decline in intensity
-# into the future. Counterintuitively, the ACCESS1-3 shows a stronger response
-# in the RCP4.5 emission scenario compared to the RCP8.5, with a siginficant
-# increase in the upper quantiles of $\Delta p_c$.
+    refgrpdata['Group1 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group145], ignore_index=True)
+    refgrpdata['Group1 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group185], ignore_index=True)
+    futgrpdata['Group1 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group145], ignore_index=True)
+    futgrpdata['Group1 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group185], ignore_index=True)
 
-fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
-ax = axes.flatten()
-x = np.linspace(0, 1, 101)
-for i, (m, refdf) in enumerate(refdata.items()):
-    futdf = futdata[m]
-    model, rcp = m.split(' ')
+    refgrpdata['Group2 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group245], ignore_index=True)
+    refgrpdata['Group2 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group285], ignore_index=True)
+    futgrpdata['Group2 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group245], ignore_index=True)
+    futgrpdata['Group2 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group285], ignore_index=True)
 
-    srefdata = refdf.pdiff.values
-    sfutdata = futdf.pdiff.values
-    srefq = np.quantile(srefdata, x)
-    sfutq = np.quantile(sfutdata, x)
-    ax[i].scatter(srefq, sfutq, alpha=0.5)
-    ax[i].plot([0, 50], [0,50], '--', color='k', alpha=0.5)
-    ax[i].set_title(m, size='small')
-    ax[i].set_xlim((0, 50))
-    ax[i].set_ylim((0, 50))
-    ax[i].set_aspect('equal')
-    
-fig.tight_layout()
-fig.text(0.5, 0.01, "Reference quantiles (hPa)", ha='center', va='center')
-fig.text(0.01, 0.5, "Future quantiles (hPa)", ha='center', va='center', rotation='vertical')
-plt.savefig(pjoin(path, f'ref_fut_quantiles.{start}-{end}.png'), bbox_inches='tight')
+    brefgrpdata = {}
+    brefgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
+    bfutgrpdata = {}
+    bfutgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
 
+    refgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
+    futgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
 
-# As a demonstration of the scaling process in practice, here we display the
-# individual $\Delta p_c$ values for the reference and projection, as well as
-# the observed $\Delta p_c$ values. On each, we add a line at the 99th
-# percentile for each collection of data. The relative change in the $Q(0.99)$
-# between the reference period and the future period is 2.1. 
-
-refdf = refdata['ACCESS1-3Q RCP45']
-futdf = futdata['ACCESS1-3Q RCP45']
-
-refq099 = np.quantile(refdf.pdiff, 0.99)
-futq099 = np.quantile(futdf.pdiff, 0.99)
-obsq099 = np.quantile(obstc.pdiff, 0.99)
-delta = futq099/refq099 
-
-fig, ax = plt.subplots(1, 2, figsize=(16, 8), sharey=True)
-ax[0].scatter(refdf.datetime, refdf.pdiff, s=1, c='r')
-ax[0].scatter(futdf.datetime, futdf.pdiff, s=1, c='r')
-ax[0].set_xlim(datetime(1981, 1, 1), datetime(2100, 1, 1))
-ax[0].axhline(refq099, xmin=0, xmax=0.833333, linestyle='--', color='0.5')
-ax[0].axhline(refq099, xmin=0, xmax=0.25, linestyle='--', color='k')
-ax[0].axhline(futq099, xmin=0.83333, xmax=1, linestyle='--', color='k')
-ax[1].scatter(obstc.ISO_TIME, obstc.pdiff, s=1, c='b')
-ax[1].axhline(obsq099, xmin=0, xmax=0.83333, linestyle='--', color='0.5')
-ax[1].axhline(obsq099, xmin=0, xmax=0.3333, linestyle='--', color='k')
-ax[1].axhline(obsq099*delta, xmin = 0.83333, xmax=1, linestyle='--', color='k')
-ax[1].set_xlim(datetime(1981, 1, 1), datetime(2100, 1, 1))
-ax[0].set_ylabel(r"$\Delta p_c$ hPa")
-ax[0].set_xlabel("Year")
-ax[1].set_xlabel("Year")
-ax[0].set_title('Modelled')
-ax[1].set_title('Observed')
-
-styles = mpatches.ArrowStyle.get_styles()
-def to_texstring(s):
-    s = s.replace("<", r"$<$")
-    s = s.replace(">", r"$>$")
-    s = s.replace("|", r"$|$")
-    return s
-
-x=datetime(2080, 1, 1)
-y = 0.5 * (refq099 + futq099)
-tx=datetime(2060, 1, 1)
-ty=0.5 * (refq099 + futq099)
-stylename = '-['
-ax[0].annotate(r'$\delta_{fut}$' + ' = {0:.2f}'.format(delta), (x, y),
-               (tx, ty), xycoords='data',
-                ha="right", va="center",
-                size=1.4,
-                arrowprops=dict(arrowstyle=stylename,
-                                fc="b", ec="b",
-                                connectionstyle="arc3,rad=-0.05",
-                                ),
-               fontsize='x-small', color='b',
-               bbox=dict(boxstyle="square", fc="w", alpha=0.5))
-
-ax[0].annotate(r"$Q_{ref}(0.99)$" + " = {0:.1f}".format(refq099), 
-               (datetime(1995, 1, 1), refq099),
-               (datetime(2000, 1, 1), 3*refq099),
-               ha="center", va="center", size=1.4,
-               arrowprops=dict(arrowstyle='->',
-                                fc="b", ec="b", shrinkB=1.5,
-                                connectionstyle="arc3,rad=-0.0",
-                                ),
-               fontsize='x-small', color='b',
-               bbox=dict(boxstyle="square", fc="w", alpha=0.5))
-
-ax[0].annotate(r"$Q_{fut}(0.99)$" + " = {0:.1f}".format(futq099), 
-               (datetime(2090, 1, 1), futq099),
-               (datetime(2080, 1, 1), 2*futq099),
-               ha="center", va="center", size=1.4,
-               arrowprops=dict(arrowstyle='->',
-                                fc="b", ec="b", shrinkB=1.5,
-                                connectionstyle="arc3,rad=-0.0",
-                                ),
-               fontsize='x-small', color='b',
-               bbox=dict(boxstyle="square", fc="w", alpha=0.5))
-
-ax[1].annotate(r"$Q_{obs}(0.99)$" + " = {0:.1f}".format(obsq099),
-              (datetime(1995, 1, 1), obsq099),
-              (datetime(1995, 1, 1), 1.5*obsq099), 
-              ha="center", va='center', size=1.4,
-              arrowprops=dict(arrowstyle="->",
-                             fc='b', ec='b', shrinkB=1.5,
-                             connectionstyle='arc3,rad=-0.05'),
-              fontsize='x-small', color='b',
-              bbox=dict(boxstyle="square", fc="w", alpha=0.5))
-
-ax[1].annotate(r"$Q_{futb}(0.99)$" + " = {0:.1f}".format(obsq099 * delta),
-              (datetime(2090, 1, 1), obsq099 * delta),
-              (datetime(2060, 1, 1), 1.5*obsq099), 
-              ha="center", va='center', size=1.4,
-              arrowprops=dict(arrowstyle="->",
-                             fc='b', ec='b', shrinkB=1.5,
-                             connectionstyle='arc3,rad=0.5'),
-              fontsize='x-small', color='b',
-              bbox=dict(boxstyle="square", fc="w", alpha=0.5))
-plt.savefig(pjoin(path, 'illustration_qdm.png'), bbox_inches='tight')
-None
-
-# Just print the values for a visual check
-print("Reference quantile:", refq099)
-print("Projected quantile: ", futq099)
-print("Observed quantile: ", obsq099)
-print("Bias corrected projection quantile: ", obsq099*delta)
-print("Ratio of observed to reference quantiles: ", obsq099 / refq099)
-
-
-# ### Applying the QDM
-# 
-# We begin by running the QDM algorithm for the reference period. 
-# This should give $\delta = 1$, as the 'reference' and 'future' 
-# data are the same. This should simplify down to a regular quantile 
-# mapping for the distribution between observed and reference 
-# period $\Delta p_c$, and allow for a mapping that can bring the 
-# simulated reference period data to a similar distribution to the 
-# observed data.
-
-
-obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
-ax = axes.flatten()
-brefdata = {}
-brefparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-for i, (m, refdf) in enumerate(refdata.items()):
-    futdf = futdata[m]
-    model, rcp = m.split(' ')
-
-    srefdata = refdf.pdiff.values
-    brefdata[m] = qdm(obsdata, srefdata, srefdata)
-    
-    popt = stats.lognorm.fit(brefdata[m], loc=0, scale=1)
-    brefparams = brefparams.append({'Model':model, 'RCP':rcp,
+    for i, (m, df) in enumerate(refgrpdata.items()):
+        model, rcp = m.split(' ')
+        popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
+        refgrpparams = refgrpparams.append({'Model':model, 'RCP':rcp,
                                     'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                   ignore_index=True)
-    ax[i].scatter(srefdata, brefdata[m], alpha=0.5)
-    ax[i].plot([-5, 100], [-5, 100], '--')
-    ax[i].set_xlabel("raw-tclv (hPa)")
-    ax[i].set_ylabel("corrected-tclv (hPa)")
-    ax[i].set_title(m)
-    ax[i].set_xlim((-5, 100))
-    ax[i].set_ylim((-5, 200))
-    
-fig.tight_layout()
+                                    ignore_index=True)
 
-
-# Now we apply the QDM algorithm to the future data to determine the bias
-# corrections for each individual model. 
-
-obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
-ax = axes.flatten()
-bfutparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-bfutdata = {}
-for i, (m, refdf) in enumerate(refdata.items()):
-    futdf = futdata[m]
-    model, rcp = m.split(' ')
-    srefdata = refdf.pdiff.values
-    sfutdata = futdf.pdiff.values
-    bfutdata[m] = qdm(obsdata, srefdata, sfutdata)
-    popt = stats.lognorm.fit(bfutdata[m], loc=0, scale=1)
-    bfutparams = bfutparams.append({'Model':model, 'RCP':rcp,
+    for i, (m, df) in enumerate(futgrpdata.items()):
+        model, rcp = m.split(' ')
+        popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
+        futgrpparams = futgrpparams.append({'Model':model, 'RCP':rcp,
                                     'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                   ignore_index=True)
-    ax[i].scatter(sfutdata, bfutdata[m], alpha=0.5)
-    ax[i].plot([-5, 100], [-5, 100], '--')
-    ax[i].set_xlabel("raw-tclv (hPa)")
-    ax[i].set_ylabel("corrected-tclv (hPa)")
-    ax[i].set_title(m)
-    ax[i].set_xlim((-5, 100))
-    ax[i].set_ylim((-5, 200))
-    
-fig.tight_layout()
-
-
-
-# Here we compare the distributions of the reference and future $\Delta p_c$
-# values for each model. This is based on the uncorrected data.
-
-fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
-ax = axes.flatten()
-
-x = np.arange(0, 51)
-for i, row in enumerate(refparams.itertuples()):
-    m = row.Model
-    r = row.RCP
-    refpopt = (row.mu, row.sigma, row.zeta)
-    futrow = futparams[(futparams.Model==m) & (futparams.RCP==r)]
-    futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
-    refpdf = stats.lognorm.pdf(x, *refpopt)
-    futpdf = stats.lognorm.pdf(x, *futpopt)
-    ks, pv = stats.ks_2samp(refpdf, futpdf)
-    ax[i].plot(x, refpdf, 'k', label='Reference')
-    ax[i].plot(x, futpdf, 'r', label='Future')
-    ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
-    ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
-    if i==0: ax[i].legend(loc=1)
-
-fig.tight_layout()
-plt.savefig(pjoin(path, f"uncorrected.{start}-{end}.png"), bbox_inches='tight')
-
-
-# Note the ACCESS1-3, CSIRO Mk 3.6.0, GFDL-ESM2M, HadGEM2 and MIROC5 models have a very narrow distribution. This collection of models also have a lower grouping of annual frequency in the reference period - around 13-14 TCLV's per year. The remaining models have a mean annual frequency around 20 in the reference period. 
-
-# Now repeat for the bias-corrected data. In these, the label includes the Kolmogorov-Smirnov (K-S) test statistic and corresponding p-value for a two-sided K-S test for the two distrbutions. A small test statistic, or large p-value, means we cannot reject the null hypothesis that the two samples are drawn from the same distribution.
-
-fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True)
-ax = axes.flatten()
-
-x = np.arange(0, 101)
-for i, row in enumerate(brefparams.itertuples()):
-    m = row.Model
-    r = row.RCP
-    refpopt = (row.mu, row.sigma, row.zeta)
-    futrow = bfutparams[(bfutparams.Model==m) & (bfutparams.RCP==r)]
-    futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
-    refpdf = stats.lognorm.pdf(x, *refpopt)
-    futpdf = stats.lognorm.pdf(x, *futpopt)
-    ks, pv = stats.ks_2samp(refpdf, futpdf)
-    ax[i].plot(x, refpdf, 'k', label='Reference')
-    ax[i].plot(x, futpdf, 'r', label='Future')
-    ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
-    ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
-    if i==0: ax[i].legend(loc=1 )
-
-fig.tight_layout()
-plt.savefig(pjoin(path, f"corrected.{start}-{end}.png"), bbox_inches='tight')
-
-
-# There are a range of responses between the reference period and the 
-# future period. In some models (e.g. ACCESS 1.3 RCP4.5, NorESM1-M RCP4.5) 
-# there is virtually no difference in the distributions. In many cases, 
-# there is a shift towards higher $\Delta p_c$ values in the future period. 
-# In a small number (GFDL-ESM2M RCP8.5, CSIRO Mk3.6 RCP4.5), the $\Delta p_c$ 
-# distribution shifts towards lower values. The IBTrACS distribution is shown 
-# in the lower right corner for reference.  
-
-fig, ax = plt.subplots(1,2, figsize=(12,5), sharey=True)
-x = np.arange(0, 101, 0.5)
-for i, row in enumerate(brefparams.itertuples()):
-    refpopt = (row.mu, row.sigma, row.zeta)
-    refpdf = stats.lognorm.pdf(x, *refpopt)
-    if i == 0:
-        ax[0].plot(x, refpdf, 'k', label="Reference", alpha=0.5)
-    else:
-        ax[0].plot(x, refpdf, 'k', alpha=0.5)
-
-for i, row in enumerate(bfutparams.itertuples()):
-    futpopt =(row.mu, row.sigma, row.zeta)
-    futpdf = stats.lognorm.pdf(x, *futpopt)
-    if i == 0:
-        ax[1].plot(x, futpdf, 'k', label="Projected", alpha=0.5)
-    else:
-        ax[1].plot(x, futpdf, 'k', alpha=0.5)
-    
-ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='IBTrACS')
-ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='IBTrACS')    
-ax[0].legend(loc=1)
-ax[1].legend(loc=1)
-
-ax[0].set_xlabel(r'$\Delta p_c$ (hPa)')
-ax[1].set_xlabel(r'$\Delta p_c$ (hPa)')
-ax[0].set_ylabel("Probability")
-fig.tight_layout()
-plt.savefig(pjoin(path, f"corrected_distributions.{start}-{end}.png"), bbox_inches='tight')
-
-
-# The left panel shows the distribution of bias-corrected $\Delta p_c$
-# values for the reference period (1981-2010, black) and the distribution 
-# of the IBTrACS data (red). The corrected model distributions very 
-# closely line up to the observed distrbution, as is the intention of the algorithm. 
-# 
-# The right panel shows the corresponding distributions for the future 
-# period bias-corrected $\Delta p_c$ values. There is a significant 
-# variation of the projected distributions of $\Delta p_c$. 
-
-fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
-x = np.arange(0, 100)
-
-for index, row in bfutparams[refparams['RCP']=='RCP45'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    ax[0].plot(x, fitline, color='k')
-ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
-ax[0].set_title("RCP4.5")
-
-
-for index, row in bfutparams[refparams['RCP']=='RCP85'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if index == 1:
-        ax[1].plot(x, fitline, color='k', label='Projected')
-    else:
-        ax[1].plot(x, fitline, color='k')
-ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
-ax[1].set_title("RCP8.5")
-fig.tight_layout()
-ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].legend()
-None
-plt.savefig(pjoin(path, f"corrected_distribution_by_RCP_future.{start}-{end}.png"), bbox_inches='tight')
-
-fig, ax = plt.subplots(1, 2, figsize=(12,6), sharey=True)
-x = np.arange(0, 100)
-
-for index, row in bfutparams[refparams['RCP']=='RCP45'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    ax[0].plot(x, fitline, color='k')
-ax[0].plot(x, stats.lognorm.pdf(x, *obsparams), 'r')
-ax[0].set_title("RCP4.5")
-
-
-for index, row in bfutparams[refparams['RCP']=='RCP85'].iterrows():
-    popt = (row.mu, row.sigma, row.zeta)
-    fitline = stats.lognorm.pdf(x, *popt)
-    if index == 1:
-        ax[1].plot(x, fitline, color='k', label='Projected')
-    else:
-        ax[1].plot(x, fitline, color='k')
-ax[1].plot(x, stats.lognorm.pdf(x, *obsparams), 'r', label='Observations')
-ax[1].set_title("RCP8.5")
-fig.tight_layout()
-ax[0].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].set_xlabel(r"$\Delta p_c$ (hPa)")
-ax[1].legend()
-None
-plt.savefig(pjoin(path, f"corrected_distribution_by_RCP_future.{start}-{end}.png"), 
-            bbox_inches='tight')
-
-
-# Now let's unpack the two families and see what the projections of each look like.
-
-group145 = ['ACCESS1-3Q RCP45', 'CSIRO-Mk3-6-0Q RCP45', 'GFDL-ESM2MQ RCP45', 'HadGEM2Q RCP45', 'MIROC5Q RCP45']
-group185 = ['ACCESS1-3Q RCP85', 'CSIRO-Mk3-6-0Q RCP85', 'GFDL-ESM2MQ RCP85', 'HadGEM2Q RCP85', 'MIROC5Q RCP85']
-group245 = ['ACCESS1-0Q RCP45', 'CCSM4Q RCP45', 'CNRM-CM5Q RCP45', 'GFDL-CM3Q RCP45', 'MPI-ESM-LRQ RCP45', 'NorESM1-MQ RCP45', ]
-group285 = ['ACCESS1-0Q RCP85', 'CCSM4Q RCP85', 'CNRM-CM5Q RCP85', 'GFDL-CM3Q RCP85', 'MPI-ESM-LRQ RCP85', 'NorESM1-MQ RCP85', ]
-
-refgrpdata = {}
-futgrpdata = {}
-
-refgrpdata['Group1 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group145], ignore_index=True)
-refgrpdata['Group1 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group185], ignore_index=True)
-futgrpdata['Group1 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group145], ignore_index=True)
-futgrpdata['Group1 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group185], ignore_index=True)
-
-refgrpdata['Group2 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group245], ignore_index=True)
-refgrpdata['Group2 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group285], ignore_index=True)
-futgrpdata['Group2 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group245], ignore_index=True)
-futgrpdata['Group2 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group285], ignore_index=True)
-
-brefgrpdata = {}
-brefgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-bfutgrpdata = {}
-bfutgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-
-refgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-futgrpparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
-
-for i, (m, df) in enumerate(refgrpdata.items()):
-    model, rcp = m.split(' ')
-    popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
-    refgrpparams = refgrpparams.append({'Model':model, 'RCP':rcp,
-                                  'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                  ignore_index=True)
-
-for i, (m, df) in enumerate(futgrpdata.items()):
-    model, rcp = m.split(' ')
-    popt = stats.lognorm.fit(df.pdiff, loc=0, scale=1)
-    futgrpparams = futgrpparams.append({'Model':model, 'RCP':rcp,
-                                  'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                  ignore_index=True)
-for i, (m, refdf) in enumerate(refgrpdata.items()):
-    futdf = futgrpdata[m]
-    model, rcp = m.split(' ')
-    srefdata = refdf.pdiff.values
-    sfutdata = futdf.pdiff.values
-    bfutgrpdata[m] = qdm(obsdata, srefdata, sfutdata)
-    popt = stats.lognorm.fit(bfutgrpdata[m], loc=0, scale=1)
-    bfutgrpparams = bfutgrpparams.append({'Model':model, 'RCP':rcp,
-                                          'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                          ignore_index=True)
-    
-for i, (m, refdf) in enumerate(refgrpdata.items()):
-    futdf = futgrpdata[m]
-    model, rcp = m.split(' ')
-
-    srefdata = refdf.pdiff.values
-    brefgrpdata[m] = qdm(obsdata, srefdata, srefdata)
-    
-    popt = stats.lognorm.fit(brefgrpdata[m], loc=0, scale=1)
-    brefgrpparams = brefgrpparams.append({'Model':model, 'RCP':rcp,
-                                    'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-                                   ignore_index=True)
-
-
-fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
-ax = axes.flatten()
-
-x = np.arange(0, 51)
-for i, row in enumerate(refgrpparams.itertuples()):
-    m = row.Model
-    r = row.RCP
-    refpopt = (row.mu, row.sigma, row.zeta)
-    futrow = futgrpparams[(futgrpparams.Model==m) & (futgrpparams.RCP==r)]
-    futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
-    refpdf = stats.lognorm.pdf(x, *refpopt)
-    futpdf = stats.lognorm.pdf(x, *futpopt)
-    ks, pv = stats.ks_2samp(refpdf, futpdf)
-    ax[i].plot(x, refpdf, 'k', label='Reference')
-    ax[i].plot(x, futpdf, 'r', label='Future')
-    ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
-    ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
-    if i==0: ax[i].legend(loc=1)
+                                    ignore_index=True)
+    for i, (m, refdf) in enumerate(refgrpdata.items()):
+        futdf = futgrpdata[m]
+        model, rcp = m.split(' ')
+        srefdata = refdf.pdiff.values
+        sfutdata = futdf.pdiff.values
+        bfutgrpdata[m] = qdm(obsdata, srefdata, sfutdata)
+        popt = stats.lognorm.fit(bfutgrpdata[m], loc=0, scale=1)
+        bfutgrpparams = bfutgrpparams.append({'Model':model, 'RCP':rcp,
+                                            'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
+                                            ignore_index=True)
         
-fig.tight_layout()
+    for i, (m, refdf) in enumerate(refgrpdata.items()):
+        futdf = futgrpdata[m]
+        model, rcp = m.split(' ')
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
-ax = axes.flatten()
-
-x = np.arange(0, 101)
-for i, row in enumerate(brefgrpparams.itertuples()):
-    m = row.Model
-    r = row.RCP
-    refpopt = (row.mu, row.sigma, row.zeta)
-    futrow = bfutgrpparams[(bfutgrpparams.Model==m) & (bfutgrpparams.RCP==r)]
-    futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
-    refpdf = stats.lognorm.pdf(x, *refpopt)
-    futpdf = stats.lognorm.pdf(x, *futpopt)
-    ks, pv = stats.ks_2samp(refpdf, futpdf)
-    ax[i].plot(x, refpdf, 'k', label='Reference')
-    ax[i].plot(x, futpdf, 'r', label='Future')
-    ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
-    ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
-    if i==0: ax[i].legend(loc=1 )
+        srefdata = refdf.pdiff.values
+        brefgrpdata[m] = qdm(obsdata, srefdata, srefdata)
         
-#ax[-1].plot(x, stats.lognorm.pdf(x, *obsparams))
-#ax[-1].set_title("IBTrACS")
-fig.tight_layout()
-None
+        popt = stats.lognorm.fit(brefgrpdata[m], loc=0, scale=1)
+        brefgrpparams = brefgrpparams.append({'Model':model, 'RCP':rcp,
+                                        'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
+                                    ignore_index=True)
 
 
-# ### Applying the correction to derive new $p_c$ values
-# 
-# In this section, we insert the updated $\Delta p_c$ values back into the source data. This will allow us to use the simulated data as an input to the hazard modelling stage.  
-# 
-# At the same time, we calculate an estimate of the maximum sustained wind speed $v_{max}$ for each record. $v_{max}$ is caluclated in the manner described in Holland (2008):
-# 
-# $ b_s = -4.4 \times 10^{-5} \Delta p^2 + 0.01\Delta p + 0.03 \dfrac{\partial p_c}{\partial t} - 0.014 \phi + 0.15 v_t^x +1.0 $
-# 
-# $ x = 0.6 ( \,1 - \dfrac{\Delta p}{215} ) \,$, and
-# 
-# $ v_m = ( \,\!\dfrac{b_s}{\rho e}\, \Delta p) \, ^{0.5} $
-# 
-# Air density, $\rho$, is derived from the virtual temperature and pressure in the region of maximum winds ($R_{mw}$). $v_t$ is the translation speed of the TC and $\phi$ is the absolute latitude in degrees.
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
+    ax = axes.flatten()
 
-outputPath = "C:/WorkSpace/data/tclv/tracks/corrected/"
-fileTemplate = "{0}_bc.dat"
+    x = np.arange(0, 51)
+    for i, row in enumerate(refgrpparams.itertuples()):
+        m = row.Model
+        r = row.RCP
+        refpopt = (row.mu, row.sigma, row.zeta)
+        futrow = futgrpparams[(futgrpparams.Model==m) & (futgrpparams.RCP==r)]
+        futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
+        refpdf = stats.lognorm.pdf(x, *refpopt)
+        futpdf = stats.lognorm.pdf(x, *futpopt)
+        ks, pv = stats.ks_2samp(refpdf, futpdf)
+        ax[i].plot(x, refpdf, 'k', label='Reference')
+        ax[i].plot(x, futpdf, 'r', label='Future')
+        ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
+        ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
+        if i==0: ax[i].legend(loc=1)
+            
+    fig.tight_layout()
 
-for i, (m, refdf) in enumerate(refdata.items()):
-    refdf['pmin'] = refdf['poci'] - brefdata[m]
-    refdf['pdiff'] = brefdata[m]
-    refdf = calculateMaxWind(refdf, 'datetime')
-    fname = pjoin(outputPath, fileTemplate.format(m.replace(' ', '_')))
-    refdf.to_csv(fname, sep=',', float_format="%.3f", index=False)
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
+    ax = axes.flatten()
 
-# Now for the future data. Need a different file template so we can include the time period
+    x = np.arange(0, 101)
+    for i, row in enumerate(brefgrpparams.itertuples()):
+        m = row.Model
+        r = row.RCP
+        refpopt = (row.mu, row.sigma, row.zeta)
+        futrow = bfutgrpparams[(bfutgrpparams.Model==m) & (bfutgrpparams.RCP==r)]
+        futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
+        refpdf = stats.lognorm.pdf(x, *refpopt)
+        futpdf = stats.lognorm.pdf(x, *futpopt)
+        ks, pv = stats.ks_2samp(refpdf, futpdf)
+        ax[i].plot(x, refpdf, 'k', label='Reference')
+        ax[i].plot(x, futpdf, 'r', label='Future')
+        ax[i].plot(x, stats.lognorm.pdf(x, *obsparams), 'g', lw=1, label='IBTrACS')
+        ax[i].set_title('{0} {1}\n({2:.4f} {3:.4f})'.format(m, r, ks, pv))
+        if i==0: ax[i].legend(loc=1 )
+            
+    #ax[-1].plot(x, stats.lognorm.pdf(x, *obsparams))
+    #ax[-1].set_title("IBTrACS")
+    fig.tight_layout()
+    None
 
-futfileTemplate = "{0}_{1}-{2}_bc.dat"
-for i, (m, futdf) in enumerate(futdata.items()):
-    futdf['pmin'] = futdf['poci'] - bfutdata[m]
-    futdf['pdiff'] = bfutdata[m]
-    futdf = calculateMaxWind(futdf, 'datetime')
-    fname = pjoin(outputPath, futfileTemplate.format(m.replace(' ', '_'), start, end))
-    futdf.to_csv(fname, sep=',',  float_format="%.3f", index=False)
 
-obstc=calculateMaxWind(obstc, 'ISO_TIME')
-obstc['category'] = pd.cut(obstc['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
+    # ### Applying the correction to derive new $p_c$ values
+    # 
+    # In this section, we insert the updated $\Delta p_c$ values back into the source data. This will allow us to use the simulated data as an input to the hazard modelling stage.  
+    # 
+    # At the same time, we calculate an estimate of the maximum sustained wind speed $v_{max}$ for each record. $v_{max}$ is caluclated in the manner described in Holland (2008):
+    # 
+    # $ b_s = -4.4 \times 10^{-5} \Delta p^2 + 0.01\Delta p + 0.03 \dfrac{\partial p_c}{\partial t} - 0.014 \phi + 0.15 v_t^x +1.0 $
+    # 
+    # $ x = 0.6 ( \,1 - \dfrac{\Delta p}{215} ) \,$, and
+    # 
+    # $ v_m = ( \,\!\dfrac{b_s}{\rho e}\, \Delta p) \, ^{0.5} $
+    # 
+    # Air density, $\rho$, is derived from the virtual temperature and pressure in the region of maximum winds ($R_{mw}$). $v_t$ is the translation speed of the TC and $\phi$ is the absolute latitude in degrees.
+
+    outputPath = "C:/WorkSpace/data/tclv/tracks/corrected/"
+    fileTemplate = "{0}_bc.dat"
+
+    for i, (m, refdf) in enumerate(refdata.items()):
+        refdf['pmin'] = refdf['poci'] - brefdata[m]
+        refdf['pdiff'] = brefdata[m]
+        refdf = calculateMaxWind(refdf, 'datetime')
+        fname = pjoin(outputPath, fileTemplate.format(m.replace(' ', '_')))
+        refdf.to_csv(fname, sep=',', float_format="%.3f", index=False)
+
+    # Now for the future data. Need a different file template so we can include the time period
+
+    futfileTemplate = "{0}_{1}-{2}_bc.dat"
+    for i, (m, futdf) in enumerate(futdata.items()):
+        futdf['pmin'] = futdf['poci'] - bfutdata[m]
+        futdf['pdiff'] = bfutdata[m]
+        futdf = calculateMaxWind(futdf, 'datetime')
+        fname = pjoin(outputPath, futfileTemplate.format(m.replace(' ', '_'), start, end))
+        futdf.to_csv(fname, sep=',',  float_format="%.3f", index=False)
+
+    obstc=calculateMaxWind(obstc, 'ISO_TIME')
+    obstc['category'] = pd.cut(obstc['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
 
 
-# Following are histograms of TC intensity categories for each model, as well as the observed record (lower right panel). Once again there is close agreement between the models for the reference period (1981-2010), both between models and against the observed record. There is a discrepancy between the models and the observed for the 'TD' category (tropical depression, < 17 m/s), with the models indicating a lower proportion of these events. This is likely tied back to the decision to filter short-lived TCLV events. 
-# 
-# __NOTE__: These histograms are the proportion of TCLV records that are in each category. This does not give an indication of the _frequency_ of different category wind speeds. Each model has a unique change in total TCLV frequency that would need to be applied to this distribution to determine frequency of e.g. category 5 TCs.
+    # Following are histograms of TC intensity categories for each model, as well as the observed record (lower right panel). Once again there is close agreement between the models for the reference period (1981-2010), both between models and against the observed record. There is a discrepancy between the models and the observed for the 'TD' category (tropical depression, < 17 m/s), with the models indicating a lower proportion of these events. This is likely tied back to the decision to filter short-lived TCLV events. 
+    # 
+    # __NOTE__: These histograms are the proportion of TCLV records that are in each category. This does not give an indication of the _frequency_ of different category wind speeds. Each model has a unique change in total TCLV frequency that would need to be applied to this distribution to determine frequency of e.g. category 5 TCs.
 
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True, sharey=True)
-ax = axes.flatten()
-for i, (m, df) in enumerate(refdata.items()):
-    df['category'] = pd.cut(df['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True, sharey=True)
+    ax = axes.flatten()
+    for i, (m, df) in enumerate(refdata.items()):
+        df['category'] = pd.cut(df['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
+        x = df['category'].value_counts()/len(df)
+        ax[i].bar(labels, x, color=catpal)
+        ax[i].set_title("{0}".format(m))
+        ax[i].set_xlabel('')
+    
+
+    # Add the IBTrACS as reference
+    #x = obstc['category'].value_counts() / len(obstc)
+    #ax[-1].bar(labels, x, color=catpal)
+    #ax[-1].set_title("IBTrACS")
+    fig.suptitle("Reference period", size=20)
+    fig.tight_layout()
+    fig.subplots_adjust(top=0.95)
+    plt.savefig(pjoin(path, "categories_reference.png"), bbox_inches='tight')
+
+
+    # The next figure shows the same distributions of TC intensity category for the future period. Here we note significant deviations between the models, as well as differences compared to the observed record. 
+
+    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True, sharey=True)
+    ax = axes.flatten()
+    labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
+    for i, (m, df) in enumerate(futdata.items()):
+        df['category'] = pd.cut(df['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
+        x = df['category'].value_counts()/len(df)
+        ax[i].bar(labels, x, color=catpal)
+        ax[i].set_title("{0}".format(m))
+        ax[i].set_xlabel('')
+    
+
+    # Add the IBTrACS as reference
+    #x = obstc['category'].value_counts() / len(obstc)
+    #ax[-1].bar(labels, x, color=catpal)
+    #ax[-1].set_title("IBTrACS")
+    fig.suptitle('{0}-{1}'.format(start, end), size=20)
+    fig.tight_layout()
+    fig.subplots_adjust(top=0.95)
+    plt.savefig(pjoin(path, "categories_future.png"), bbox_inches='tight')
+
+
+    fig, axes = plt.subplots(1,3, figsize=(20, 7), sharex=True, sharey=True)
+    ax = axes.flatten()
+    labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
+
+    df = futdata['ENS RCP45']
     x = df['category'].value_counts()/len(df)
-    ax[i].bar(labels, x, color=catpal)
-    ax[i].set_title("{0}".format(m))
-    ax[i].set_xlabel('')
- 
-
-# Add the IBTrACS as reference
-#x = obstc['category'].value_counts() / len(obstc)
-#ax[-1].bar(labels, x, color=catpal)
-#ax[-1].set_title("IBTrACS")
-fig.suptitle("Reference period", size=20)
-fig.tight_layout()
-fig.subplots_adjust(top=0.95)
-plt.savefig(pjoin(path, "categories_reference.png"), bbox_inches='tight')
-
-
-# The next figure shows the same distributions of TC intensity category for the future period. Here we note significant deviations between the models, as well as differences compared to the observed record. 
-
-fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True, sharey=True)
-ax = axes.flatten()
-labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
-for i, (m, df) in enumerate(futdata.items()):
-    df['category'] = pd.cut(df['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=labels)
+    ax[0].bar(labels, x, color=catpal)
+    ax[0].set_title('ENS RCP45')
+    df = futdata['ENS RCP85']
     x = df['category'].value_counts()/len(df)
-    ax[i].bar(labels, x, color=catpal)
-    ax[i].set_title("{0}".format(m))
-    ax[i].set_xlabel('')
- 
+    ax[1].bar(labels, x, color=catpal)
+    ax[1].set_title('ENS RCP85')
+    x = obstc['category'].value_counts() / len(obstc)
+    ax[2].bar(labels, x, color=catpal)
+    ax[2].set_title("IBTrACS")
+    plt.savefig(pjoin(path, "ensemble_category_projections.png"), bbox_inches='tight')
 
-# Add the IBTrACS as reference
-#x = obstc['category'].value_counts() / len(obstc)
-#ax[-1].bar(labels, x, color=catpal)
-#ax[-1].set_title("IBTrACS")
-fig.suptitle('{0}-{1}'.format(start, end), size=20)
-fig.tight_layout()
-fig.subplots_adjust(top=0.95)
-plt.savefig(pjoin(path, "categories_future.png"), bbox_inches='tight')
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True,
+                            subplot_kw={'projection': ccrs.PlateCarree()})
+    ax = axes.flatten()
+
+    for i, (m, df) in enumerate(futdata.items()):
+        ax[i].coastlines(resolution='50m', color='black', linewidth=1)
+        ax[i].add_feature(feature.BORDERS)
+        ax[i].add_feature(feature.OCEAN, zorder=0)
+        gl = ax[i].gridlines(linestyle=":")
+        for k,v in df.groupby('num'):
+            ax[i].plot(v['lon'], v['lat'])
+            
+        ax[i].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
+                                    fill=False, edgecolor='k', linewidth=3,
+                                    transform=ccrs.PlateCarree(), zorder=100)
+                        )
+        
+        ax[i].set_title(m)
+    None
+    plt.savefig(pjoin(path, "future_tracks.png"), bbox_inches='tight')
 
 
-fig, axes = plt.subplots(1,3, figsize=(20, 7), sharex=True, sharey=True)
-ax = axes.flatten()
-labels = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
+    fig, ax = plt.subplots(1, 2, sharex=True, sharey=True, 
+                        figsize=(20, 7),
+                        subplot_kw={'projection': ccrs.PlateCarree()})
 
-df = futdata['ENS RCP45']
-x = df['category'].value_counts()/len(df)
-ax[0].bar(labels, x, color=catpal)
-ax[0].set_title('ENS RCP45')
-df = futdata['ENS RCP85']
-x = df['category'].value_counts()/len(df)
-ax[1].bar(labels, x, color=catpal)
-ax[1].set_title('ENS RCP85')
-x = obstc['category'].value_counts() / len(obstc)
-ax[2].bar(labels, x, color=catpal)
-ax[2].set_title("IBTrACS")
-plt.savefig(pjoin(path, "ensemble_category_projections.png"), bbox_inches='tight')
-
-fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True, sharey=True,
-                         subplot_kw={'projection': ccrs.PlateCarree()})
-ax = axes.flatten()
-
-for i, (m, df) in enumerate(futdata.items()):
-    ax[i].coastlines(resolution='50m', color='black', linewidth=1)
-    ax[i].add_feature(feature.BORDERS)
-    ax[i].add_feature(feature.OCEAN, zorder=0)
-    gl = ax[i].gridlines(linestyle=":")
+    ax[0].coastlines(resolution='50m', color='black', linewidth=1)
+    ax[0].add_feature(feature.BORDERS)
+    ax[0].add_feature(feature.OCEAN, zorder=0)
+    gl = ax[0].gridlines(linestyle=":")
+    df = futdata['ENS RCP45']
     for k,v in df.groupby('num'):
-        ax[i].plot(v['lon'], v['lat'])
-        
-    ax[i].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
-                                fill=False, edgecolor='k', linewidth=3,
-                                transform=ccrs.PlateCarree(), zorder=100)
+        ax[0].plot(v['lon'], v['lat'])
+    ax[0].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
+                                    fill=False, edgecolor='k', linewidth=3,
+                                    transform=ccrs.PlateCarree(), zorder=100)
                     )
-    
-    ax[i].set_title(m)
-None
-plt.savefig(pjoin(path, "future_tracks.png"), bbox_inches='tight')
+    ax[0].set_title("ENS RCP45")
 
+    ax[1].coastlines(resolution='50m', color='black', linewidth=1)
+    ax[1].add_feature(feature.BORDERS)
+    ax[1].add_feature(feature.OCEAN, zorder=0)
+    gl = ax[1].gridlines(linestyle=":")
+    df = futdata['ENS RCP85']
+    for k,v in df.groupby('num'):
+        ax[1].plot(v['lon'], v['lat'])
+    ax[1].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
+                                    fill=False, edgecolor='k', linewidth=3,
+                                    transform=ccrs.PlateCarree(), zorder=100)
+                    )
+    ax[1].set_title("ENS RCP85")
 
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True, 
-                       figsize=(20, 7),
-                       subplot_kw={'projection': ccrs.PlateCarree()})
-
-ax[0].coastlines(resolution='50m', color='black', linewidth=1)
-ax[0].add_feature(feature.BORDERS)
-ax[0].add_feature(feature.OCEAN, zorder=0)
-gl = ax[0].gridlines(linestyle=":")
-df = futdata['ENS RCP45']
-for k,v in df.groupby('num'):
-    ax[0].plot(v['lon'], v['lat'])
-ax[0].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
-                                   fill=False, edgecolor='k', linewidth=3,
-                                   transform=ccrs.PlateCarree(), zorder=100)
-                )
-ax[0].set_title("ENS RCP45")
-
-ax[1].coastlines(resolution='50m', color='black', linewidth=1)
-ax[1].add_feature(feature.BORDERS)
-ax[1].add_feature(feature.OCEAN, zorder=0)
-gl = ax[1].gridlines(linestyle=":")
-df = futdata['ENS RCP85']
-for k,v in df.groupby('num'):
-    ax[1].plot(v['lon'], v['lat'])
-ax[1].add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
-                                   fill=False, edgecolor='k', linewidth=3,
-                                   transform=ccrs.PlateCarree(), zorder=100)
-                )
-ax[1].set_title("ENS RCP85")
-
-None
-plt.savefig(pjoin(path, "ensemble_future_tracks.png"), bbox_inches='tight')
+    None
+    plt.savefig(pjoin(path, "ensemble_future_tracks.png"), bbox_inches='tight')
 
 
 
