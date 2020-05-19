@@ -11,8 +11,11 @@ class TestQDM(NumpyTestCase.NumpyTestCase):
     nanarray = np.array([1,2,3,4,np.nan])
     
     obsdist = lognorm.rvs(0.57, size=100)
+    obsp = lognorm.fit(obsdist)
     refdist = lognorm.rvs(0.45, size=100)
+    refp = lognorm.fit(refdist)
     futdist = lognorm.rvs(0.55, size=100)
+    futp = lognorm.fit(futdist)
     x = np.linspace(0, 1, 101)
     qobs = np.quantile(obsdist, x)
     qref = np.quantile(refdist, x)
@@ -28,12 +31,13 @@ class TestQDM(NumpyTestCase.NumpyTestCase):
                           self.nanarray, self.nanarray)
     
     def testRefInput(self):
-        """Test using reference data as future returns obs"""
+        """Test using reference data as future returns obs dist params"""
         testqfut = qdm(self.obsdist, self.refdist, self.refdist)
-        print(np.sort(testqfut))
-        print(np.sort(self.obsdist))
-        print(np.sort(self.obsdist) - np.sort(testqfut))
-        self.numpyAssertAlmostEqual(self.qobs, np.quantile(testqfut, self.x))
+        testp = lognorm.fit(testqfut)
+        self.assertAlmostEqual(self.obsp[0], testp[0], places=2)
+        self.assertAlmostEqual(self.obsp[1], testp[1], places=2)
+        self.assertAlmostEqual(self.obsp[2], testp[2], places=2)
+
 
 if __name__ == "__main__":
     #flStartLog('', 'CRITICAL', False)
