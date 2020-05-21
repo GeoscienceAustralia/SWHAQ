@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from scipy.stats import lognorm
 import NumpyTestCase
-from quantileMapping import qdm
+from qdm import qdm
 
 np.random.seed(seed=233423)
 
@@ -38,6 +38,15 @@ class TestQDM(NumpyTestCase.NumpyTestCase):
         self.assertAlmostEqual(self.obsp[1], testp[1], places=2)
         self.assertAlmostEqual(self.obsp[2], testp[2], places=2)
 
+class TestLoadData(unittest.TestCase):
+    goodTestPath = "./"
+    badTestPath = ""
+    start_year = 2011
+    end_year = 2030
+    domain = (135, 160, -25, -10)
+
+    def testSwapYearInput(self):
+        self.assertRaises(ValueError, loadTCLVdata, end_year, start_year)
 
 if __name__ == "__main__":
     #flStartLog('', 'CRITICAL', False)
