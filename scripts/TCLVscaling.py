@@ -2,10 +2,10 @@
 # coding: utf-8
 
 """
-:mod: `quantileMapping` -- Quantile delta mapping of TCLV intensity
+:mod: `TCLVscaling` -- Quantile delta mapping of TCLV intensity
 ===================================================================
 
-.. module:: quantileMapping
+.. module:: TCLVscaling
     :synopsis: Use quantile delta mapping to scale intensity of TCLVs to
     observed distribution of intensity. 
 
@@ -55,11 +55,9 @@ import datetime as dt
 
 from datetime import timedelta, datetime
 
-import shapely.geometry as sg
 from shapely.geometry import box as sbox
 from shapely.geometry import LineString
 
-from scipy.optimize import curve_fit
 import scipy.stats as stats
 
 from qdm import qdm
@@ -464,16 +462,16 @@ if __name__ == '__main__':
                 srefdata = refdf.loc[refdf.groupby('num')["pdiff"].idxmax()].set_index(['num'])
                 sfutdata = futdf.loc[futdf.groupby('num')["pdiff"].idxmax()].set_index(['num'])
             except:
-                LOGGER.error(f"Reference data: {refdf.groupby('num')['pdiff'].idxmax()}")
-                LOGGER.error(f"Projected data: {futdf.groupby('num')['pdiff'].idxmax()}")
+                LOGGER.error(f"Reference data: {refdf.groupby('num')['pdiff'].idxmax():.2f}")
+                LOGGER.error(f"Projected data: {futdf.groupby('num')['pdiff'].idxmax():.2f}")
             # Calculate the bias-corrected LMI
             try:
                 srefdata['blmi'], sfutdata['blmi'] = qdm(obsdata, srefdata.pdiff.values, sfutdata.pdiff.values)
             except:
                 LOGGER.error(f"QDM failed for {m}")
                 raise
-            LOGGER.debug(f"Mean bias-corrected projected LMI:{sfutdata['blmi'].mean()}")
-            LOGGER.debug(f"Mean bias-corrected reference LMI:{srefdata['blmi'].mean()}")  
+            LOGGER.debug(f"Mean bias-corrected projected LMI: {sfutdata['blmi'].mean():.2f}")
+            LOGGER.debug(f"Mean bias-corrected reference LMI: {srefdata['blmi'].mean():.2f}")  
                       
             # Now to join the bias-corrected LMI to the existing normalised
             # intensity to give bias-corrected pressure deficit values
@@ -481,7 +479,7 @@ if __name__ == '__main__':
             newdf = pd.merge(futdf, sfutdata['blmi'], on='num')
             futdf['pdiff'] = futdf.ni.values * newdf.blmi.values
             futdf['pmin'] = futdf['poci'] - futdf['pdiff']
-            LOGGER.debug(f"Mean bias-corrected future pressure deficit: {futdf['pdiff'].mean()}")
+            LOGGER.debug(f"Mean bias-corrected future pressure deficit: {futdf['pdiff'].mean():.2f}")
             # Calculate maximum wind speed (this will replace existing values)
             futdf = calculateMaxWind(futdf, 'datetime')
             # Save to file
