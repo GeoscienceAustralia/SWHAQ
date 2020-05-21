@@ -5,7 +5,31 @@
 :mod: `qdm` -- Quantile Delta Mapping 
 =====================================
 
-..:mod:
+..:mod: qdm
+    :synopsis: Apply quantile delta mapping. 
+
+
+.. moduleauthor:: Craig Arthur, <craig.arthur@ga.gov.au
+
+Cannon _et al._ (2015) describe a method for bias correction of climate
+variables that conserves relative changes in quantiles between current and
+future climate regimes. Called Quantile Delta Mapping (QDM), the method ensures
+that climate sensitivity of the underlying climate model remains unaffected by
+the correction process.
+
+This is a Python wrapper for the QDM function in the `MBC` package for R, see
+https://rdrr.io/cran/MBC/man/MBC-package.html for details on the `MBC` package.
+
+Dependencies::
+
+* `rpy2`
+* `MBC`
+* `numpy`
+
+Cannon, A.J., Sobie, S.R., and Murdock, T.Q. 2015. Bias correction of simulated
+precipitation by quantile mapping: How well do methods preserve relative changes
+in quantiles and extremes? Journal of Climate, 28: 6938-6959.
+doi:10.1175/JCLI-D-14-00754.1
 
 """
 
@@ -79,7 +103,7 @@ def qdm(obs, ref, fut, ratio=True, trace=0.1, n=None):
         n_tau = n
     else:
         n_tau = len(fut)
-        
+
     mhatc, mhatp = MBC.QDM(obs, ref, fut, ratio, trace, n_tau=n_tau)
 
-    return np.array(mhatp)
+    return np.array(mhatc), np.array(mhatp)
