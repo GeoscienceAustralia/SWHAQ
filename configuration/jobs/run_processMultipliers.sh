@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -Pw85
 #PBS -qexpress
-#PBS -N swhaqmultipliers
+#PBS -N runmultipliers
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=01:00:00
@@ -50,7 +50,6 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 module list
 DATE=`date +%Y%m%d%H%M`
-SIMULATION=001-00406
 OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$EVENTID
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$EVENTID\_pm.ini
 
