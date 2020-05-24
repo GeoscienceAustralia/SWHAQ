@@ -4,7 +4,7 @@
 #PBS -N tcevent
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=01:00:00
+#PBS -lwalltime=02:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85
@@ -36,6 +36,7 @@ module load hdf5/1.10.5
 module load geos/3.8.0
 module load proj/6.2.1
 module load gdal/3.0.2
+module list
 
 # Need to ensure we get the correct paths to access the local version of gdal bindings. 
 # The module versions are compiled against Python3.6
@@ -44,20 +45,18 @@ export PYTHONPATH=/g/data/w85/.local/lib/python3.7/site-packages:$PYTHONPATH
 # Add the local Python-based scripts to the path:
 export PATH=/g/data/w85/.local/bin:$PATH
 
-
-module list
-
+DATE=`date +%Y%m%d%H%M`
 OUTPUT=/g/data/w85/QFES_SWHA/wind/regional/$EVENTID
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$EVENTID.ini
 TRACKPATH=/g/data/w85/QFES_SWHA/tracks
 
 # Substitute the paths into the template configuration file: 
-sed 's|TRACKPATH|'$TRACKPATH'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini $CONFIGFILE
-sed 's|OUTPUTPATH|'$OUTPUT'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini $CONFIGFILE
-sed 's|EVENTID|'$EVENTID'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini $CONFIGFILE
+sed 's|TRACKPATH|'$TRACKPATH'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
+sed 's|OUTPUTPATH|'$OUTPUT'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
+sed 's|EVENTID|'$EVENTID'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
 
 # Add path to where TCRM is installed. Separate installations
-# for py3 branch
+# for py3, master, develop branch
 SOFTWARE=/g/data/w85/software
 BRANCH=master
 
