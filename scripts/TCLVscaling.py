@@ -67,11 +67,14 @@ from Utilities.loadData import maxWindSpeed
 
 from builtins import str
 
-from git import Repo
+from git import Repo, InvalidGitRepositoryError
 
 
-r = Repo('')
-commit = str(r.commit('HEAD'))
+try:
+    r = Repo('')
+    commit = str(r.commit('HEAD'))
+except InvalidGitRepositoryError:
+    commit = 'unknown'
 
 LOGGER = logging.getLogger()
 logFormat = "%(asctime)s: %(funcName)s: %(message)s"
