@@ -8,6 +8,7 @@ vulnerability/
 impact/
 hazard/
 data/
+scripts/.Rhistory
 .ipynb_checkpoints/
 
 

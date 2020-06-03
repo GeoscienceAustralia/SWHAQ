@@ -67,11 +67,14 @@ from Utilities.loadData import maxWindSpeed
 
 from builtins import str
 
-from git import Repo
+from git import Repo, InvalidGitRepositoryError
 
 
-r = Repo('')
-commit = str(r.commit('HEAD'))
+try:
+    r = Repo('')
+    commit = str(r.commit('HEAD'))
+except InvalidGitRepositoryError:
+    commit = 'unknown'
 
 LOGGER = logging.getLogger()
 logFormat = "%(asctime)s: %(funcName)s: %(message)s"
@@ -278,7 +281,7 @@ def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
     
     return vfutb
 
-def loadTCLVdata(dataPath, start_year, end_year, domain):
+def loadTCLVdata(dataPath, start_year=None, end_year=None, domain=None):
     """ 
     Load TCLV data from a directory, for a given year range 
     and a geographic domain
@@ -296,39 +299,56 @@ def loadTCLVdata(dataPath, start_year, end_year, domain):
         LOGGER.error(f"{dataPath} is not a valid directory")
         raise OSError(f"{dataPath} is not a valid directory")
 
-    if start_year > end_year:
-        raise ValueError(f"Start year {start_year} is greater than end year {end_year}")
+    if start_year is not None or end_year is not None:
+        if start_year is None or end_year is None:
+            raise ValueError("must supply both start year and end year or none")
+        if start_year > end_year:
+            raise ValueError(f"Start year {start_year} is greater than end year {end_year}")
     
     datadict = {}
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
-    ens45 = []
-    ens85 = []
-    for fname in os.listdir(path):
+    for fname in os.listdir(dataPath):
         # Skip the ERA-Interim sourced TCLV set
-        if fname=="all_tracks_ERAIntQ_rcp85.dat":
+        if fname == "all_tracks_ERAIntQ_rcp85.dat":
             continue
 
         if re.search(regex, fname):
             m = re.match(regex, fname)
             model, rcp = m.group(1, 2)
-            filename = pjoin(path, fname)
+            filename = pjoin(dataPath, fname)
             df = load_track_file(filename)
-            #df = filter_tracks(df, start_year, end_year)
-            #df = filter_tracks_domain(df, *domain)
-            #if rcp.upper() == 'RCP45':
-            #    ens45.append(df)
-            #else:
-            #    ens85.append(df)
+
+            if start_year is not None:
+                df = filter_tracks(df, start_year, end_year)
+            if domain is not None:
+                df = filter_tracks_domain(df, *domain)
             label = f"{model} {rcp.upper()}"
             datadict[label] = df
         else:
             LOGGER.debug(f"{fname} does not match the expected pattern. Skipping...")
             continue
-    # Create an ensemble set of data as well:
-    #datadict['ENS RCP45'] = pd.concat(ens45, ignore_index=True)
-    #datadict['ENS RCP85'] = pd.concat(ens85, ignore_index=True)
 
     return datadict
+
+
+def append_ensembles(datadict):
+    # make a copy
+    datadict = dict(datadict)
+    ens45 = []
+    ens85 = []
+
+    for key, df in datadict.items():
+        model, rcp = key.split()
+        if rcp.upper() == 'RCP45':
+            ens45.append(df)
+        else:
+            ens85.append(df)
+
+    datadict['ENS RCP45'] = pd.concat(ens45, ignore_index=True)
+    datadict['ENS RCP85'] = pd.concat(ens85, ignore_index=True)
+
+    return datadict
+
 
 def calculateFitParams(datadict, dist=stats.lognorm):
     """
@@ -430,11 +450,10 @@ if __name__ == '__main__':
     # below shows the histogram of $\Delta p_c$, with a fitted lognormal
     # distribution to each. 
 
-    tclvdata = loadTCLVdata(path, 1981, 2100, domain)
+    tclvdata = loadTCLVdata(path, domain=domain)
     #futdata = loadTCLVdata(path, 1981, 2100, domain)
     #refparams = calculateFitParams(refdata)
     obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
-
 
     obslmi = obstc.loc[obstc.groupby(["num"])["pdiff"].idxmax()] 
 
@@ -453,9 +472,7 @@ if __name__ == '__main__':
         for i, (m, df) in enumerate(tclvdata.items()):
             LOGGER.info(f"Processing {m}")
             refdf = filter_tracks(df, 1981, 2010)
-            refdf = filter_tracks_domain(refdf, *domain)
             futdf = filter_tracks(df, s, e)
-            futdf = filter_tracks_domain(futdf, *domain)
 
             # Determine LMI for each event in the reference and projected data
             try:
@@ -499,9 +516,3 @@ if __name__ == '__main__':
 
     #plotCategories(refdata, 1980, 2010, path)
     #plotCategories(futdata, start, end, path)
-
-
-
-
-
-

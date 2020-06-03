@@ -75,11 +75,14 @@ from builtins import str
 sns.set_style('whitegrid')
 sns.set_context("poster")
 
-from git import Repo
+from git import Repo, InvalidGitRepositoryError
 
 
-r = Repo('')
-commit = str(r.commit('HEAD'))
+try:
+    r = Repo('')
+    commit = str(r.commit('HEAD'))
+except InvalidGitRepositoryError:
+    commit = 'unknown'
 
 LOGGER = logging.getLogger()
 logFormat = "%(asctime)s: %(funcName)s: %(message)s"
@@ -294,14 +297,15 @@ def loadTCLVdata(dataPath, start_year, end_year, domain):
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
     ens45 = []
     ens85 = []
-    for fname in os.listdir(path):
+    for fname in os.listdir(dataPath):
         # Skip the ERA-Interim sourced TCLV set
         if fname=="all_tracks_ERAIntQ_rcp85.dat":
             continue
 
         if re.search(regex, fname):
+            m = re.match(regex, fname)
             model, rcp = m.group(1, 2)
-            filename = pjoin(path, fname)
+            filename = pjoin(dataPath, fname)
             df = load_track_file(filename)
             df = filter_tracks(df, start_year, end_year)
             df = filter_tracks_domain(df, *domain)
