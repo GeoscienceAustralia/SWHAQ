@@ -1,4 +1,4 @@
-##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/013-01524-nc.yaml
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/007-03074.yaml
 
  - template: wind_nc
  
@@ -6,21 +6,21 @@
  - vulnerability_set: domestic_wind_2012
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/Cairns_ResidentialExposure_NEXISV10_M4_updated.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/Mackay_ResidentialExposure_NEXISV10_M4_updated.csv
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
  - load_wind:
-     file_list: /g/data/w85/QFES_SWHA/wind/local/013-01524/local_wind.tif
+     file_list: /g/data/w85/QFES_SWHA/wind/local/007-02914/local_wind.tif
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/013-01524/QFES_013-01524.csv
+ - save: /g/data/w85/QFES_SWHA/impact/007-03074/QFES_007-03074.csv
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
-     file_name: /g/data/w85/QFES_SWHA/impact/013-01524/QFES_013-01524.shp
+     file_name: /g/data/w85/QFES_SWHA/impact/007-03074/QFES_007-03074.shp
      impactcode: SA1_CODE
      boundarycode: SA1_MAIN16
      
@@ -30,5 +30,6 @@
       structural_loss_ratio: [mean, max, std]
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
-      
- - save_agg: /g/data/w85/QFES_SWHA/impact/013-01524/QFES_013-01524_agg.csv
+
+
+ - save_agg: /g/data/w85/QFES_SWHA/impact/007-03074/QFES_007-03074_agg.csv
