@@ -60,14 +60,23 @@ export PYTHONPATH=$SOFTWARE/hazimp:$PYTHONPATH
 
 cd $SOFTWARE/hazimp/
 
-module list
 DATE=`date +%Y%m%d%H%M`
+
+if [ $# -eq 0 ]; then
+    # Use an environment variable
+    EVENTID=$EVENTID
+else
+    EVENTID=$1
+    echo "Running hazimp for scenario $EVENTID"
+fi
 
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/hazimp/$EVENTID.yaml
 OUTPUT=/g/data/w85/QFES_SWHA/impact
 
 echo $PYTHONPATH
 echo $CONFIGFILE
+
+
 
 # Ensure output directory exists. If not, create it:
 if [ ! -d "$OUTPUT" ]; then
@@ -84,5 +93,5 @@ fi
 python3 $SOFTWARE/hazimp/hazimp/main.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
 
 cd $OUTPUT
-cp $CONFIGFILE ./$EVENT.$DATE.yaml
+cp $CONFIGFILE ./$EVENTID.$DATE.yaml
 
