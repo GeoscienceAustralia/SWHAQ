@@ -6,7 +6,7 @@
  - vulnerability_set: domestic_wind_2012
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4_updated-SM-47-61-9.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/Townsville_ResidentialExposure_NEXISV10_M4_updated.csv
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
