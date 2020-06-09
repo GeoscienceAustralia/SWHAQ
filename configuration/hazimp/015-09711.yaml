@@ -19,10 +19,10 @@
  - save: /g/data/w85/QFES_SWHA/impact/015-09711/QFES_015-09711.csv
  
  - aggregate:
-     boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
+     boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
      file_name: /g/data/w85/QFES_SWHA/impact/015-09711/QFES_015-09711.shp
-     impactcode: SA1_CODE
-     boundarycode: SA1_MAIN16
+     impactcode: MB_CODE
+     boundarycode: MB_CODE16
      
  - aggregation:
      groupby: SA1_CODE
