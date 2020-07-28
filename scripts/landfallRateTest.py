@@ -1,3 +1,8 @@
+"""
+Test significance of change in landfall rates
+
+"""
+
 import os
 import sys
 import pandas as pd

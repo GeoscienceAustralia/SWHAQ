@@ -5,8 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from scipy.stats import ttest_ind_from_stats as ttest
+
 sns.set_style('whitegrid')
-sns.set_palette('PuBuGn_d')
+palette = sns.blend_palette(["#5E6A71", "#006983", "#72C7E7", "#A33F1F",
+                             "#CA7700", "#A5D867", "#6E7645"], 7)
+sns.set_palette(palette)
 sns.set_context('talk')
 basepath = "C:/WorkSpace/swhaq/data/tclv/landfall"
 
@@ -32,6 +36,31 @@ for g in groups:
             df = df.append(d, ignore_index=True)
 
 df = df.set_index(['model', 'RCP', 'period', 'gate'])
+
+# First calculate signifcance of trends:
+stats = pd.DataFrame(columns=['model', 'RCP', 'period', 'gate', 'label', 'pval', 'sig'])
+for i, g in enumerate(groups):
+    for j, r in enumerate(rcps):
+        baseidx = [g, r, '1981-2010']
+        baserate = df.xs(baseidx)
+        for p in periods[1:]:
+            prjrate = df.xs([g, r, p])
+            for r1, r2 in zip(baserate.itertuples(), prjrate.itertuples()):
+                tstat, pstat = ttest(r1.count_nanmean,
+                                     r1.count_nanstd, 1000,
+                                     r2.count_nanmean,
+                                     r2.count_nanstd, 1000)
+                stats = stats.append({'model': g,
+                                      'RCP': r,
+                                      'period': p,
+                                      'gate': r1.Index,
+                                      'label': r1.label,
+                                      'pval': pstat,
+                                      'sig': (pstat < 0.05)}, ignore_index=True)
+
+stats.to_csv(os.path.join(basepath, "significance.csv"))
+stats = stats.set_index(['model', 'RCP', 'period', 'gate'])
+
 ticks = np.arange(0, 49, 2)
 
 fig, ax = plt.subplots(2, 1, figsize=(16,9), sharex=True)
@@ -137,6 +166,9 @@ for i, g in enumerate(groups):
             prjrate = df.xs([g, r, p])[var]
             delta = 100 * (prjrate - baserate) / baserate
             ax[i, j].plot(delta, label=p)
+            ax[i, j].plot(delta[stats.xs([g, r, p])['sig']].index,
+                          delta[stats.xs([g, r, p])['sig']], linewidth=0,
+                             marker='o', mfc='none', markersize=5)
         ax[i, j].set_title(f"{g} - {r}")
         ax[i, j].set_xlim((22, 46))
 
