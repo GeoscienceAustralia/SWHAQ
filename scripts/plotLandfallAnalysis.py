@@ -162,13 +162,16 @@ for i, g in enumerate(groups):
     for j, r in enumerate(rcps):
         baseidx = [g, r, '1981-2010']
         baserate = df.xs(baseidx)[var]
+        ax[i, j].set_prop_cycle(color=palette[0:4])
         for p in periods[1:]:
             prjrate = df.xs([g, r, p])[var]
             delta = 100 * (prjrate - baserate) / baserate
-            ax[i, j].plot(delta, label=p)
+            color = next(ax[i, j]._get_lines.prop_cycler)['color']
+
+            ax[i, j].plot(delta, label=p, color=color)
             ax[i, j].plot(delta[stats.xs([g, r, p])['sig']].index,
                           delta[stats.xs([g, r, p])['sig']], linewidth=0,
-                             marker='o', mfc='none', markersize=5)
+                             marker='o', mfc='none', markersize=5, color=color)
         ax[i, j].set_title(f"{g} - {r}")
         ax[i, j].set_xlim((22, 46))
 
@@ -228,7 +231,6 @@ for i, g in enumerate(groups):
             ax[i, j].plot(delta, label=p)
         ax[i, j].set_title(f"{g} - {r}")
         ax[i, j].set_xlim((22, 46))
-
 
 ax[1, 0].set_xticks(ticks)
 ax[1, 0].set_xticklabels(df.xs(['GROUP1', 'RCP85', p])['label'][ticks].fillna(''), rotation='vertical')
