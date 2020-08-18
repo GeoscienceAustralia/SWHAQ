@@ -43,6 +43,7 @@ numpy2ri.activate()
 # Use the R implementation of QDM provided by the MBC package
 MBC = importr("MBC")
 
+
 def qdm(obs, ref, fut, ratio=True, trace=0.1, n=None):
     """
     Calculate the quantile delta mapping for a collection of simulated data. 
@@ -54,7 +55,7 @@ def qdm(obs, ref, fut, ratio=True, trace=0.1, n=None):
     $\delta_{fut} = \dfrac{Q_{fut}}{F_{ref}^{-1}\left[ F_{fut} ( Q_{fut} ) \right]} $ 
 
     $Q_{futb} = F_{obs}^{-1} \left[ F_{fut} (Q_{fut}) \right] \times \delta_{fut} $
-    
+
     $\delta_{fut}$ is the relative change in the quantiles between the simulated
     reference data ('sreftclv') and the simulated future data ('sfuttclv').
     $Q_{fut}$ is the quantile of the simulated future data. $F_{fut}$ and
@@ -79,14 +80,14 @@ def qdm(obs, ref, fut, ratio=True, trace=0.1, n=None):
     zeros.
     :param int n: Number of quantiles used in the quantile mapping; `None`
     equals the length of the `fut` series.
-    
+
 
     :returns: `mhatp` a `numpy.array` of bias corrected future values.
 
     """
 
     if not isinstance(obs, (list, np.ndarray,)):
-        raise TypeError("Incorrect input type for observed values") 
+        raise TypeError("Incorrect input type for observed values")
     if not isinstance(ref, (list, np.ndarray,)):
         raise TypeError("Incorrect input type for reference period values")
     if not isinstance(fut, (list, np.ndarray,)):
