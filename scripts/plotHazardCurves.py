@@ -21,16 +21,17 @@ minlocator = LogLocator(base=10.0, subs=np.arange(0.1, 1, 0.1), numticks=12)
 # TODO: Make this an argument to the script
 # Currently set to a subset on my laptop
 datapath = 'C:/WorkSpace/swhaq/data/hazard'
+datapath = '/scratch/w85/swhaq/hazard/output/QLD'
 
 g = 'GROUP1'
-r = 'RCP45'
+r = 'RCP85'
 periods = ['1981-2020', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
 colors = ['#AED6F1', '#5DADE2', '#2E86C1', '#21618C', 'k']
 
 # TODO: Iterate over all locations in the domain
-locName = 'Mackay'
-locLon = 149.2
-locLat = -21.17
+locName = 'Noosa'
+locLon = 153.1
+locLat = -26.4
 
 # For full page width figures:
 figsize = (8,6)
@@ -61,4 +62,4 @@ fig.tight_layout()
 # TODO: save figures to file, rather than showing them
 # To ensure the margins are correctly captured, add
 # plt.savefig(filepath, bbox_inches='tight')
-plt.show()
+plt.savefig("hazard_curve.png", bbox_inches='tight')
