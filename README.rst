@@ -22,7 +22,6 @@ maintained by Geoscience Australia - e.g.
 Contact:
 Craig Arthur: craig.arthur@ga.gov.au
 
-Shane Martin: shane.martin@ga.gov.au
 
 
 This directory contains input, output and model configuration files used for
@@ -112,4 +111,4 @@ craig.arthur@ga.gov.au
 Last updated:
 -------------
 
-2020-03-02
+2020-08-26
