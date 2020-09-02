@@ -1,9 +1,11 @@
 #!/bin/python3
 
+from os.path import join as pjoin
 import csv
 from dateutil.parser import parse
 from datetime import datetime
 from pathlib import Path
+import pandas as pd
 
 TIMES = ["1981-2010","2021-2040","2041-2060","2061-2080","2081-2100"]
 
@@ -14,8 +16,8 @@ GROUPS = {
         'GROUP2': ["ACCESS1-0Q","CCSM4Q","CNRM-CM5Q","GFDL-CM3Q","MPI-ESM-LRQ","NorESM1-MQ"]
 }
 
-INPUT_FOLDER = Path('/g/data/w85/QFES_SWHA/hazard/input/tclv/20200622')
-OUTPUT_FOLDER = Path('/g/data/w85/QFES_SWHA/hazard/input/tclv/20200622')
+INPUT_FOLDER = Path('C:/WorkSpace/data/tclv/tracks/corrected/20200622')
+OUTPUT_FOLDER = Path('C:/WorkSpace/data/tclv/tracks/corrected/20200828')
 
 
 def belongs(group, emission_scenario, time, f):
@@ -37,7 +39,7 @@ def find_missing():
         for group in GROUPS:
             for emission_scenario in EMISSION_SCENARIOS:
                 for time in TIMES:
-                    if belongs(groups[group], emission_scenario, time, f):
+                    if belongs(GROUPS[group], emission_scenario, time, f):
                         found = True
         
         if not found:
@@ -49,29 +51,26 @@ def merge_tracks(group, emission_scenario, time):
     HEADER = None
 
     start_time, end_time = time.split('-')
+    inc = int(end_time) - int(start_time) + 1
+    timeinc = 0
     start_time = datetime(int(start_time), 1, 1)
     end_time = datetime(int(end_time) + 1, 1, 1)
 
-    with open(OUTPUT_FOLDER / output_file, 'w') as out:
-        writer = csv.writer(out)
+    # Empty list to store the dataframes as they are loaded
+    alltracks = []
 
-        for f in INPUT_FOLDER.iterdir():
-            if belongs(group, emission_scenario, time, f):
-                with open(f) as fl:
-                    reader = csv.reader(fl)
-                    header = next(reader)
+    for f in INPUT_FOLDER.iterdir():
+        if belongs(group, emission_scenario, time, f):
+            df = pd.read_csv(f)
+            df['datetime'] = pd.to_datetime(df.datetime) + pd.offsets.DateOffset(years=timeinc)
+            df['year'] += timeinc
+            alltracks.append(df)
+            timeinc += inc
+        else:
+            pass
 
-                    if HEADER is None:
-                        HEADER = header
-                        writer.writerow(HEADER)
-
-                    elif HEADER != header:
-                        raise ValueError('{} is not {}'.format(header, HEADER))
-
-                    for row in reader:
-                        t = parse(row[0])
-                        if t >= start_time and t < end_time:
-                            writer.writerow(row)
+    outdf = pd.concat(alltracks)
+    outdf.to_csv(pjoin(OUTPUT_FOLDER, output_file),index=False)
 
 if __name__ == '__main__':
     for group in GROUPS:
