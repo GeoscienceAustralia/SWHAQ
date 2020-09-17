@@ -3,10 +3,11 @@
 #PBS -qnormal
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=1:00:00
-#PBS -lmem=32GB,ncpus=16,jobfs=4000MB
+#PBS -lwalltime=8:00:00
+#PBS -lmem=192GB,ncpus=48,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=scratch/w85+gdata/w85
+#PBS -v GROUP,RCP
 
 # This script cycles through RCP scenarios and future time periods
 # and calculates the absolute and relative change in ARI wind speeds,
@@ -31,34 +32,32 @@ PERIODS="2021-2040,2041-2060,2061-2080,2081-2100"
 RCPLIST="RCP45,RCP85"
 IFS=","
 
-echo $GROUPLIST
 for P in $PERIODS; do
-    for R in $RCPLIST; do
-        for GROUP in $GROUPLIST; do
-            echo $GROUP, $R, $P
-            REFFILE=$BASEPATH/${GROUP}\_$R\_1981-2020/hazard/hazard.nc
-            PRJFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard.nc
-            OUTFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard_change.nc
-            RELFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard_rel.nc
-            # Difference
-            cdo -L setattribute,wspd@long_name="Difference in ARI wind speed" \
-            -sub \
-            -selvar,wspd ${PRJFILE} \
-            -selvar,wspd ${REFFILE} ${OUTFILE}
+    echo $GROUP, $RCP, $P
+    REFFILE=$BASEPATH/${GROUP}\_$RCP\_1981-2020/hazard/hazard.nc
+    PRJFILE=$BASEPATH/${GROUP}\_$RCP\_$P/hazard/hazard.nc
+    OUTFILE=$BASEPATH/${GROUP}\_$RCP\_$P/hazard/hazard_change.nc
+    RELFILE=$BASEPATH/${GROUP}\_$RCP\_$P/hazard/hazard_rel.nc
+    # Difference
+    cdo -L -P ${PBS_NCPUS} setattribute,wspd@long_name="Difference in ARI wind speed" \
+    -smooth,radius=50km \
+    -sub \
+    -selvar,wspd ${PRJFILE} \
+    -selvar,wspd ${REFFILE} ${OUTFILE}
 
-            # Relative change:
-            cdo -L setattribute,wspd@long_name="Relative change in ARI wind speed" \
-            -subc,1 -div \
-            -selvar,wspd ${PRJFILE} \
-            -selvar,wspd  ${REFFILE} ${RELFILE}
+    # Relative change:
+    cdo -L -P ${PBS_NCPUS} setattribute,wspd@long_name="Relative change in ARI wind speed",wspd@units="%" \
+    -smooth,radius=50km \
+    -mulc,100 \
+    -subc,1 -div \
+    -selvar,wspd ${PRJFILE} \
+    -selvar,wspd  ${REFFILE} ${RELFILE}
 
-            if [[ $? -ne 0 ]]; then
-                echo "cdo commands failed when processing $PRJFILE"
-            else
-                echo "Processed $PRJFILE"
-            fi
-        done
-    done
+    if [[ $? -ne 0 ]]; then
+        echo "cdo commands failed when processing $PRJFILE"
+    else
+        echo "Processed $PRJFILE"
+    fi
 done
 
 FS=$IFS

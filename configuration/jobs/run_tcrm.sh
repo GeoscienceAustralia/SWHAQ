@@ -1,13 +1,13 @@
 #!/bin/bash
 #PBS -Pw85
 #PBS -qnormal
-#PBS -N tcrm
+#PBS -N tcrmdb
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=6:00:00
-#PBS -lmem=128GB,ncpus=96,jobfs=4000MB
+#PBS -lwalltime=2:00:00
+#PBS -lmem=64GB,ncpus=16,jobfs=400MB
 #PBS -joe
-#PBS -lstorage=gdata/w85
+#PBS -lstorage=gdata/w85+scratch/w85
 #PBS -v CONFIGFILE
 #PBS -o /g/data/w85/QFES_SWHA/logs/tcrm/hazard
 #PBS -e /g/data/w85/QFES_SWHA/logs/tcrm/hazard

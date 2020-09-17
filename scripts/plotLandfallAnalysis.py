@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from builtins import str
 from scipy.stats import ttest_ind_from_stats as ttest
 
 sns.set_style('whitegrid')
@@ -13,23 +14,24 @@ palette = sns.blend_palette(["#5E6A71", "#006983", "#72C7E7", "#A33F1F",
 sns.set_palette(palette)
 sns.set_context('talk')
 basepath = "C:/WorkSpace/swhaq/data/tclv/landfall"
-
+basepath = "/scratch/w85/swhaq/hazard/output/QLD"
 groups = ['GROUP1', 'GROUP2']
 rcps = ['RCP45', 'RCP85']
-periods = ['1981-2010', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
-
-df = pd.read_csv(os.path.join(basepath, 'GROUP1', 'RCP45', '1981-2010', 'simulated_landfall_rates.csv'))
+periods = ['1981-2020', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
+basefile = os.path.join(basepath, 'GROUP1_RCP45_1981-2020', 'plots', 'simulated_landfall_rates.csv')
+df = pd.read_csv(basefile)
 
 df['model'] = 'GROUP1'
 df['RCP'] = 'RCP45'
-df['period'] = '1981-2010'
+df['period'] = '1981-2020'
 
 df = pd.DataFrame(columns=df.columns)
 
 for g in groups:
     for r in rcps:
         for p in periods:
-            d = pd.read_csv(os.path.join(basepath, g, r, p, 'simulated_landfall_rates.csv'))
+            scenario = f"{g}_{r}_{p}"
+            d = pd.read_csv(os.path.join(basepath, scenario, 'plots', 'simulated_landfall_rates.csv'))
             d['model'] = g
             d['RCP'] = r
             d['period'] = p
@@ -41,7 +43,7 @@ df = df.set_index(['model', 'RCP', 'period', 'gate'])
 stats = pd.DataFrame(columns=['model', 'RCP', 'period', 'gate', 'label', 'pval', 'sig'])
 for i, g in enumerate(groups):
     for j, r in enumerate(rcps):
-        baseidx = [g, r, '1981-2010']
+        baseidx = [g, r, '1981-2020']
         baserate = df.xs(baseidx)
         for p in periods[1:]:
             prjrate = df.xs([g, r, p])
@@ -147,9 +149,9 @@ ax[1, 0].set_xlim((22, 46))
 ax[1, 1].set_xticks(ticks)
 ax[1, 1].set_xticklabels(df.xs(['GROUP1', 'RCP85', p])['label'][ticks].fillna(''), rotation='vertical')
 ax[1, 1].set_xlim((22, 46))
-ax[0, 0].set_ylim((0, 1))
+ax[0, 0].set_ylim((0, 0.2))
 ax[0, 0].set_ylabel("Landfall rate (TCs/yr)")
-ax[1, 0].set_ylim((0, 1))
+ax[1, 0].set_ylim((0, 0.2))
 ax[1, 0].set_ylabel("Landfall rate (TCs/yr)")
 
 ax[0, 1].legend()
@@ -160,7 +162,7 @@ fig, ax = plt.subplots(2, 2, figsize=(16, 9), sharex=True, sharey=True)
 
 for i, g in enumerate(groups):
     for j, r in enumerate(rcps):
-        baseidx = [g, r, '1981-2010']
+        baseidx = [g, r, '1981-2020']
         baserate = df.xs(baseidx)[var]
         ax[i, j].set_prop_cycle(color=palette[0:4])
         for p in periods[1:]:
@@ -211,9 +213,9 @@ ax[1, 0].set_xlim((22, 46))
 ax[1, 1].set_xticks(ticks)
 ax[1, 1].set_xticklabels(df.xs(['GROUP1', 'RCP85', p])['label'][ticks].fillna(''), rotation='vertical')
 ax[1, 1].set_xlim((22, 46))
-ax[0, 0].set_ylim((0, 1))
+ax[0, 0].set_ylim((0, 0.2))
 ax[0, 0].set_ylabel("Landfall rate (TCs/yr)")
-ax[1, 0].set_ylim((0, 1))
+ax[1, 0].set_ylim((0, 0.2))
 ax[1, 0].set_ylabel("Landfall rate (TCs/yr)")
 
 ax[0, 1].legend()
@@ -224,7 +226,7 @@ fig, ax = plt.subplots(2, 2, figsize=(16, 9), sharex=True, sharey=True)
 
 for i, g in enumerate(groups):
     for j, r in enumerate(rcps):
-        baserate = df.xs([g, r, '1981-2010'])[['cat3_nanmean', 'cat4_nanmean', 'cat5_nanmean']].sum(axis=1)
+        baserate = df.xs([g, r, '1981-2020'])[['cat3_nanmean', 'cat4_nanmean', 'cat5_nanmean']].sum(axis=1)
         for p in periods[1:]:
             prjrate = df.xs([g, r, p])[['cat3_nanmean', 'cat4_nanmean', 'cat5_nanmean']].sum(axis=1)
             delta = 100 * (prjrate - baserate) / baserate

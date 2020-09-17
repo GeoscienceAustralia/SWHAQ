@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from scipy.ndimage import median_filter
+
 import pdb
 
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
@@ -31,18 +32,18 @@ borders = cfeature.NaturalEarthFeature(
         scale='10m',
         facecolor='none')
 
-levels = np.arange(-15, 16, 2.5)
+levels = np.arange(-100, 101, 10)
 
 for g in groups:
     for r in rcps:
         for p in periods:
             scenario = f'{g}_{r}_{p}'
-            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_change.nc')
+            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel.nc')
             print(f"Processing {fname}")
             ds = xr.open_dataset(fname)
             for ari in aris:
                 fig, ax = plt.subplots(1, 1, subplot_kw={'projection':prj})
-                title = f"{ari}-year ARI difference - {p}"
+                title = f"{ari}-year ARI relative difference - {p}"
                 ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
                 subplot_kws=dict(projection=prj), add_labels=True,
                 ax=ax)
@@ -57,7 +58,7 @@ for g in groups:
                 gl.ylabel_style = {'size': 'x-small'}
                 ax.set_title(title)
                 plt.tight_layout()
-                outputfile = os.path.join(datapath, scenario, 'plots', f'hazard_change.{ari}.png')
+                outputfile = os.path.join(datapath, scenario, 'plots', f'hazard_rel_change.{ari}.png')
                 plt.savefig(outputfile, bbox_inches='tight')
                 plt.close(fig)
 
@@ -65,7 +66,7 @@ from itertools import product
 
 for p in periods:
     for ari in aris:
-        fig, axes = plt.subplots(2, 2, figsize=(10, 10),
+        fig, axes = plt.subplots(2, 2, figsize=(10,10),
                                  subplot_kw={'projection':prj},
                                  sharex=True, sharey=True)
         ax = axes.flatten()
@@ -73,7 +74,7 @@ for p in periods:
             print(f"Plotting hazard change for {g} - {r} - {p} - {ari}")
             suptitle = f"Change in {ari}-ARI wind speed - {p}"
             scenario = f"{g}_{r}_{p}"
-            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_change.nc')
+            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel.nc')
             ds = xr.open_dataset(fname)
             title = f"{g} {r}"
             im = ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
@@ -92,11 +93,11 @@ for p in periods:
             ax[i].set_title(title, fontsize='small')
         fig.subplots_adjust(right=0.85, wspace=0.1, hspace=0.05, top=0.95)
         cbar_ax = fig.add_axes([0.9, 0.15, 0.025, 0.7])
-        cbarlabel = "Change in ARI wind speed [m/s]"
+        cbarlabel = "Relative change in ARI wind speed [%]"
         fig.colorbar(im, cax=cbar_ax, label=cbarlabel)
         #plt.tight_layout()
         fig.suptitle(suptitle)
-        outputfile = os.path.join(datapath, f'hazard_change.{ari}.{p}.png')
+        outputfile = os.path.join(datapath, f'hazard_rel_change.{ari}.{p}.png')
         plt.savefig(outputfile, bbox_inches='tight')
         plt.close(fig)
-            
+
