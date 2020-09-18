@@ -71,23 +71,21 @@ else
 fi
 
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/hazimp/$EVENTID.yaml
-OUTPUT=/g/data/w85/QFES_SWHA/impact
-
-echo $PYTHONPATH
-echo $CONFIGFILE
+OUTPUT=/g/data/w85/QFES_SWHA/impact/2020
 
 
+if [ ! -f "$CONFIGFILE" ]; then
+    echo "Configuration file does not exist: $CONFIGFILE"
+    exit 1
+else
+    echo $CONFIGFILE
+fi
 
 # Ensure output directory exists. If not, create it:
 if [ ! -d "$OUTPUT" ]; then
    mkdir $OUTPUT
 fi
 
-if [ ! -f "$CONFIGFILE" ]; then
-    echo "Configuration file does not exist:"
-    echo $CONFIGFILE
-    exit 1
-fi
 
 # Run the complete simulation:
 python3 $SOFTWARE/hazimp/hazimp/main.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
