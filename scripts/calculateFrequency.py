@@ -7,6 +7,7 @@ from datetime import datetime
 from builtins import str
 
 from matplotlib import pyplot as plt
+import matplotlib.lines as mlines
 
 import numpy as np
 import pandas as pd
@@ -30,13 +31,13 @@ except InvalidGitRepositoryError:
 # Set up logging:
 LOGGER = logging.getLogger()
 logFormat = "%(asctime)s: %(funcName)s: %(message)s"
-logging.basicConfig(level='DEBUG',
+logging.basicConfig(level='INFO',
                     format=logFormat,
                     filename='quantileMapping.log',
                     filemode='w',
                     datefmt="%Y-%m-%d %H:%M:%S")
 console = logging.StreamHandler(sys.stdout)
-console.setLevel(getattr(logging, 'DEBUG'))
+console.setLevel(getattr(logging, 'INFO'))
 formatter = logging.Formatter(logFormat,
                               datefmt='%H:%M:%S', )
 console.setFormatter(formatter)
@@ -232,47 +233,68 @@ def load_obs_data(obsfile, domain):
     best.rename(columns={'SID': 'num', 'LAT': 'lat', 'LON': 'lon',
                          'WMO_PRES': 'pmin', 'BOM_WIND': 'vmax',
                          'BOM_POCI': 'poci'}, inplace=True)
-    best = best[best.poci.notnull() & best.pmin.notnull()]
-    best['pdiff'] = best.poci - best.pmin
-    best = best[best.pdiff > 1]
+    #best = best[best.poci.notnull() & best.pmin.notnull()]
+    #best['pdiff'] = best.poci - best.pmin
+    #best = best[best.pdiff > 1]
     obstc = filter_tracks_domain(best, *domain)
     return obstc
 
 
 if __name__ == '__main__':
 
+    sns.set_context("talk")
+
     path = "data/tclv/"
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
     domain = (135, 160, -25, -10)
     obstc = load_obs_data("data/ibtracs.since1980.list.v04r00.csv", domain)
-    obstc = calculateMaxWind(obstc, 'ISO_TIME')
+    #obstc = calculateMaxWind(obstc, 'ISO_TIME')
     tclvdata = loadTCLVdata(path, domain=domain)
     #futdata = loadTCLVdata(path, 1981, 2100, domain)
     #refparams = calculateFitParams(refdata)
-    obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
-    obsfreq = obsdata.groupby('num').ngroups / 40
+    #obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
+    obsfreq = obstc.groupby('num').ngroups / 40
     STARTS = [2021, 2041, 2061, 2081]
     ENDS = [2040, 2060, 2080, 2100]
 
-    freqdf = pd.DataFrame(columns=['Model', 'RCP', 'start_year', 'plot_year', 'end_year', 'frequency'])
+    freqdf = pd.DataFrame(columns=['Model', 'RCP', 'GROUP', 'start_year', 'plot_year', 'end_year', 'frequency'])
+    group1 = ['ACCESS1-3Q', 'CSIRO-Mk3-6-0Q', 'GFDL-ESM2MQ', 'HadGEM2Q', 'MIROC5Q']
+    group2 = ['ACCESS1-0Q', 'CCSM4Q', 'CNRM-CM5Q', 'GFDL-CM3Q', 'MPI-ESM-LRQ', 'NorESM1-MQ']
+    
     #freqdf = freqdf.append({'Model':"IBTrACS", 'RCP':'', 'start_year':1980, 'end_year':2019, 'frequency':obsfreq}, ignore_index=True)
     for i, (m, df) in enumerate(tclvdata.items()):
         LOGGER.info(f"Processing {m}")
+
         model, rcp = m.split()
+        if model in group1:
+            group = "GROUP 1"
+        else:
+            group = "GROUP 2"
+        LOGGER.info(f"{model} is in {group}")
         refdf = filter_tracks(df, 1981, 2010)
         reffreq = refdf.groupby('num').ngroups / 30
-        freqdf = freqdf.append({'Model':model, 'RCP':rcp, 'start_year':1981, 'plot_year':1995, 'end_year':2010, 'frequency':reffreq}, ignore_index=True)
+        freqdf = freqdf.append({'Model':model, 'RCP':rcp, 'GROUP': group, 'start_year':1981, 'plot_year':1995, 'end_year':2010, 'frequency':reffreq}, ignore_index=True)
         for s, e in zip(STARTS, ENDS):
             LOGGER.info(f"Processing time period {s} - {e}")
             futdf = filter_tracks(df, s, e)
             futfreq = futdf.groupby('num').ngroups / 20
-            freqdf = freqdf.append({'Model':model, 'RCP':rcp, 'start_year':s, 'plot_year':s+9, 'end_year':e, 'frequency':futfreq}, ignore_index=True)
+            freqdf = freqdf.append({'Model':model, 'RCP':rcp, 'GROUP': group, 'start_year':s, 'plot_year':s+9, 'end_year':e, 'frequency':futfreq}, ignore_index=True)
     
-    g = sns.FacetGrid(freqdf, col='RCP', hue='Model',
-                      height=5, aspect=1.25, legelnd_out=True)
+    groupfreq = freqdf.groupby(["GROUP", "RCP", "plot_year"]).agg("mean")
+
+    g = sns.FacetGrid(freqdf, row="GROUP", col='RCP', hue='Model',
+                      height=5, aspect=1.25, legend_out=True,
+                      row_order=["GROUP 1", "GROUP 2"])
     g.map(sns.lineplot, "plot_year", "frequency")
-    for  cv, ax in g.axes_dict.items():
-        ax.axhline(obsfreq, color='0.5', linestyle='--')
+
+    for cv, ax in g.axes_dict.items():
+        ax.plot(groupfreq.xs(list(cv)), color='r', linestyle='--', label="Mean")
+        ax.axhline(obsfreq, color='0.5', linestyle='--', label="Historical")
         ax.set_title(cv)
         ax.set_xlabel("Year")
         ax.set_xticks([1995, 2030, 2050, 2070, 2090])
+
+    g.add_legend()
+    plt.savefig("figures/tclv_frequency_projections.png", bbox_inches="tight", dpi=600)
+    freqdf.to_excel("data/tclv/tclv_frequency_projections.xlsx", index=False)
+
