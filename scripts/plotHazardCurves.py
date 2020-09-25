@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 from matplotlib.ticker import LogLocator, NullFormatter
 
 import seaborn as sns
-context = 'paper'
+context = 'talk'
 sns.set_context(context)
 #sns.set_style('whitegrid')
 
@@ -32,16 +32,16 @@ colors = ['#AED6F1', '#5DADE2', '#2E86C1', '#21618C', 'k']
 
 def plotLocation(locName, locLon, locLat, g, r):
     # For full page width figures:
-    #figsize = (8,6)
+    figsize = (8,6)
 
     # For half-page width:
-    figsize = (4,3)
+    #figsize = (4,3)
 
     fig, ax = plt.subplots(figsize=figsize)
 
     for p, c in zip(periods, colors):
         scenario = f'{g}_{r}_{p}'
-        ds = xr.open_dataset(os.path.join(datapath, scenario, 'hazard', 'hazard_rel_tcha.nc'))
+        ds = xr.open_dataset(os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc'))
         ari = ds.ari.values
         locDict = dict(lon=locLon, lat=locLat)
         wspd = ds.sel(locDict, method='nearest')['wspd'].values.flatten()

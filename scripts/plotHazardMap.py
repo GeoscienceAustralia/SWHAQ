@@ -46,7 +46,7 @@ for g in groups:
     for r in rcps:
         for p in periods:
             scenario = f'{g}_{r}_{p}'
-            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_tcha.nc')
+            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc')
             print(f"Processing {fname}")
             ds = xr.open_dataset(fname)
             for ari in aris:
@@ -80,7 +80,7 @@ for p in periods:
             print(f"Plotting hazard for {g} - {r} - {p} - {ari}")
             suptitle = f"{ari}-ARI wind speed - {p}"
             scenario = f"{g}_{r}_{p}"
-            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_tcha.nc')
+            fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc')
             ds = xr.open_dataset(fname)
             title = f"{g} {r}"
             im = ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',

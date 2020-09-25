@@ -41,7 +41,7 @@ def plotLocation(locName, locLon, locLat, g, r):
 
     for p, c in zip(periods, colors):
         scenario = f'{g}_{r}_{p}'
-        ds = xr.open_dataset(os.path.join(datapath, scenario, 'hazard', 'hazard_rel_tcha.nc'))
+        ds = xr.open_dataset(os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc'))
         ari = ds.ari.values
         aep = 1./ari
         locDict = dict(lon=locLon, lat=locLat)

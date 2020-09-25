@@ -28,7 +28,7 @@ module load cdo
 FS=$IFS
 
 BASEPATH=/scratch/w85/swhaq/hazard/output/QLD
-TCHAPATH=/g/data/fj6/TCRM/TCHA18/hazard/hazard_emp.nc
+TCHAPATH=$BASEPATH/HISTORICAL_1981-2010/hazard/hazard.nc
 GROUPLIST="GROUP1,GROUP2"
 PERIODS="2021-2040,2041-2060,2061-2080,2081-2100"
 RCPLIST="RCP45,RCP85"
@@ -41,11 +41,12 @@ for P in $PERIODS; do
             echo $GROUP, $R, $P
             REFFILE=$BASEPATH/${GROUP}\_$R\_1981-2020/hazard/hazard.nc
             PRJFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard.nc
-            OUTFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard_rel_tcha.nc
+            OUTFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard_rel_hist.nc
             RELFILE=$BASEPATH/${GROUP}\_$R\_$P/hazard/hazard_rel.nc
 
             # Apply relative change:
             cdo -L -mul \
+                -setrtomiss,0,20 \
                 -sellonlatbox,135,160,-30,-5 \
                 -selvar,wspd ${TCHAPATH} \
                 -addc,1 -divc,100 \
