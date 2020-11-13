@@ -31,7 +31,8 @@ import pdb
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(levelname)s: %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
+                    datefmt='%Y-%m-%d %H:%M:%S',)
+
 
 # function to transpose table
 def transpose(inputList):
@@ -42,7 +43,7 @@ def transpose(inputList):
     
 ########################################################################
 # input directory where exposure .xls files for each category exist
-dir = "../data/exposure"
+dir = "data/exposure"
 ########################################################################
 
 dirlist =  [x[0] for x in os.walk(dir)]
