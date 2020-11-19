@@ -51,9 +51,9 @@ CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/tcrm/$EVENTID.ini
 TRACKPATH=/g/data/w85/QFES_SWHA/tracks
 
 # Substitute the paths into the template configuration file: 
-sed 's|TRACKPATH|'$TRACKPATH'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
-sed 's|OUTPUTPATH|'$OUTPUT'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
-sed 's|EVENTID|'$EVENTID'|' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
+sed 's|TRACKPATH|'$TRACKPATH'|g' /g/data/w85/QFES_SWHA/configuration/tcrm/tcevent_template.ini > $CONFIGFILE
+sed -i 's|OUTPUTPATH|'$OUTPUT'|g' $CONFIGFILE
+sed -i 's|EVENTID|'$EVENTID'|g' $CONFIGFILE
 
 # Add path to where TCRM is installed. Separate installations
 # for py3, master, develop branch
