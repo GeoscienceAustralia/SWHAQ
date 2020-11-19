@@ -18,7 +18,7 @@ sed 1d $BASEPATH/scenario_lookup_table.csv | while IFS=, read -r ID category loc
 do 
     echo "Running HazImp post analysis for scenario $ID, a category $category event at $location"
 
-    INPUTFILE=$BASEOUTPUT/NEXISV10/$ID/QFES\_$ID.csv
+    INPUTFILE=$BASEOUTPUT/2020_LUO/$ID/QFES\_$ID.csv
     echo "Processing $INPUTFILE"
     python3 $SOFTWARE/hazimp/post/impact_analysis.py -i $INPUTFILE -f 'png'
 

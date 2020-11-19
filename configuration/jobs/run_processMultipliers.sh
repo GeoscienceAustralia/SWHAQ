@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -Pw85
+#PBS -P w85
 #PBS -qexpress
 #PBS -N runmultipliers
 #PBS -m ae
