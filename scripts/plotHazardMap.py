@@ -17,10 +17,10 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 datapath = '/scratch/w85/swhaq/hazard/output/QLD'
 groups = ['GROUP1', 'GROUP2']
 rcps = ['RCP45', 'RCP85']
-periods = ['2021-2040', '2041-2060', '2061-2080', '2081-2100']
+periods = ['1981-2020','2021-2040', '2041-2060', '2061-2080', '2081-2100']
 
 g = 'GROUP1'
-r = 'RCP45'
+rlabel = {'RCP45': 'RCP 4.5', 'RCP85': 'RCP 8.5'}
 p = '2081-2100'
 aris = [50, 100, 500, 2000]
 figsize=(12, 10)
@@ -82,7 +82,7 @@ for p in periods:
             scenario = f"{g}_{r}_{p}"
             fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc')
             ds = xr.open_dataset(fname)
-            title = f"{g} {r}"
+            title = f"{g} {rlabel[r]}"
             im = ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
                                                    subplot_kws=dict(projection=prj),
                                                    add_labels=True, add_colorbar=False,
