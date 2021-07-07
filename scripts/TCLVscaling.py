@@ -68,7 +68,7 @@ from qdm import qdm
 from Utilities.loadData import maxWindSpeed
 
 try:
-    r = Repo('')
+    r = Repo('', search_parent_directories=True)
     commit = str(r.commit('HEAD'))
 except InvalidGitRepositoryError:
     commit = 'unknown'
@@ -222,74 +222,6 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     df['vmax'] = maxWindSpeed(varidx, dt.values, df.lon.values, df.lat.values,
                               df.pmin.values, df.poci.values, gustfactor=1.223)
     return df
-
-
-def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
-    """
-    Calculate the quantile delta mapping for a collection of simulated data. 
-
-    This function is based on the formulation described in Cannon _et al._
-    (2015) and Heo _et al._ (2019), where the relative change in quantiles 
-    between a reference period and the future period are preserved.
-
-    $\delta_{fut} = \dfrac{Q_{fut}}{F_{ref}^{-1}\left[ F_{fut} ( Q_{fut} ) \right]} $ 
-
-    $Q_{futb} = F_{obs}^{-1} \left[ F_{fut} (Q_{fut}) \right] \times \delta_{fut} $
-
-    $\delta_{fut}$ is the relative change in the quantiles between the simulated
-    reference data ('sreftclv') and the simulated future data ('sfuttclv').
-    $Q_{fut}$ is the quantile of the simulated future data. $F_{fut}$ and
-    $F_{ref}^{-1}$ are a CDF of the simulated future data and an inverse CDF of
-    the simulated reference data respectively. Finally, $F_{obs}^{-1}$ is the
-    inverse CDF of the observed data, and $Q_{futb}$ are the corrected quantiles
-    of the future data.
-
-    In this framework, the algorithm is independent of the selection of
-    distribution, which would be data-dependent, and more generally specific to
-    the variable that is being corrected. We begin by fitting a lognormal
-    distribution to the $\Delta p_c$ values in each of the observed, reference and
-    future collections. 
-
-    :param vobs: `numpy.array` of observed values 
-    :param vref: `numpy.array` of reference period values (simulated) 
-    :param vfut: `numpy.array` of future period values (simulated) 
-    :param func dist: Distribution function to use.
-    This must have `fit`, `pdf`, `cdf` and `ppf` methods defined, as used in
-    `scipy.stats.rv_continuous` distributions. Default is `scipy.stats.lognorm`.
-
-    :returns: `vfutb` a `numpy.array` of bias corrected future values. 
-    """
-
-    if not isinstance(vobs, (list, np.ndarray,)):
-        raise TypeError("Incorrect input type for observed values")
-    if not isinstance(vref, (list, np.ndarray,)):
-        raise TypeError("Incorrect input type for reference period values")
-    if not isinstance(vfut, (list, np.ndarray,)):
-        raise TypeError("Incorrect input type for future period values")
-
-    if any(np.isnan(vobs)):
-        raise ValueError("Input observation array contains NaN values")
-    if any(np.isnan(vref)):
-        raise ValueError("Input reference array contains NaN values")
-    if any(np.isnan(vfut)):
-        raise ValueError("Input future array contains NaN values")
-
-    pobs = dist.fit(vobs, loc=0, scale=1)
-    pref = dist.fit(vref, loc=0, scale=1)
-    pfut = dist.fit(vfut, loc=0, scale=1)
-
-    # CDF of future, at the value of the future data points
-    Fsf = dist.cdf(vfut, *pfut)
-
-    # Inverse cdf of reference period distribution, evaluated at future CDF
-    # values
-    invFsr = dist.ppf(Fsf, *pref)
-
-    # Relative change in values
-    delta = vfut / invFsr
-    vfutb = dist.ppf(Fsf, *pobs) * delta
-
-    return vfutb
 
 
 def loadTCLVdata(dataPath, start_year=None, end_year=None, domain=None):
@@ -450,7 +382,7 @@ def plot_categories(datadict, start, end, plotpath):
 
 if __name__ == '__main__':
 
-    path = "data/tclv/"
+    path = "../data/tclv/"
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
 
     # The variables are referenced in the following way::
@@ -466,12 +398,14 @@ if __name__ == '__main__':
     # and enter the simulation domain.
 
     domain = (135, 160, -25, -10)
-    obstc = load_obs_data("data/ibtracs.since1980.list.v04r00.csv", domain)
+    obstc = load_obs_data("../data/ibtracs.since1980.list.v04r00.csv", domain)
     obstc = calculateMaxWind(obstc, 'ISO_TIME')
     obstc['category'] = pd.cut(obstc['vmax'], 
                                [0, 25, 35, 46, 62, 77, 200], 
                                labels=LABELS)
     obsparams = stats.lognorm.fit(obstc.pdiff, loc=0, scale=1)
+    obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
+    obslmi = obstc.loc[obstc.groupby(["num"])["pdiff"].idxmax()]
 
     # First we explore the distribution of $\Delta p_c$ for the reference period
     # (1981-2010) in each of the models, and the best track archive. The figure
@@ -479,13 +413,11 @@ if __name__ == '__main__':
     # distribution to each.
 
     tclvdata = loadTCLVdata(path, domain=domain)
-    #futdata = loadTCLVdata(path, 1981, 2100, domain)
-    #refparams = calculateFitParams(refdata)
-    obsdata = obstc.pdiff.values[obstc.pdiff.values > 0]
 
-    obslmi = obstc.loc[obstc.groupby(["num"])["pdiff"].idxmax()]
-
-    OUTPUTPATH = "C:/WorkSpace/data/tclv/tracks/corrected/20200622"
+    OUTPUTPATH = "C:/WorkSpace/swhaq/data/tclv/20210212"
+    if not os.path.isdir(OUTPUTPATH):
+        LOGGER.warning(f"{OUTPUTPATH} does not exist - creating")
+        os.makedirs(OUTPUTPATH)
     FILETEMPLATE = "{0}_1981-2010_bc.csv"
     FUTFILETEMPLATE = "{0}_{1}-{2}_bc.csv"
 
@@ -494,9 +426,6 @@ if __name__ == '__main__':
 
     for s, e in zip(STARTS, ENDS):
         LOGGER.info(f"Processing time period {s} - {e}")
-        #futdata = loadTCLVdata(path, s, e, domain)
-        bfutdata = {}
-        brefdata = {}
         for i, (m, df) in enumerate(tclvdata.items()):
             LOGGER.info(f"Processing {m}")
             refdf = filter_tracks(df, 1981, 2010)
@@ -515,15 +444,16 @@ if __name__ == '__main__':
                     f"Projected data: {futdf.groupby('num')['pdiff'].idxmax():.2f}")
             # Calculate the bias-corrected LMI
             try:
-                srefdata['blmi'], sfutdata['blmi'] = qdm(
-                    obsdata, srefdata.pdiff.values, sfutdata.pdiff.values)
+                srefdata['blmi'], sfutdata['blmi'] = qdm(obslmi.pdiff.values,
+                                                         srefdata.pdiff.values,
+                                                         sfutdata.pdiff.values)
             except:
                 LOGGER.error(f"QDM failed for {m}")
                 raise
             LOGGER.debug(
-                f"Mean bias-corrected projected LMI: {sfutdata['blmi'].mean():.2f}")
+                f"Median bias-corrected reference LMI: {srefdata['blmi'].median():.2f}")
             LOGGER.debug(
-                f"Mean bias-corrected reference LMI: {srefdata['blmi'].mean():.2f}")
+                f"Median bias-corrected projected LMI: {sfutdata['blmi'].median():.2f}")
 
             # Now to join the bias-corrected LMI to the existing normalised
             # intensity to give bias-corrected pressure deficit values
@@ -532,7 +462,7 @@ if __name__ == '__main__':
             futdf['pdiff'] = futdf.ni.values * newdf.blmi.values
             futdf['pmin'] = futdf['poci'] - futdf['pdiff']
             LOGGER.debug(
-                f"Mean bias-corrected future pressure deficit: {futdf['pdiff'].mean():.2f}")
+                f"Median bias-corrected future pressure deficit: {futdf['pdiff'].median():.2f}")
             # Calculate maximum wind speed (this will replace existing values)
             futdf = calculateMaxWind(futdf, 'datetime')
             # Save to file
@@ -545,9 +475,8 @@ if __name__ == '__main__':
             newdf = pd.merge(refdf, srefdata[['blmi']], on='num')
             refdf['pdiff'] = refdf.ni.values * newdf.blmi.values
             refdf['pmin'] = refdf['poci'] - refdf['pdiff']
+            LOGGER.debug(
+                f"Median bias-corrected reference pressure deficit: {refdf['pdiff'].median():.2f}")
             refdf = calculateMaxWind(refdf, 'datetime')
             fname = pjoin(OUTPUTPATH, FILETEMPLATE.format(m.replace(' ', '_')))
             refdf.to_csv(fname, sep=',',  float_format="%.3f", index=False)
-
-    #plotCategories(refdata, 1980, 2010, path)
-    #plotCategories(futdata, start, end, path)

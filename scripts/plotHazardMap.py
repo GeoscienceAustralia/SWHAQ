@@ -17,7 +17,7 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 datapath = '/scratch/w85/swhaq/hazard/output/QLD'
 groups = ['GROUP1', 'GROUP2']
 rcps = ['RCP45', 'RCP85']
-periods = ['2021-2040', '2041-2060', '2061-2080', '2081-2100']
+periods = ['1981-2020', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
 
 g = 'GROUP1'
 r = 'RCP45'
