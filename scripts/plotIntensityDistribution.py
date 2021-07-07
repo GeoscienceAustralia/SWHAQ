@@ -14,6 +14,7 @@ sns.set_style("whitegrid")
 datapath = "X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/tracks/ensemble/20200828"
 groups = ["GROUP1", "GROUP2"]
 rcps = ["RCP45", "RCP85"]
+rlabel = {'RCP45': 'RCP 4.5', 'RCP85': 'RCP 8.5'}
 periods = ["1981-2010", "2021-2040", "2041-2060", "2061-2080", "2081-2100"]
 
 palette = sns.blend_palette(["#5E6A71", "#006983", "#72C7E7", "#A33F1F",
@@ -42,7 +43,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].axvline(m, linestyle='--', color=palette[j], alpha=0.5)
         ax[i].set_xlabel("Maximum wind speed")
         ax[i].set_xlim((0, 100))
-        ax[i].set_title(f"{g} - {r}")
+        ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
 plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_distribution.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
@@ -61,7 +62,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].axvline(m, linestyle='--', color=palette[j], alpha=0.5)
         ax[i].set_xlabel("Maximum wind speed")
         ax[i].set_xlim((0, 100))
-        ax[i].set_title(f"{g} - {r}")
+        ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
 plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_cdf.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
@@ -79,7 +80,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].axvline(m, linestyle='--', color=palette[j], alpha=0.5)
         ax[i].set_xlabel("Maximum wind speed")
         ax[i].set_xlim((0, 100))
-        ax[i].set_title(f"{g} - {r}")
+        ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
 plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_sf.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
@@ -97,7 +98,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].axvline(m, linestyle='--', color=palette[j], alpha=0.5)
         ax[i].set_xlabel("Latitude")
         ax[i].set_xlim((-30, 0))
-        ax[i].set_title(f"{g} - {r}")
+        ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
 plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/latitude_lmi.png", bbox_inches='tight', dpi=600)
 plt.close(fig)

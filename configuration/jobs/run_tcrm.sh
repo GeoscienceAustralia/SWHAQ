@@ -38,7 +38,7 @@ module load hdf5/1.10.5
 module load geos/3.8.0
 module load proj/6.2.1
 module load gdal/3.0.2
-module load openmpi
+module load openmpi/4.0.3
 
 # Need to ensure we get the correct paths to access the local version of gdal bindings. 
 # The module versions are compiled against Python3.6
