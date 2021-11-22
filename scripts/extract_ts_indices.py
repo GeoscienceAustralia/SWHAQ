@@ -35,7 +35,7 @@ comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
 sl_prefix = "/g/data/rt52/era5/single-levels/reanalysis"
-
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
 
 years = np.arange(1979, 2022)
 rank = comm.Get_rank()
@@ -65,10 +65,9 @@ for year in rank_years:
         totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute()
         z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice)
 
-        speed500 = np.sqrt(u.sel(level=500).compute() ** 2 + v.sel(level=500).compute() ** 2)
-        speed10 = np.sqrt(u10 ** 2 + v10 ** 2)
-
-        mason = (speed500 - speed10) * cape ** 1.67
+        uu = u.sel(level=500).compute() - u10
+        vv = v.sel(level=500).compute() - v10
+        mason = np.sqrt(uu ** 2 + vv ** 2) * cape ** 1.67
         mason = mason.data.reshape((-1, 24) + mason.data.shape[1:]).max(axis=1)
 
         totalx = totalx.data.reshape((-1, 24) + totalx.data.shape[1:]).max(axis=1)
@@ -80,6 +79,31 @@ for year in rank_years:
         allen = shear * cape ** 1.67
         allen = allen.data.reshape((-1, 24) + allen.data.shape[1:]).max(axis=1)
 
+        umean = None # pressure weighted mean
+        lr13 = None # temperature lapse rate from 1-3km
+        rhmin13 = None # rel hum min 1-3km
+        srhe = None # effective-layer storm relative helicity
+        qmelt = None # water vapor mixing ratio at the height of the melting level
+        efflcl = None # effective-layer parcel lifting condensation level
 
+        # dowdy = 6.1e-02 * shear + 1.5e-1 * umean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
+        # dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl -1.3e1
 
+        days = uu.coords['time'].data.reshape((-1, 24))[:, 0]
 
+        data_vars = {
+            'mason': (('time', 'latitude', 'longitude'), mason),
+            'allen': (('time', 'latitude', 'longitude'), allen),
+            'totalx': (('time', 'latitude', 'longitude'), totalx),
+        }
+
+        coords = {
+            'time': days,
+            'latitude': u.coords['latitude'].data,
+            'longitude': u.coords['longitude'].data,
+        }
+
+        ds = xr.Dataset(data_vars, coords)
+        ds.to_netcdf(outpath + "ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc")
+        break
+    break
