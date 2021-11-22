@@ -3,7 +3,7 @@ import os
 import xarray as xr
 from calendar import monthrange
 from mpi4py import MPI
-
+import metpy
 
 comm = MPI.COMM_WORLD
 
@@ -39,21 +39,18 @@ for year in rank_years:
         totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute()
         z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice).compute()
 
-        uu = u.sel(level=500).compute() - u10
-        vv = v.sel(level=500).compute() - v10
-        mason = np.sqrt(uu ** 2 + vv ** 2) * cape ** 1.67
-        mason = mason.data.reshape((-1, 24) + mason.data.shape[1:]).max(axis=1)
+        umean = np.empty_like(cape.data)
+        lr13 = np.empty_like(cape.data)  # temperature lapse rate from 1-3km
+        rhmin13 = np.empty_like(cape.data)  # rel hum min 1-3km
+        srhe = np.empty_like(cape.data)  # effective-layer storm relative helicity
+        qmelt = np.empty_like(cape.data)  # water vapor mixing ratio at the height of the melting level
+        efflcl = np.empty_like(cape.data)
 
-        totalx = totalx.data.reshape((-1, 24) + totalx.data.shape[1:]).max(axis=1)
+        for time in u.coords['time']:
+            for lat in u.coords['latitude']:
+                for lon in u.coords['longitude']:
+                    umean = metpy.calc.mean_pressure_weighted(u.coords['level'], u, height=None, bottom=None, depth=None)
 
-        utop, vtop = dask_interpolate(u, v, z, height=6_000)
-        uu = utop - u10
-        vv = vtop - v10
-        shear = np.sqrt(uu ** 2 + vv ** 2)
-        allen = shear * cape ** 1.67
-        allen = allen.data.reshape((-1, 24) + allen.data.shape[1:]).max(axis=1)
-
-        umean = None # pressure weighted mean
         lr13 = None # temperature lapse rate from 1-3km
         rhmin13 = None # rel hum min 1-3km
         srhe = None # effective-layer storm relative helicity

@@ -45,6 +45,7 @@ rank_years = years[(years % comm.size) == rank]
 
 for year in rank_years:
     for month in range(1, 13):
+        print(f"Processing {month}/{year}", )
         days = monthrange(year, month)[1]
         ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
