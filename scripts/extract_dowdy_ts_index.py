@@ -26,6 +26,22 @@ def calc_rhmin13(height_profile, rh_profile):
     return rh_profile[mask].min()
 
 
+def calc_melting_point_mixing_ratio(relative_humidity, pressure, temperature, dewpoint):
+    wetbulb = metpy.calc.wet_bulb_temperature(pressure, temperature, dewpoint)
+    idx = np.where(wetbulb <= 0)[0][-1]
+    mixing_ratio_1 = metpy.calc.mixing_ratio_from_relative_humidity(
+        pressure[idx], temperature[idx], relative_humidity[idx]
+    )
+
+    mixing_ratio_2 = metpy.calc.mixing_ratio_from_relative_humidity(
+        pressure[idx + 1], temperature[idx + 1], relative_humidity[idx + 1]
+    )
+
+    mixing_ratio = mixing_ratio_1 * (wetbulb[idx + 1] - 0) + mixing_ratio_2 * (0 - wetbulb[idx])
+    mixing_ratio /= wetbulb[idx + 1] - wetbulb[idx]
+    return mixing_ratio
+
+
 def calc_dewpoint(pressure, temperature, relative_humidity):
     mixing_ratio = metpy.calc.mixing_ratio_from_relative_humidity(
         pressure, temperature, relative_humidity
@@ -99,7 +115,7 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
     )
     efflcl = metpy.calc.lcl(*mixed_parcel)
 
-    qmelt = 0
+    qmelt = calc_melting_point_mixing_ratio(relative_humidity, pressure, temperature, dewpoint)
 
     dowdy = 6.1e-02 * shear + 1.5e-1 * windspeed_mean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
     dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl - 1.3e1
