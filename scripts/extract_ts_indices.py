@@ -3,6 +3,7 @@ import os
 import xarray as xr
 from calendar import monthrange
 from mpi4py import MPI
+import time
 
 
 def dask_index(arr, indexes):
@@ -42,6 +43,8 @@ rank = comm.Get_rank()
 long_slice = slice(148, 154)
 lat_slice = slice(-24, -33)
 rank_years = years[(years % comm.size) == rank]
+
+t0 = time.time()
 
 for year in rank_years:
     for month in range(1, 13):
@@ -106,3 +109,7 @@ for year in rank_years:
 
         ds = xr.Dataset(data_vars, coords)
         ds.to_netcdf(outpath + "ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc")
+        break
+    break
+
+print("Time taken:", time.time() - t0, "s")

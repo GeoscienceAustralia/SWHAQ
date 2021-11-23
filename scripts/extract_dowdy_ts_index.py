@@ -5,6 +5,26 @@ from calendar import monthrange
 from mpi4py import MPI
 import metpy
 
+
+def calc_lr13(height_profile, temp_profile):
+    idx = np.where(height_profile <= 1_000)[0][-1]
+    temp_1 = temp_profile[idx] * (1_000 - height_profile[idx])
+    temp_1 += temp_profile[idx + 1] * (height_profile[idx + 1] - 1_000)
+    temp_1 /= height_profile[idx + 1] - height_profile[idx]
+
+    idx = np.where(height_profile <= 3_000)[0][-1]
+    temp_3 = temp_profile[idx] * (3_000 - height_profile[idx])
+    temp_3 += temp_profile[idx + 1] * (height_profile[idx + 1] - 3_000)
+    temp_3 /= height_profile[idx + 1] - height_profile[idx]
+
+    return (temp_3 - temp_1) / 3
+
+
+def calc_rhmin13(height_profile, rh_profile):
+    mask = (1_000 <= height_profile) & (height_profile <= 3_000)
+    return rh_profile[mask].min()
+
+
 comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
@@ -27,6 +47,8 @@ for year in rank_years:
         v10file = f"{sl_prefix}/10v/{year}/10v_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         totalxfile = f"{sl_prefix}/totalx/{year}/totalx_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         zfile = f"{pl_prefix}/z/{year}/z_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+        tfile = f"{pl_prefix}/t/{year}/t_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+        rhfile = f"{pl_prefix}/r/{year}/r_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
 
         if not os.path.isfile(ufile):
             continue
@@ -38,18 +60,47 @@ for year in rank_years:
         v10 = xr.open_dataset(v10file, chunks='auto').v10.sel(longitude=long_slice, latitude=lat_slice).compute()
         totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute()
         z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice).compute()
+        temp = xr.open_dataset(tfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
+        rh = xr.open_dataset(rhfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
 
-        umean = np.empty_like(cape.data)
-        lr13 = np.empty_like(cape.data)  # temperature lapse rate from 1-3km
-        rhmin13 = np.empty_like(cape.data)  # rel hum min 1-3km
-        srhe = np.empty_like(cape.data)  # effective-layer storm relative helicity
-        qmelt = np.empty_like(cape.data)  # water vapor mixing ratio at the height of the melting level
-        efflcl = np.empty_like(cape.data)
+        shear = cape.copy(data=np.empty_like(cape.data))
+        umean = cape.copy(data=np.empty_like(cape.data))
+        lr13 = cape.copy(data=np.empty_like(cape.data))  # temperature lapse rate from 1-3km
+        rhmin13 = cape.copy(data=np.empty_like(cape.data))  # rel hum min 1-3km
+        srhe = cape.copy(data=np.empty_like(cape.data)) # effective-layer storm relative helicity
+        qmelt = cape.copy(data=np.empty_like(cape.data)) # water vapor mixing ratio at the height of the melting level
+        efflcl = cape.copy(data=np.empty_like(cape.data))
 
-        for time in u.coords['time']:
-            for lat in u.coords['latitude']:
-                for lon in u.coords['longitude']:
-                    umean = metpy.calc.mean_pressure_weighted(u.coords['level'], u, height=None, bottom=None, depth=None)
+        for i, time in enumerate(u.coords['time']):
+            for j, lat in enumerate(u.coords['latitude']):
+                for k, lon in enumerate(u.coords['longitude']):
+                    u_profile = u.data[i, :, j, k]
+                    v_profile = v.data[i, :, j, k]
+                    height_profile = z.data[i, :, j, k] / 9.80665
+                    pressure_profile = z.coords['pressure'].data
+                    temp_profile = temp.data[i, :, j, k]
+                    rh_profile = rh.data[i, :, j, k]
+
+                    umean.data[i, j, k] = metpy.calc.mean_pressure_weighted(
+                        u.coords['level'], u.sel(time=time, latitude=lat, longitude=lon), bottom=800, depth=200
+                    )
+
+                    lr13.data[i, j, k] = calc_lr13(height_profile, temp_profile)
+                    rhmin13.data[i, :, j, k] = calc_rhmin13(height_profile, rh_profile)
+
+                    # find effective layer
+
+                    srhe[i, j, k] = metpy.calc.storm_relative_helicity(height_profile, u_profile, v_profile)
+                    shear[i, j, k] = metpy.calc.wind_speed(
+                        *metpy.calc.bulk_shear(pressure_profile, u_profile, v_profile)
+                    )
+
+                    # find effective
+                    # efflcl.data[i, j, k] = metpy.calc.lcl(pressure, temperature, dewpoint)
+
+
+
+
 
         lr13 = None # temperature lapse rate from 1-3km
         rhmin13 = None # rel hum min 1-3km
