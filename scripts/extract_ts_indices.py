@@ -94,7 +94,7 @@ for year in rank_years:
         # dowdy = 6.1e-02 * shear + 1.5e-1 * umean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
         # dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl -1.3e1
 
-        days = u.coords['time'].data.reshape((-1, 24))[:, 0]
+        time_days = u.coords['time'].data.reshape((-1, 24))[:, 0]
 
         data_vars = {
             'mason': (('time', 'latitude', 'longitude'), mason),
@@ -103,7 +103,7 @@ for year in rank_years:
         }
 
         coords = {
-            'time': days,
+            'time': time_days,
             'latitude': u.coords['latitude'].data,
             'longitude': u.coords['longitude'].data,
         }
