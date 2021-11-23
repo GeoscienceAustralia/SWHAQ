@@ -15,12 +15,13 @@ def dask_index(arr, indexes):
     y = idxs.argsort()
     i = np.empty_like(y)
     i[y] = np.arange(y.size)
-    return arr.data.flatten()[idxs[y]].compute(scheduler='single-threaded')[i].reshape(indexes.shape)
+    # return arr.data.flatten()[idxs[y]].compute(scheduler='single-threaded')[i].reshape(indexes.shape)
+    return arr.data.flatten()[idxs[y]][i].reshape(indexes.shape)
 
 
 def dask_interpolate(u, v, z, height):
     top = height * 9.80665
-    idxs = (abs(top - z) + 1_000_000_000 * (z > top)).argmin(axis=1).compute(scheduler='single-threaded')
+    idxs = (abs(top - z) + 1_000_000_000 * (z > top)).argmin(axis=1)#.compute(scheduler='single-threaded')
     z1 = dask_index(z, idxs)
     u1 = dask_index(u, idxs)
     v1 = dask_index(v, idxs)
@@ -61,16 +62,16 @@ for year in rank_years:
         if not os.path.isfile(ufile):
             continue
 
-        u = xr.open_dataset(ufile, chunks='auto').u.sel(longitude=long_slice, latitude=lat_slice)
-        v = xr.open_dataset(vfile, chunks='auto').v.sel(longitude=long_slice, latitude=lat_slice)
+        u = xr.open_dataset(ufile, chunks='auto').u.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
+        v = xr.open_dataset(vfile, chunks='auto').v.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
         cape = xr.open_dataset(capefile, chunks='auto').cape.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
         u10 = xr.open_dataset(u10file, chunks='auto').u10.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
         v10 = xr.open_dataset(v10file, chunks='auto').v10.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
         totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
-        z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice)
+        z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice).compute(scheduler='single-threaded')
 
-        uu = u.sel(level=500).compute(scheduler='single-threaded') - u10
-        vv = v.sel(level=500).compute(scheduler='single-threaded') - v10
+        uu = u.sel(level=500) - u10
+        vv = v.sel(level=500) - v10
         mason = np.sqrt(uu ** 2 + vv ** 2) * cape ** 1.67
         mason = mason.data.reshape((-1, 24) + mason.data.shape[1:]).max(axis=1)
 
