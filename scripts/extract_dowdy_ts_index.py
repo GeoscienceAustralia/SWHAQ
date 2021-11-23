@@ -120,8 +120,11 @@ long_slice = slice(148, 154)
 lat_slice = slice(-24, -33)
 rank_years = years[(years % comm.size) == rank]
 
+t0 = time.time()
+
 for year in rank_years:
     for month in range(1, 13):
+
         days = monthrange(year, month)[1]
         ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
@@ -163,7 +166,6 @@ for year in rank_years:
                         temp.data[i, :, j, k], z.data[i, :, j, k] / 9.80665, rh.data[i, :, j, k]
 
                     )
-            break
 
         data_vars = {
             "dowdy": dowdy
@@ -177,3 +179,7 @@ for year in rank_years:
 
         ds = xr.Dataset(data_vars, coords)
         ds.to_netcdf(outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc")
+        break
+    break
+
+print("Time taken:", time.time() - t0, "s")
