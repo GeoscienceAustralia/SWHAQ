@@ -93,12 +93,12 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
         )
     )
 
-    # how to average? bottom of
-    efflcl = metpy.calc.lcl(
-        pressure[bottom_idx], temperature[bottom_idx], dewpoint[bottom_idx]
+    mixed_parcel = metpy.cacl.mixed_parcel(
+        pressure[top_idx:bottom_idx], temperature[top_idx:bottom_idx], dewpoint[top_idx:bottom_idx]
     )
+    efflcl = metpy.calc.lcl(*mixed_parcel)
 
-    qmelt = None
+    qmelt = 0
 
     dowdy = 6.1e-02 * shear + 1.5e-1 * windspeed_mean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
     dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl - 1.3e1
@@ -146,13 +146,7 @@ for year in rank_years:
         temp = xr.open_dataset(tfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
         rh = xr.open_dataset(rhfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
 
-        shear = cape.copy(data=np.empty_like(cape.data))
-        umean = cape.copy(data=np.empty_like(cape.data))
-        lr13 = cape.copy(data=np.empty_like(cape.data))  # temperature lapse rate from 1-3km
-        rhmin13 = cape.copy(data=np.empty_like(cape.data))  # rel hum min 1-3km
-        srhe = cape.copy(data=np.empty_like(cape.data)) # effective-layer storm relative helicity
-        qmelt = cape.copy(data=np.empty_like(cape.data)) # water vapor mixing ratio at the height of the melting level
-        efflcl = cape.copy(data=np.empty_like(cape.data))
+        dowdy = cape.copy(data=np.empty_like(cape.data))
 
         for i, time in enumerate(u.coords['time']):
             for j, lat in enumerate(u.coords['latitude']):
@@ -164,39 +158,12 @@ for year in rank_years:
                     temp_profile = temp.data[i, :, j, k]
                     rh_profile = rh.data[i, :, j, k]
 
-                    umean.data[i, j, k] = metpy.calc.mean_pressure_weighted(
-                        u.coords['level'], u.sel(time=time, latitude=lat, longitude=lon), bottom=800, depth=200
+                    dowdy.data[i, j, k] = calc_dowdy(
+                        u.data[i, :, j, k], v.data[i, :, j, k], z.coords['pressure'].data,
+                        temp.data[i, :, j, k], z.data[i, :, j, k] / 9.80665, rh.data[i, :, j, k]
+
                     )
-
-                    lr13.data[i, j, k] = calc_lr13(height_profile, temp_profile)
-                    rhmin13.data[i, :, j, k] = calc_rhmin13(height_profile, rh_profile)
-
-                    # find effective layer
-                    dewpoint = calc_dewpoint(pressure_profile, temp_profile, rh_profile)
-                    bottom_idx, top_idx = calc_effective_layer(pressure_profile, temp_profile, dewpoint)
-
-
-                    srhe.data[i, j, k] = metpy.calc.storm_relative_helicity(
-                        height_profile[top_idx:bottom_idx], u_profile[top_idx:bottom_idx],
-                        v_profile[top_idx:bottom_idx]
-                    )
-
-                    shear.data[i, j, k] = metpy.calc.wind_speed(
-                        *metpy.calc.bulk_shear(
-                            pressure_profile[top_idx:bottom_idx], u_profile[top_idx:bottom_idx],
-                            v_profile[top_idx:bottom_idx]
-                        )
-                    )
-
-                    # how to average? bottom of
-                    efflcl.data[i, j, k] = metpy.calc.lcl(
-                        pressure_profile[bottom_idx], temp_profile[bottom_idx], dewpoint[bottom_idx]
-                    )
-
-        dowdy = 6.1e-02 * shear + 1.5e-1 * umean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
-        dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl -1.3e1
-        dowdy = 1 / (1 + dowdy.exp())
-
+            break
 
         data_vars = {
             "dowdy": dowdy
