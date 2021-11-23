@@ -178,7 +178,7 @@ for year in rank_years:
         }
 
         ds = xr.Dataset(data_vars, coords)
-        ds.to_netcdf(outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc")
+        ds.to_netcdf(outpath + f"dowdy_{year}{month:02d}01-{year}{month:02d}{days}.nc")
         break
     break
 
