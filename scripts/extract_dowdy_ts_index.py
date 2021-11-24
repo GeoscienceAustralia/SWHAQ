@@ -8,15 +8,15 @@ import time
 
 
 def calc_lr13(height_profile, temp_profile):
-    idx = np.where(height_profile <= 1_000)[0][-1]
+    idx = np.where(height_profile <= 1_000)[0][0]
     temp_1 = temp_profile[idx] * (1_000 - height_profile[idx])
-    temp_1 += temp_profile[idx + 1] * (height_profile[idx + 1] - 1_000)
-    temp_1 /= height_profile[idx + 1] - height_profile[idx]
+    temp_1 += temp_profile[idx - 1] * (height_profile[idx - 1] - 1_000)
+    temp_1 /= height_profile[idx - 1] - height_profile[idx]
 
-    idx = np.where(height_profile <= 3_000)[0][-1]
+    idx = np.where(height_profile <= 3_000)[0][0]
     temp_3 = temp_profile[idx] * (3_000 - height_profile[idx])
-    temp_3 += temp_profile[idx + 1] * (height_profile[idx + 1] - 3_000)
-    temp_3 /= height_profile[idx + 1] - height_profile[idx]
+    temp_3 += temp_profile[idx - 1] * (height_profile[idx - 1] - 3_000)
+    temp_3 /= height_profile[idx - 1] - height_profile[idx]
 
     return (temp_3 - temp_1) / 3
 
@@ -54,7 +54,7 @@ def calc_dewpoint(pressure, temperature, relative_humidity):
 def calc_effective_layer(pressure, temperature, dewpoint):
 
     bottom_idx = None
-    top_idx = None
+    top_idx = 0
 
     # start at ground level and increment pressure levels
     for parcel_idx in range(len(pressure) - 1, -1, -1):
@@ -73,7 +73,7 @@ def calc_effective_layer(pressure, temperature, dewpoint):
             # if this is the first pressure level (from base of inflow level) that violates
             # the constraints this is the end of the inflow layer
             if bottom_idx is not None:
-                top_idx = bottom_idx
+                top_idx = parcel_idx
                 break
 
     return bottom_idx, top_idx
@@ -98,24 +98,27 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
 
     # find effective layer
     dewpoint = calc_dewpoint(pressure, temperature, relative_humidity)
+    qmelt = calc_melting_point_mixing_ratio(relative_humidity, pressure, temperature, dewpoint)
+
     bottom_idx, top_idx = calc_effective_layer(pressure, temperature, dewpoint)
 
-    srhe = metpy.calc.storm_relative_helicity(
-        height[top_idx:bottom_idx], u[top_idx:bottom_idx], v[top_idx:bottom_idx]
-    )
-
-    shear = metpy.calc.wind_speed(
-        *metpy.calc.bulk_shear(
-            pressure[top_idx:bottom_idx], u[top_idx:bottom_idx], v[top_idx:bottom_idx]
+    if bottom_idx is None:
+        srhe, shear, mixed_parcel, efflcl = 0, 0, 0, 0
+    else:
+        srhe = metpy.calc.storm_relative_helicity(
+            height[top_idx:bottom_idx], u[top_idx:bottom_idx], v[top_idx:bottom_idx]
         )
-    )
 
-    mixed_parcel = metpy.cacl.mixed_parcel(
-        pressure[top_idx:bottom_idx], temperature[top_idx:bottom_idx], dewpoint[top_idx:bottom_idx]
-    )
-    efflcl = metpy.calc.lcl(*mixed_parcel)
+        shear = metpy.calc.wind_speed(
+            *metpy.calc.bulk_shear(
+                pressure[top_idx:bottom_idx], u[top_idx:bottom_idx], v[top_idx:bottom_idx]
+            )
+        )
 
-    qmelt = calc_melting_point_mixing_ratio(relative_humidity, pressure, temperature, dewpoint)
+        mixed_parcel = metpy.cacl.mixed_parcel(
+            pressure[top_idx:bottom_idx], temperature[top_idx:bottom_idx], dewpoint[top_idx:bottom_idx]
+        )
+        efflcl = metpy.calc.lcl(*mixed_parcel)
 
     dowdy = 6.1e-02 * shear + 1.5e-1 * windspeed_mean + 9.4e-1 * lr13 + 3.9e-2 * rhmin13
     dowdy += 1.7e-02 * srhe + 3.8e-1 * qmelt + 4.7e-4 * efflcl - 1.3e1
