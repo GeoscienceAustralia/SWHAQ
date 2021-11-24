@@ -124,7 +124,6 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
     return dowdy
 
 
-
 comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
