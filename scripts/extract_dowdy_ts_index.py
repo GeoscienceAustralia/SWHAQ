@@ -166,7 +166,7 @@ for year in rank_years:
         totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute()
         z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice).compute()
         temp = xr.open_dataset(tfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
-        rh = xr.open_dataset(rhfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
+        rh = xr.open_dataset(rhfile, chunks='auto').r.sel(longitude=long_slice, latitude=lat_slice).compute()
 
         t1 = time.time()
         print(f"Data loading: {t1 - t0} s")
