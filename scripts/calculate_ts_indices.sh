@@ -16,4 +16,5 @@ module use /g/data/dk92/apps/Modules/modulefiles
 module load NCI-data-analysis/2021.09
 module load openmpi/4.1.0
 
+cd $HOME/SWHAQ/scripts
 mpiexec -n 44 python3 extract_ts_indices.py
