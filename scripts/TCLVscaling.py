@@ -210,7 +210,7 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     to the function
 
     This returns a `DataFrame` with an additional column (`vmax`), which represents an estimated
-    0.2 second maximum gust wind speed.
+    1-minute sustained wind speed (lines up with potential intensity).
     """
 
     idx = df.num.values
@@ -220,7 +220,7 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     dt = (df[dtname] - df[dtname].shift()).fillna(pd.Timedelta(seconds=0)
                                                   ).apply(lambda x: x / np.timedelta64(1, 'h')).astype('int64') % (24*60)
     df['vmax'] = maxWindSpeed(varidx, dt.values, df.lon.values, df.lat.values,
-                              df.pmin.values, df.poci.values, gustfactor=1.223)
+                              df.pmin.values, df.poci.values, gustfactor=1.0)
     return df
 
 
@@ -414,7 +414,7 @@ if __name__ == '__main__':
 
     tclvdata = loadTCLVdata(path, domain=domain)
 
-    OUTPUTPATH = "C:/WorkSpace/swhaq/data/tclv/20210212"
+    OUTPUTPATH = "C:/WorkSpace/swhaq/data/tclv/20211006"
     if not os.path.isdir(OUTPUTPATH):
         LOGGER.warning(f"{OUTPUTPATH} does not exist - creating")
         os.makedirs(OUTPUTPATH)
