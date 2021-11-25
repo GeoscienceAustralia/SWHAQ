@@ -41,8 +41,8 @@ outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
 
 years = np.arange(1980, 2022)
 rank = comm.Get_rank()
-long_slice = slice(148, 154)
-lat_slice = slice(-24, -33)
+long_slice = slice(151, 154)
+lat_slice = slice(-25, -29)
 rank_years = years[(years % comm.size) == rank]
 
 t0 = time.time()
