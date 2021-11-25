@@ -49,6 +49,9 @@ t0 = time.time()
 
 for year in rank_years:
     for month in range(1, 13):
+        if os.path.isfile(outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc"):
+            print(f"Skipping {month}/{year}")
+            continue
         print(f"Loading data {month}/{year}")
         days = monthrange(year, month)[1]
         ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
