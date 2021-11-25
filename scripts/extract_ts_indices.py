@@ -37,7 +37,7 @@ comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
 sl_prefix = "/g/data/rt52/era5/single-levels/reanalysis"
-outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices1/"
 
 years = np.arange(1980, 2022)
 rank = comm.Get_rank()
@@ -49,7 +49,7 @@ t0 = time.time()
 
 for year in rank_years:
     for month in range(1, 13):
-        print(f"Processing {month}/{year}")
+        print(f"Loading data {month}/{year}")
         days = monthrange(year, month)[1]
         ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
@@ -58,7 +58,7 @@ for year in rank_years:
         v10file = f"{sl_prefix}/10v/{year}/10v_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         totalxfile = f"{sl_prefix}/totalx/{year}/totalx_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         zfile = f"{pl_prefix}/z/{year}/z_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-
+        print(f"Processing data {month}/{year}")
         if not os.path.isfile(ufile):
             continue
 
