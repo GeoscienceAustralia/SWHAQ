@@ -16,12 +16,18 @@ GROUPS = {
         'GROUP2': ["ACCESS1-0Q","CCSM4Q","CNRM-CM5Q","GFDL-CM3Q","MPI-ESM-LRQ","NorESM1-MQ"]
 }
 
-INPUT_FOLDER = Path('C:/WorkSpace/data/tclv/tracks/corrected/20200622')
-OUTPUT_FOLDER = Path('C:/WorkSpace/data/tclv/tracks/corrected/20200828')
+INPUT_FOLDER = Path(r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\corrected\20211124")
+OUTPUT_FOLDER = Path(r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\ensemble\20211124")
 
 
 def belongs(group, emission_scenario, time, f):
-    g, es, t, *_ = f.stem.split('_')
+    try:
+        g, es, t, *_ = f.stem.split('_')
+    except ValueError as verr:
+        # Handle case of a path listing that's not a file of the correct
+        # name structure
+        print(verr)
+        return False
 
     if g not in GROUPS[group]:
         return False
