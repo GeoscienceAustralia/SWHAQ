@@ -5,6 +5,10 @@ from calendar import monthrange
 from mpi4py import MPI
 import metpy
 import time
+import logging
+
+
+logging.basicConfig(filename='extract_dowdy_ts_index.log', level=logging.DEBUG)
 
 
 def calc_lr13(height_profile, temp_profile):
@@ -143,7 +147,7 @@ t0 = time.time()
 
 for year in rank_years:
     for month in range(1, 13):
-        print(f"Processing {month}/{year}")
+        logging.info(f"Processing {month}/{year}")
         days = monthrange(year, month)[1]
         ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
@@ -169,7 +173,7 @@ for year in rank_years:
         rh = xr.open_dataset(rhfile, chunks='auto').r.sel(longitude=long_slice, latitude=lat_slice).compute()
 
         t1 = time.time()
-        print(f"Data loading: {t1 - t0} s")
+        logging.info(f"Data loading: {t1 - t0} s")
         dowdy = cape.copy(data=np.empty_like(cape.data))
 
         for i, time in enumerate(u.coords['time']):
@@ -200,8 +204,6 @@ for year in rank_years:
 
         ds = xr.Dataset(data_vars, coords)
         ds.to_netcdf(outpath + f"dowdy_{year}{month:02d}01-{year}{month:02d}{days}.nc")
-        print(f"Calculations: {time.time() - t1} s")
+        logging.info(f"Calculations: {time.time() - t1} s")
         break
     break
-
-print("Time taken:", time.time() - t0, "s")
