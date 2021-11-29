@@ -37,7 +37,7 @@ comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
 sl_prefix = "/g/data/rt52/era5/single-levels/reanalysis"
-outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices1/"
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
 
 years = np.arange(1980, 2022)
 rank = comm.Get_rank()
