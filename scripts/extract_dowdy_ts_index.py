@@ -162,15 +162,15 @@ for year in rank_years:
         if not os.path.isfile(ufile):
             continue
 
-        u = xr.open_dataset(ufile, chunks='auto').u.sel(longitude=long_slice, latitude=lat_slice).compute()
-        v = xr.open_dataset(vfile, chunks='auto').v.sel(longitude=long_slice, latitude=lat_slice).compute()
-        cape = xr.open_dataset(capefile, chunks='auto').cape.sel(longitude=long_slice, latitude=lat_slice).compute()
-        u10 = xr.open_dataset(u10file, chunks='auto').u10.sel(longitude=long_slice, latitude=lat_slice).compute()
-        v10 = xr.open_dataset(v10file, chunks='auto').v10.sel(longitude=long_slice, latitude=lat_slice).compute()
-        totalx = xr.open_dataset(totalxfile, chunks='auto').totalx.sel(longitude=long_slice, latitude=lat_slice).compute()
-        z = xr.open_dataset(zfile, chunks='auto').z.sel(longitude=long_slice, latitude=lat_slice).compute()
-        temp = xr.open_dataset(tfile, chunks='auto').t.sel(longitude=long_slice, latitude=lat_slice).compute()
-        rh = xr.open_dataset(rhfile, chunks='auto').r.sel(longitude=long_slice, latitude=lat_slice).compute()
+        u = xr.open_dataset(ufile).u.sel(longitude=long_slice, latitude=lat_slice)
+        v = xr.open_dataset(vfile).v.sel(longitude=long_slice, latitude=lat_slice)
+        cape = xr.open_dataset(capefile).cape.sel(longitude=long_slice, latitude=lat_slice)
+        u10 = xr.open_dataset(u10file).u10.sel(longitude=long_slice, latitude=lat_slice)
+        v10 = xr.open_dataset(v10file).v10.sel(longitude=long_slice, latitude=lat_slice)
+        totalx = xr.open_dataset(totalxfile).totalx.sel(longitude=long_slice, latitude=lat_slice)
+        z = xr.open_dataset(zfile).z.sel(longitude=long_slice, latitude=lat_slice)
+        temp = xr.open_dataset(tfile).t.sel(longitude=long_slice, latitude=lat_slice)
+        rh = xr.open_dataset(rhfile).r.sel(longitude=long_slice, latitude=lat_slice)
 
         t1 = time.time()
         logging.info(f"Data loading: {t1 - t0} s")
