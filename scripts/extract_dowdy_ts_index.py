@@ -182,7 +182,7 @@ for year in rank_years:
                     u_profile = u.data[i, :, j, k]
                     v_profile = v.data[i, :, j, k]
                     height_profile = z.data[i, :, j, k] / 9.80665
-                    pressure_profile = z.coords['pressure'].data
+                    pressure_profile = z.coords['level'].data
                     temp_profile = temp.data[i, :, j, k]
                     rh_profile = rh.data[i, :, j, k]
 
