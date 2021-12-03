@@ -176,8 +176,9 @@ for year in rank_years:
         outfile = outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc"
         if os.path.isfile(outfile):
             print(f"Skipping {month}/{year}")
-            ds = xr.open_dataset(outfile)
+            ds = xr.load_dataset(outfile)
             attribute_ds(ds)
+
             ds.to_netcdf(outfile)
             continue
 
