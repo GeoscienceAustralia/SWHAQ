@@ -130,6 +130,32 @@ def dask_interpolate(u, v, z, height):
     return u_interp, v_interp
 
 
+def attribute_ds(ds):
+    ds.attrs = {
+        'title': 'Thunderstorm Indices',
+        'references': references,
+        'license': licence,
+    }
+
+    ds['mason'].attrs = {
+        'long_name': 'Mason (2021) Thunderstorm Index',
+        'units': 'm/s',
+        'cell_methods': 'time: daily maximum'
+    }
+
+    ds['allen'].attrs = {
+        'long_name': 'Allen et. al. (2011) Thunderstorm Index',
+        'units': 'm/s',
+        'cell_methods': 'time: daily maximum'
+    }
+
+    ds['totalx'].attrs = {
+        'long_name': 'Total totals Index',
+        'units': 'm/s',
+        'cell_methods': 'time: daily maximum'
+    }
+
+
 comm = MPI.COMM_WORLD
 
 pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
@@ -147,9 +173,12 @@ t0 = time.time()
 for year in rank_years:
     for month in range(1, 13):
         days = monthrange(year, month)[1]
-
-        if os.path.isfile(outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc"):
+        outfile = outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+        if os.path.isfile(outfile):
             print(f"Skipping {month}/{year}")
+            ds = xr.open_dataset(outfile)
+            attribute_ds(ds)
+            ds.to_netcdf(outfile)
             continue
 
         print(f"Loading data {month}/{year}")
@@ -212,29 +241,7 @@ for year in rank_years:
         }
 
         ds = xr.Dataset(data_vars, coords)
-        ds.attrs = {
-            'title': 'Thunderstorm Indices',
-            'references': references,
-            'license': licence,
-        }
-
-        ds['mason'].attrs = {
-            'long_name': 'Mason (2021) Thunderstorm Index',
-            'units': 'm/s',
-            'cell_methods': 'time: daily maximum'
-        }
-
-        ds['allen'].attrs = {
-            'long_name': 'Allen et. al. (2011) Thunderstorm Index',
-            'units': 'm/s',
-            'cell_methods': 'time: daily maximum'
-        }
-
-        ds['totalx'].attrs = {
-            'long_name': 'Total totals Index',
-            'units': 'm/s',
-            'cell_methods': 'time: daily maximum'
-        }
+        attribute_ds(ds)
 
         ds.to_netcdf(outpath + f"ts_indices_{year}{month:02d}01-{year}{month:02d}{days}.nc")
         print(f"Finished {month}/{year}")
