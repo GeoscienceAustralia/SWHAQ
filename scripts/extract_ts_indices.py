@@ -151,7 +151,7 @@ def attribute_ds(ds):
 
     ds['totalx'].attrs = {
         'long_name': 'Total totals Index',
-        'units': 'm/s',
+        'units': 'K',
         'cell_methods': 'time: daily maximum'
     }
 
