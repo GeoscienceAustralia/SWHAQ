@@ -1,14 +1,135 @@
-import numpy as np
 import os
-import xarray as xr
-from calendar import monthrange
-from mpi4py import MPI
-import metpy
-import time
+import sys
 import logging
+import time
+from calendar import monthrange
+import xarray as xr
+import metpy
+from metpy.units import units
+import numpy as np
+import time
 
+from parallel import attemptParallel, disableOnWorkers
+
+MPI = attemptParallel()
+comm = MPI.COMM_WORLD
 
 logging.basicConfig(filename='extract_dowdy_ts_index.log', level=logging.DEBUG)
+
+pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
+sl_prefix = "/g/data/rt52/era5/single-levels/reanalysis"
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
+
+def main():
+    """
+    Handle command line arguments and call processing functions
+
+    """
+
+    if comm.rank == 0:
+        master_process()
+    else:
+        slave_process()
+
+
+def master_process():
+    for year in range(1980, 2021):
+        for month in range(1, 13):
+            logging.info(f"Processing {month}/{year}")
+
+
+def slave_process():
+    data = comm.recv(source=0)
+    tidx, coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
+    outarray = np.zeros((u_profiles.shape[1], u_profiles.shape[2]))
+    prssure_profile = coords['pressure'].data
+    for j in range(u_profiles.shape[1]):
+        for k in range(u_profiles.shape[2]):
+            u_profile = u_profiles[:, j, k]
+            v_profile = v_profiles[:, j, k]
+            height_profile = height_profiles[:, j, k]
+            temp_profile = temp_profiles[:, j, k]
+            rh_profile = rh_profiles[:, j, k]
+
+            outarray[j, k] = calc_dowdy(
+                u_profile, v_profile, prssure_profile,
+                temp_profile, height_profile, rh_profile
+
+            )
+
+    return outarray, tidx
+
+
+def process(year: int, month: int):
+    t0 = time.time()
+
+    print(f"Started processing {month}/{year}")
+    logging.info(f"Started processing {month}/{year}")
+
+    long_slice = slice(148, 154)
+    lat_slice = slice(-24, -33)
+
+    days = monthrange(year, month)[1]
+    ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+    vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+    zfile = f"{pl_prefix}/z/{year}/z_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+    tfile = f"{pl_prefix}/t/{year}/t_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+    rhfile = f"{pl_prefix}/r/{year}/r_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
+
+    u = xr.open_dataset(ufile).u.sel(longitude=long_slice, latitude=lat_slice)
+    v = xr.open_dataset(vfile).v.sel(longitude=long_slice, latitude=lat_slice)
+    z = xr.open_dataset(zfile).z.sel(longitude=long_slice, latitude=lat_slice)
+    temp = xr.open_dataset(tfile).t.sel(longitude=long_slice, latitude=lat_slice)
+    rh = xr.open_dataset(rhfile).r.sel(longitude=long_slice, latitude=lat_slice)
+
+    nt = len(u.coords['time'])
+    tidx = 0
+    status = MPI.Status()
+
+    outarray = np.zeros((u.data.shape[0], u.data.shape[2], u.data.shape[3]))
+
+    for rank in range(1, comm.size):
+        u_profiles = u.data[tidx, ...]
+        v_profiles = v.data[tidx, ...]
+        height_profiles = z.data[tidx, ...] / 9.80665
+        temp_profiles = temp.data[tidx, ...]
+        rh_profiles = rh.data[tidx, ...]
+
+        data = (tidx, u.coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles)
+        comm.send(data, dest=rank)
+
+        tidx += 1
+
+    terminated = 0
+    while terminated < comm.size -1:
+        result, outidx = comm.recv(source=MPI.ANY_SOURCE, status=status)
+        outarray[outidx, ...] = result
+        rank = status.source
+        if tidx < nt:
+            comm.send(tidx, dest=rank)
+            tidx += 1
+        else:
+            terminated += 1
+
+    print(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
+    logging.info(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
+    time_days = u.coords['time'].data.reshape((-1, 24))[:, 0]
+
+    outarray = outarray.reshape((-1, 24, outarray.shape[1], outarray.shape[2])).max(axis=1)
+    data_vars = {
+        'dowdy': (('time', 'latitude', 'longitude'), outarray),
+    }
+
+    coords = {
+        'time': time_days,
+        'latitude': u.coords['latitude'].data,
+        'longitude': u.coords['longitude'].data,
+    }
+
+    ds = xr.Dataset(data_vars, coords)
+    # attribute_ds(ds)
+
+    ds.to_netcdf(outpath + f"dowdy_ts_index_{year}{month:02d}01-{year}{month:02d}{days}.nc")
 
 
 def calc_lr13(height_profile, temp_profile):
@@ -129,81 +250,3 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
     dowdy = 1 / (1 + dowdy.exp())
 
     return dowdy
-
-
-comm = MPI.COMM_WORLD
-
-pl_prefix = "/g/data/rt52/era5/pressure-levels/reanalysis"
-sl_prefix = "/g/data/rt52/era5/single-levels/reanalysis"
-outpath = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
-
-years = np.arange(1980, 2022)
-rank = comm.Get_rank()
-long_slice = slice(148, 154)
-lat_slice = slice(-24, -33)
-rank_years = years[(years % comm.size) == rank]
-
-t0 = time.time()
-
-for year in rank_years:
-    for month in range(1, 13):
-        logging.info(f"Processing {month}/{year}")
-        days = monthrange(year, month)[1]
-        ufile = f"{pl_prefix}/u/{year}/u_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        vfile = f"{pl_prefix}/v/{year}/v_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        capefile = f"{sl_prefix}/cape/{year}/cape_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        u10file = f"{sl_prefix}/10u/{year}/10u_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        v10file = f"{sl_prefix}/10v/{year}/10v_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        totalxfile = f"{sl_prefix}/totalx/{year}/totalx_era5_oper_sfc_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        zfile = f"{pl_prefix}/z/{year}/z_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        tfile = f"{pl_prefix}/t/{year}/t_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-        rhfile = f"{pl_prefix}/r/{year}/r_era5_oper_pl_{year}{month:02d}01-{year}{month:02d}{days}.nc"
-
-        if not os.path.isfile(ufile):
-            continue
-
-        u = xr.open_dataset(ufile).u.sel(longitude=long_slice, latitude=lat_slice)
-        v = xr.open_dataset(vfile).v.sel(longitude=long_slice, latitude=lat_slice)
-        cape = xr.open_dataset(capefile).cape.sel(longitude=long_slice, latitude=lat_slice)
-        u10 = xr.open_dataset(u10file).u10.sel(longitude=long_slice, latitude=lat_slice)
-        v10 = xr.open_dataset(v10file).v10.sel(longitude=long_slice, latitude=lat_slice)
-        totalx = xr.open_dataset(totalxfile).totalx.sel(longitude=long_slice, latitude=lat_slice)
-        z = xr.open_dataset(zfile).z.sel(longitude=long_slice, latitude=lat_slice)
-        temp = xr.open_dataset(tfile).t.sel(longitude=long_slice, latitude=lat_slice)
-        rh = xr.open_dataset(rhfile).r.sel(longitude=long_slice, latitude=lat_slice)
-
-        t1 = time.time()
-        logging.info(f"Data loading: {t1 - t0} s")
-        dowdy = cape.copy(data=np.empty_like(cape.data))
-
-        for i, time in enumerate(u.coords['time']):
-            for j, lat in enumerate(u.coords['latitude']):
-                for k, lon in enumerate(u.coords['longitude']):
-                    u_profile = u.data[i, :, j, k]
-                    v_profile = v.data[i, :, j, k]
-                    height_profile = z.data[i, :, j, k] / 9.80665
-                    pressure_profile = z.coords['level'].data
-                    temp_profile = temp.data[i, :, j, k]
-                    rh_profile = rh.data[i, :, j, k]
-
-                    dowdy.data[i, j, k] = calc_dowdy(
-                        u.data[i, :, j, k], v.data[i, :, j, k], z.coords['pressure'].data,
-                        temp.data[i, :, j, k], z.data[i, :, j, k] / 9.80665, rh.data[i, :, j, k]
-
-                    )
-
-        data_vars = {
-            "dowdy": dowdy
-        }
-
-        coords = {
-            'time': u.coords['time'].data.reshape((-1, 24))[:, 0],
-            'latitude': u.coords['latitude'].data,
-            'longitude': u.coords['longitude'].data,
-        }
-
-        ds = xr.Dataset(data_vars, coords)
-        ds.to_netcdf(outpath + f"dowdy_{year}{month:02d}01-{year}{month:02d}{days}.nc")
-        logging.info(f"Calculations: {time.time() - t1} s")
-        break
-    break
