@@ -100,16 +100,16 @@ def process(year: int, month: int):
 
         tidx += 1
 
-    terminated = 0
-    while terminated < comm.size -1:
-        result, outidx = comm.recv(source=MPI.ANY_SOURCE, status=status)
-        outarray[outidx, ...] = result
-        rank = status.source
-        if tidx < nt:
-            comm.send(tidx, dest=rank)
-            tidx += 1
-        else:
-            terminated += 1
+    # terminated = 0
+    # while terminated < comm.size - 1:
+    #     result, outidx = comm.recv(source=MPI.ANY_SOURCE, status=status)
+    #     outarray[outidx, ...] = result
+    #     rank = status.source
+    #     if tidx < nt:
+    #         comm.send(tidx, dest=rank)
+    #         tidx += 1
+    #     else:
+    #         terminated += 1
 
     print(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
     logging.info(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
