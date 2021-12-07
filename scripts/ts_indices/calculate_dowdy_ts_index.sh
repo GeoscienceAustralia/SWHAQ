@@ -3,10 +3,10 @@
 #PBS -qnormal
 #PBS -m ae
 #PBS -M kieran.ricardo@ga.gov.au
-#PBS -lwalltime=4:00:00
+#PBS -l walltime=4:00:00
 #PBS -lmem=128GB,ncpus=48,jobfs=4000MB
 #PBS -joe
-#PBS -lstorage=scratch/w85+gdata/w85+gdata/rt52+gdata/dk92+gdata/v10
+#PBS -l storage=scratch/w85+gdata/w85+gdata/rt52+gdata/dk92+gdata/v10
 
 module purge
 module use /g/data/v10/public/modules/modulefiles
