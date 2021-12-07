@@ -12,6 +12,6 @@ module purge
 module use /g/data/v10/public/modules/modulefiles
 module load dea/20210527
 
-cd $HOME/SWHAQ/scripts
+cd $HOME/SWHAQ/scripts/ts_indices
 pip install metpy
 mpiexec -n 44 python extract_dowdy_ts_index.py
