@@ -8,10 +8,8 @@ import metpy
 from metpy.units import units
 import numpy as np
 import time
+from mpi4py import MPI
 
-from parallel import attemptParallel, disableOnWorkers
-
-MPI = attemptParallel()
 comm = MPI.COMM_WORLD
 
 logging.basicConfig(filename='extract_dowdy_ts_index.log', level=logging.DEBUG)
