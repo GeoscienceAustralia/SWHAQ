@@ -33,29 +33,33 @@ def main():
 def master_process():
     for year in range(1980, 2021):
         for month in range(1, 13):
-            logging.info(f"Processing {month}/{year}")
+            process(year, month)
+            break
+        break
 
 
 def slave_process():
     data = comm.recv(source=0)
-    tidx, coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
-    outarray = np.zeros((u_profiles.shape[1], u_profiles.shape[2]))
+    coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
+    outarray = np.zeros((u_profiles.shape[0], u_profiles.shape[2], u_profiles.shape[3]))
     prssure_profile = coords['pressure'].data
-    for j in range(u_profiles.shape[1]):
-        for k in range(u_profiles.shape[2]):
-            u_profile = u_profiles[:, j, k]
-            v_profile = v_profiles[:, j, k]
-            height_profile = height_profiles[:, j, k]
-            temp_profile = temp_profiles[:, j, k]
-            rh_profile = rh_profiles[:, j, k]
 
-            outarray[j, k] = calc_dowdy(
-                u_profile, v_profile, prssure_profile,
-                temp_profile, height_profile, rh_profile
+    for i in range(u_profiles.shape[0]):
+        for j in range(u_profiles.shape[2]):
+            for k in range(u_profiles.shape[3]):
+                u_profile = u_profiles[i, :, j, k]
+                v_profile = v_profiles[i, :, j, k]
+                height_profile = height_profiles[i, :, j, k]
+                temp_profile = temp_profiles[i, :, j, k]
+                rh_profile = rh_profiles[i, :, j, k]
 
-            )
+                outarray[i, j, k] = calc_dowdy(
+                    u_profile, v_profile, prssure_profile,
+                    temp_profile, height_profile, rh_profile
 
-    return outarray, tidx
+                )
+
+    return outarray
 
 
 def process(year: int, month: int):
@@ -81,33 +85,34 @@ def process(year: int, month: int):
     rh = xr.open_dataset(rhfile).r.sel(longitude=long_slice, latitude=lat_slice)
 
     nt = len(u.coords['time'])
-    tidx = 0
+    num_cores = comm.size - 1
+    idxs = -1 * np.one(num_cores + 1)
+    idxs[:-1] = np.arange(0, nt, (nt // num_cores) + 1)
     status = MPI.Status()
 
     outarray = np.zeros((u.data.shape[0], u.data.shape[2], u.data.shape[3]))
 
     for rank in range(1, comm.size):
-        u_profiles = u.data[tidx, ...]
-        v_profiles = v.data[tidx, ...]
-        height_profiles = z.data[tidx, ...] / 9.80665
-        temp_profiles = temp.data[tidx, ...]
-        rh_profiles = rh.data[tidx, ...]
+        start_idx = idxs[rank - 1]
+        stop_idx = idxs[rank]
+        u_profiles = u.data[start_idx:stop_idx, ...]
+        v_profiles = v.data[start_idx:stop_idx, ...]
+        height_profiles = z.data[start_idx:stop_idx, ...] / 9.80665
+        temp_profiles = temp.data[start_idx:stop_idx, ...]
+        rh_profiles = rh.data[start_idx:stop_idx, ...]
 
-        data = (tidx, u.coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles)
+        data = (u.coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles)
         comm.send(data, dest=rank)
 
-        tidx += 1
+    terminated = 0
+    while terminated < comm.size - 1:
+        result = comm.recv(source=MPI.ANY_SOURCE, status=status)
+        rank = status.source
+        start_idx = idxs[rank - 1]
+        stop_idx = idxs[rank]
+        outarray[start_idx:stop_idx, ...] = result
 
-    # terminated = 0
-    # while terminated < comm.size - 1:
-    #     result, outidx = comm.recv(source=MPI.ANY_SOURCE, status=status)
-    #     outarray[outidx, ...] = result
-    #     rank = status.source
-    #     if tidx < nt:
-    #         comm.send(tidx, dest=rank)
-    #         tidx += 1
-    #     else:
-    #         terminated += 1
+        terminated += 1
 
     print(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
     logging.info(f"Finished processing {month}/{year}. Took {np.round(time.time() - t0)}s")
