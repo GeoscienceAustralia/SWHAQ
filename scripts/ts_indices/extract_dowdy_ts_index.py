@@ -5,7 +5,7 @@ import time
 from calendar import monthrange
 import xarray as xr
 import metpy
-metpy.calc
+import metpy.calc
 from metpy.units import units
 import numpy as np
 import time
