@@ -86,8 +86,8 @@ def process(year: int, month: int):
 
     nt = len(u.coords['time'])
     num_cores = comm.size - 1
-    idxs = -1 * np.ones(num_cores + 1)
-    idxs[:-1] = np.arange(0, nt, (nt // num_cores) + 1)
+    idxs = np.arange(0, nt, (nt // num_cores) + 1)
+    idxs = np.append(idxs, -1)
     status = MPI.Status()
 
     outarray = np.zeros((u.data.shape[0], u.data.shape[2], u.data.shape[3]))
