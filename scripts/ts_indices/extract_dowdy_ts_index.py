@@ -42,7 +42,7 @@ def slave_process():
     data = comm.recv(source=0)
     coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
     outarray = np.zeros((u_profiles.shape[0], u_profiles.shape[2], u_profiles.shape[3]))
-    prssure_profile = coords['pressure'].data
+    prssure_profile = coords['level'].data
 
     for i in range(u_profiles.shape[0]):
         for j in range(u_profiles.shape[2]):
