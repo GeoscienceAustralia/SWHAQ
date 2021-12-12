@@ -232,7 +232,10 @@ def calc_windpeed_mean(u, v, pressure):
     vmean = metpy.calc.mean_pressure_weighted(
         units.Quantity(pressure[mask], "hPa"), v[mask]
     )
-    windspeed_mean = metpy.calc.wind_speed(umean, vmean)
+    windspeed_mean = metpy.calc.wind_speed(
+        units.Quantity(umean, "m/s"),
+        units.Quantity(vmean, "m/s"),
+    )
     return windspeed_mean
 
 
