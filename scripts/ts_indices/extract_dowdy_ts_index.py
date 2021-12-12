@@ -59,6 +59,9 @@ def slave_process():
                     temp_profile, height_profile, rh_profile
 
                 )
+                break
+            break
+        break
 
     return outarray
 
@@ -225,7 +228,7 @@ def calc_windpeed_mean(u, v, pressure):
         pressure[mask], u[mask]
     )
     vmean = metpy.calc.mean_pressure_weighted(
-        pressure[mask], v[mask]
+        units.Quantity(pressure[mask], "hPa"), v[mask]
     )
     windspeed_mean = metpy.calc.wind_speed(umean, vmean)
     return windspeed_mean
