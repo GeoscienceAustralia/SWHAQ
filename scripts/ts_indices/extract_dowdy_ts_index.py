@@ -227,7 +227,7 @@ def calc_effective_layer(pressure, temperature, dewpoint):
 def calc_windpeed_mean(u, v, pressure):
     mask = (600 <= pressure) & (pressure <= 800)
     umean = metpy.calc.mean_pressure_weighted(
-        pressure[mask], u[mask]
+        units.Quantity(pressure[mask], "hPa"), u[mask]
     )
     vmean = metpy.calc.mean_pressure_weighted(
         units.Quantity(pressure[mask], "hPa"), v[mask]
