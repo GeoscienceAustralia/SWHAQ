@@ -41,6 +41,7 @@ def master_process():
 
 def slave_process():
     data = comm.recv(source=0)
+    print("Started computation")
     coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
     outarray = np.zeros((u_profiles.shape[0], u_profiles.shape[2], u_profiles.shape[3]))
     prssure_profile = coords['level'].data
@@ -63,6 +64,7 @@ def slave_process():
             break
         break
 
+    print("Finished computation")
     return outarray
 
 
