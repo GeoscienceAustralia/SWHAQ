@@ -172,6 +172,7 @@ def calc_rhmin13(height_profile, rh_profile):
 
 
 def calc_melting_point_mixing_ratio(relative_humidity, pressure, temperature, dewpoint):
+
     wetbulb = metpy.calc.wet_bulb_temperature(pressure, temperature, dewpoint)
     idx = np.where(wetbulb <= 0)[0][-1]
     mixing_ratio_1 = metpy.calc.mixing_ratio_from_relative_humidity(
@@ -240,6 +241,13 @@ def calc_windpeed_mean(u, v, pressure):
 
 
 def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
+    relative_humidity = units.Quantity(relative_humidity, "%")
+    pressure = units.Quantity(pressure, "hPa")
+    temperature = units.Quantity(temperature, "K")
+    u = units.Quantity(u, "m/s")
+    v = units.Quantity(u, "m/s")
+    height = units.Quantity(height, "m")
+
     windspeed_mean = calc_windpeed_mean(u, v, pressure)
     lr13 = calc_lr13(height, temperature)
     rhmin13 = calc_rhmin13(height, relative_humidity)
