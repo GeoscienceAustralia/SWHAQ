@@ -245,7 +245,7 @@ def calc_dowdy(u, v, pressure, temperature, height, relative_humidity):
     pressure = units.Quantity(pressure, "hPa")
     temperature = units.Quantity(temperature, "K")
     u = units.Quantity(u, "m/s")
-    v = units.Quantity(u, "m/s")
+    v = units.Quantity(v, "m/s")
     height = units.Quantity(height, "m")
 
     windspeed_mean = calc_windpeed_mean(u, v, pressure)
