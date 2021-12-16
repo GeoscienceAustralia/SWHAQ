@@ -98,6 +98,9 @@ def process(year: int, month: int):
 
     outarray = np.zeros((u.data.shape[0], u.data.shape[2], u.data.shape[3]))
 
+    print(f"Finished loading data for {month}/{year}")
+    logging.info(f"Finished loading data for {month}/{year}")
+
     for rank in range(1, comm.size):
         start_idx = idxs[rank - 1]
         stop_idx = idxs[rank]
