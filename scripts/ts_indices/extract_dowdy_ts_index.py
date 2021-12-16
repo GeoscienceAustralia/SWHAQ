@@ -41,7 +41,13 @@ def master_process():
 
 def slave_process():
     data = comm.recv(source=0)
-    print("Started computation")
+
+    msg = "Started computation"
+    logging.info(msg)
+    print(msg)
+
+    t0 = time.time()
+
     coords, u_profiles, v_profiles, height_profiles, temp_profiles, rh_profiles = data
     outarray = np.zeros((u_profiles.shape[0], u_profiles.shape[2], u_profiles.shape[3]))
     prssure_profile = coords['level'].data
@@ -64,7 +70,9 @@ def slave_process():
             break
         break
 
-    print("Finished computation")
+    msg = f"Finished computation. Time taken: {time.time() - t0}"
+    print(msg)
+    logging.info(msg)
     return outarray
 
 
@@ -73,7 +81,7 @@ def process(year: int, month: int):
 
     print(f"Started processing {month}/{year}")
     logging.info(f"Started processing {month}/{year}")
-
+    t0 = time.time()
     long_slice = slice(148, 154)
     lat_slice = slice(-24, -33)
 
@@ -98,8 +106,9 @@ def process(year: int, month: int):
 
     outarray = np.zeros((u.data.shape[0], u.data.shape[2], u.data.shape[3]))
 
-    print(f"Finished loading data for {month}/{year}")
-    logging.info(f"Finished loading data for {month}/{year}")
+    msg = f"Finished loading data for {month}/{year}. Time taken: {time.time() - t0}"
+    print(msg)
+    logging.info(msg)
 
     for rank in range(1, comm.size):
         start_idx = idxs[rank - 1]
