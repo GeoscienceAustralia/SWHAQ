@@ -66,9 +66,6 @@ def slave_process():
                     temp_profile, height_profile, rh_profile
 
                 )
-                break
-            break
-        break
 
     msg = f"Finished computation. Time taken: {time.time() - t0}"
     print(msg)
