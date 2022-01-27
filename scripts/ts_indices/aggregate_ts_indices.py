@@ -3,6 +3,7 @@ import xarray as xr
 
 out_ds = None
 path = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/ts_index_climatology"
 
 for fn in os.listdir(path)[:4]:
     print("processing", fn)
@@ -25,9 +26,5 @@ for fn in os.listdir(path)[:4]:
         out_ds['allen'] += allen
         out_ds['totalx'] += totalx
 
-
-
-
-
-
-print(out_ds)
+out_ds /= 41
+out_ds.to_netcdf(outpath)
