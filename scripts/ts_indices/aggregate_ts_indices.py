@@ -3,9 +3,9 @@ import xarray as xr
 
 out_ds = None
 path = "/g/data/w85/QFES_SWHA/hazard/input/tsindices/"
-outpath = "/g/data/w85/QFES_SWHA/hazard/input/ts_index_climatology"
+outpath = "/g/data/w85/QFES_SWHA/hazard/input/ts_index_climatology.nc"
 
-for fn in os.listdir(path)[:4]:
+for fn in os.listdir(path)[:]:
     print("processing", fn)
     if '2021' in fn:
         # skip 2021 because its incomplete
@@ -26,5 +26,5 @@ for fn in os.listdir(path)[:4]:
         out_ds['allen'] += allen
         out_ds['totalx'] += totalx
 
-out_ds /= 41
+out_ds /= 41  # 41 years from 1980-2020 inclusive
 out_ds.to_netcdf(outpath)
