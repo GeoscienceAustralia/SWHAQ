@@ -5,7 +5,7 @@ import numpy as np
 import xarray as xr
 from matplotlib import pyplot as plt
 
-DATA_DIR = "/g/data/w85/QFES_SWHA/hazard/input/tsindices"
+DATA_DIR = "/g/data/w85/QFES_SWHA/hazard/tsindices"
 OUT_PATH = os.path.expanduser("/g/data/w85/QFES_SWHA/hazard/output/plots")
 
 # load in and plot indices
