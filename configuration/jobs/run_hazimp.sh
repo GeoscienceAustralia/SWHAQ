@@ -90,6 +90,5 @@ fi
 # Run the complete simulation:
 python3 $SOFTWARE/hazimp/hazimp/main.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
 
-cd $OUTPUT
-cp $CONFIGFILE ./$EVENTID.$DATE.yaml
+cp $CONFIGFILE $OUTPUT/$EVENTID.$DATE.yaml
 

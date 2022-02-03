@@ -11,7 +11,7 @@ import seaborn as sns
 
 sns.set_style("whitegrid")
 
-datapath = "X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/tracks/ensemble/20200828"
+datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\corrected\20211124"
 groups = ["GROUP1", "GROUP2"]
 rcps = ["RCP45", "RCP85"]
 rlabel = {'RCP45': 'RCP 4.5', 'RCP85': 'RCP 8.5'}
@@ -45,7 +45,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].set_xlim((0, 100))
         ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
-plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_distribution.png", bbox_inches='tight', dpi=600)
+plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/20211124/intensity_distribution.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
 
 logging.info("Plotting cumulative distribution")
@@ -64,7 +64,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].set_xlim((0, 100))
         ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
-plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_cdf.png", bbox_inches='tight', dpi=600)
+plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/20211124/intensity_cdf.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
 
 logging.info("Plotting survival function")
@@ -82,7 +82,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].set_xlim((0, 100))
         ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
-plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_sf.png", bbox_inches='tight', dpi=600)
+plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/20211124/intensity_sf.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
 
 logging.info("Plotting distribution of latitude of LMI")
@@ -100,7 +100,7 @@ for i, (g, r) in enumerate(product(groups, rcps)):
         ax[i].set_xlim((-30, 0))
         ax[i].set_title(f"{g} - {rlabel[r]}")
 ax[i].legend()
-plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/latitude_lmi.png", bbox_inches='tight', dpi=600)
+plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/20211124/latitude_lmi.png", bbox_inches='tight', dpi=600)
 plt.close(fig)
 
 logging.info("Plotting quantile trends")
@@ -125,4 +125,4 @@ g.set_ylabels("Wind speed [m/s]")
 g.set_xlabels("Period")
 g.add_legend(title="Quantile")
 
-plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/intensity_quantiles.png", bbox_inches='tight', dpi=600)
+plt.savefig("X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/figures/20211124/intensity_quantiles.png", bbox_inches='tight', dpi=600)

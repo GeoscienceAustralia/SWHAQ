@@ -67,6 +67,7 @@ from scipy.optimize import curve_fit
 import scipy.stats as stats
 
 from qdm import qdm
+import pdb
 
 # From TCRM codebase
 from Utilities.loadData import maxWindSpeed
@@ -207,13 +208,13 @@ def filter_tracks_domain(df, minlon=90, maxlon=180, minlat=-40, maxlat=0):
 
 def calculateMaxWind(df, dtname='ISO_TIME'):
     """
-    Calculate a maximum gust wind speed based on the central pressure deficit and the 
-    wind-pressure relation defined in Holland (2008). This uses the function defined in 
-    the TCRM code base, and simply passes the correct variables from the data frame
-    to the function
+    Calculate a maximum gust wind speed based on the central pressure deficit
+    and the wind-pressure relation defined in Holland (2008). This uses the
+    function defined in the TCRM code base, and simply passes the correct
+    variables from the data frame to the function.
     
     This returns a `DataFrame` with an additional column (`vmax`), which represents an estimated
-    0.2 second maximum gust wind speed.
+    1-minute sustained wind speed.
     """
     LOGGER.debug("Calculating maximum wind speed")
     idx = df.num.values
@@ -222,7 +223,7 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     
     dt = (df[dtname] - df[dtname].shift()).fillna(pd.Timedelta(seconds=0)).apply(lambda x: x / np.timedelta64(1,'h')).astype('int64') % (24*60)
     df['vmax'] = maxWindSpeed(varidx, dt.values, df.lon.values, df.lat.values,
-                              df.pmin.values, df.poci.values, gustfactor=1.223)
+                              df.pmin.values, df.poci.values, gustfactor=1.0)
     return df
 
 def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
@@ -494,9 +495,10 @@ def plotQuantileDelta(refdata, futdata, scenario, start, end, plotpath, title):
 
 if __name__ == '__main__':
 
-    path = "../data/tclv/"
-    plotpath = "../figures/20210707"
+    path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\raw\from_des\TCLV\20211124"
+    plotpath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\corrected\20211124\figures"
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
+    obsfile = r"X:\georisk\HaRIA_B_Wind\data\raw\from_noaa\ibtracs\v04r00\ibtracs.since1980.list.v04r00.csv"
 
     dist = stats.lognorm
     binvals = np.arange(0, 100, 5)
@@ -518,7 +520,7 @@ if __name__ == '__main__':
     LOGGER.info("Processing observations...")
     domain = (135, 160, -25, -10)
     bins = np.arange(0, 100, 5)
-    obstc = loadObsData("../data/ibtracs.since1980.list.v04r00.csv", domain)
+    obstc = loadObsData(obsfile, domain)
     obslmi = obstc.loc[obstc.groupby(["num"])["pdiff"].idxmax()]
     obsdata = obslmi.pdiff.values[obslmi.pdiff.values > 0]
 
@@ -697,7 +699,7 @@ if __name__ == '__main__':
     # in the region of maximum winds ($R_{mw}$). $v_t$ is the translation speed
     # of the TC and $\phi$ is the absolute latitude in degrees.
 
-    outputPath = "C:/WorkSpace/swhaq/data/tclv/20210707"
+    outputPath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\corrected\20211124\figures"
     fileTemplate = "{0}_bc.dat"
 
     brefdata = {}
@@ -777,16 +779,19 @@ if __name__ == '__main__':
     bfutgrpdata['Group2 RCP45'] = pd.concat([v for k, v in bfutdata.items() if k in group245], ignore_index=True)
     bfutgrpdata['Group2 RCP85'] = pd.concat([v for k, v in bfutdata.items() if k in group285], ignore_index=True)
 
-    params = calculateFitParams(refgrpdata, params, 1981, 2010, bc=False)
-    params = calculateFitParams(futgrpdata, params, 2081, 2100, bc=False)
-    params = calculateFitParams(brefgrpdata, params, 1981, 2010, bc=True)
-    params = calculateFitParams(bfutgrpdata, params, 2081, 2100, bc=True)
+    refgrpparams = calculateFitParams(refgrpdata, params, 1981, 2010, bc=False)
+    futgrpparams = calculateFitParams(futgrpdata, params, 2081, 2100, bc=False)
+    brefgrpparams = calculateFitParams(brefgrpdata, params, 1981, 2010, bc=True)
+    bfutgrpparams = calculateFitParams(bfutgrpdata, params, 2081, 2100, bc=True)
 
     LOGGER.info("Saving fitted distribution parameters")
-    params.to_csv(pjoin(plotpath, "fitparameters.csv"), index=False)
+    refgrpparams.to_csv(pjoin(plotpath, "refgrpfitparameters.csv"), index=False)
+    futgrpparams.to_csv(pjoin(plotpath, "futgrpfitparameters.csv"), index=False)
+    brefgrpparams.to_csv(pjoin(plotpath, "brefgrpfitparameters.csv"), index=False)
+    bfutgrpparams.to_csv(pjoin(plotpath, "bfutgrpfitparameters.csv"), index=False)
 
 
-
+    """
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
     ax = axes.flatten()
 
@@ -795,7 +800,7 @@ if __name__ == '__main__':
         m = row.Model
         r = row.RCP
         refpopt = (row.mu, row.sigma, row.zeta)
-        futrow = futgrpparams[(futgrpparams.Model==m) & (futgrpparams.RCP==r)]
+        futrow = futgrpparams[(futgrpparams.Model==m) & (futgrpparams.RCP==r)].iloc[0]
         futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
         refpdf = stats.lognorm.pdf(x, *refpopt)
         futpdf = stats.lognorm.pdf(x, *futpopt)
@@ -816,7 +821,7 @@ if __name__ == '__main__':
         m = row.Model
         r = row.RCP
         refpopt = (row.mu, row.sigma, row.zeta)
-        futrow = bfutgrpparams[(bfutgrpparams.Model==m) & (bfutgrpparams.RCP==r)]
+        futrow = bfutgrpparams[(bfutgrpparams.Model==m) & (bfutgrpparams.RCP==r)].iloc[0]
         futpopt = (futrow.mu, futrow.sigma, futrow.zeta)
         refpdf = stats.lognorm.pdf(x, *refpopt)
         futpdf = stats.lognorm.pdf(x, *futpopt)
@@ -831,7 +836,7 @@ if __name__ == '__main__':
     #ax[-1].set_title("IBTrACS")
     fig.tight_layout()
     None
-
+    """
     obstc=calculateMaxWind(obstc, 'ISO_TIME')
     obstc['category'] = pd.cut(obstc['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=LABELS)
 

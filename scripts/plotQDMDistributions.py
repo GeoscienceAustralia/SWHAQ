@@ -3,15 +3,12 @@ import sys
 import logging
 from os.path import join as pjoin
 from matplotlib import pyplot as plt
-import matplotlib.patches as mpatches
 
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
 import scipy.stats as stats
-
-import pdb
 
 sns.set_style('whitegrid')
 sns.set_context("talk")

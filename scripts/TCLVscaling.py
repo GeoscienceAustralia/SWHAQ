@@ -210,7 +210,7 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     to the function
 
     This returns a `DataFrame` with an additional column (`vmax`), which represents an estimated
-    0.2 second maximum gust wind speed.
+    1-minute sustained wind speed (lines up with potential intensity).
     """
 
     idx = df.num.values
@@ -220,7 +220,7 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     dt = (df[dtname] - df[dtname].shift()).fillna(pd.Timedelta(seconds=0)
                                                   ).apply(lambda x: x / np.timedelta64(1, 'h')).astype('int64') % (24*60)
     df['vmax'] = maxWindSpeed(varidx, dt.values, df.lon.values, df.lat.values,
-                              df.pmin.values, df.poci.values, gustfactor=1.223)
+                              df.pmin.values, df.poci.values, gustfactor=1.0)
     return df
 
 
@@ -382,8 +382,9 @@ def plot_categories(datadict, start, end, plotpath):
 
 if __name__ == '__main__':
 
-    path = "../data/tclv/"
+    path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\raw\from_des\TCLV\20211124"
     regex = r'all_tracks_(.+)_(rcp\d+)\.dat'
+    obsfile = r"X:\georisk\HaRIA_B_Wind\data\raw\from_noaa\ibtracs\v04r00\ibtracs.since1980.list.v04r00.csv"
 
     # The variables are referenced in the following way::
     #
@@ -398,7 +399,7 @@ if __name__ == '__main__':
     # and enter the simulation domain.
 
     domain = (135, 160, -25, -10)
-    obstc = load_obs_data("../data/ibtracs.since1980.list.v04r00.csv", domain)
+    obstc = load_obs_data(obsfile, domain)
     obstc = calculateMaxWind(obstc, 'ISO_TIME')
     obstc['category'] = pd.cut(obstc['vmax'], 
                                [0, 25, 35, 46, 62, 77, 200], 
@@ -414,7 +415,7 @@ if __name__ == '__main__':
 
     tclvdata = loadTCLVdata(path, domain=domain)
 
-    OUTPUTPATH = "C:/WorkSpace/swhaq/data/tclv/20210212"
+    OUTPUTPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\TCLV\tracks\corrected\20211124"
     if not os.path.isdir(OUTPUTPATH):
         LOGGER.warning(f"{OUTPUTPATH} does not exist - creating")
         os.makedirs(OUTPUTPATH)
