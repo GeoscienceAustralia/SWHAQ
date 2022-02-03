@@ -1,0 +1,34 @@
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/004-08495a.yaml
+
+ - template: wind_nc
+ 
+ - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_wJCU.xml
+ - vulnerability_set: domestic_wind_2012
+ 
+ - load_exposure: 
+    file_name: /g/data/w85/QFES_SWHA/exposure/2020/SEQ_ResidentialExposure_NEXIS_2020_M4_updated.csv
+    exposure_latitude: LATITUDE
+    exposure_longitude: LONGITUDE  
+ 
+ - load_wind:
+     file_list: /g/data/w85/QFES_SWHA/wind/local/004-08495a/local_wind.tif
+ 
+ - calc_struct_loss:
+    replacement_value_label: REPLACEMENT_VALUE
+    
+ - save: /g/data/w85/QFES_SWHA/impact/004-08495a/QFES_004-08495a.csv
+ 
+ - aggregate:
+     boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
+     file_name: /g/data/w85/QFES_SWHA/impact/004-08495a/QFES_004-08495a.shp
+     impactcode: MB_CODE
+     boundarycode: MB_CODE16
+     
+ - aggregation:
+     groupby: SA1_CODE
+     kwargs:
+      structural_loss_ratio: [mean, max, std]
+      structural_loss: [mean, sum]
+      REPLACEMENT_VALUE: [mean, sum]
+      
+ - save_agg: /g/data/w85/QFES_SWHA/impact/004-08495a/QFES_004-08495a_agg.csv
