@@ -20,7 +20,7 @@
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
-     file_name: /g/data/w85/QFES_SWHA/impact/014-01920/QFES_014-01920.shp
+     filename: /g/data/w85/QFES_SWHA/impact/014-01920/QFES_014-01920.shp
      impactcode: MB_CODE
      boundarycode: MB_CODE16
      
