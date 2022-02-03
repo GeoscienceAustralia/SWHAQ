@@ -5,7 +5,7 @@
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=12:00:00
-#PBS -lmem=128GB,ncpus=48,jobfs=400MB
+#PBS -lmem=192GB,ncpus=48,jobfs=400MB
 #PBS -joe
 #PBS -lstorage=gdata/w85+scratch/w85
 #PBS -v CONFIGFILE

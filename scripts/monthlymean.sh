@@ -29,9 +29,9 @@ process()
 {
     # Run a bunch of cdo commands:
     echo "Processing $3"
-    cdo -monmean -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1.$2.monmean.nc
-    cdo -monmin -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1.$2.monmin.nc
-    cdo -monmax -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1.$2.monmax.nc
+    cdo -monmean -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1-$2.monmean.nc
+    cdo -monmin -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1-$2.monmin.nc
+    cdo -monmax -selyear,$1/$2 $3 $OUTPUTPATH/$4.$1-$2.monmax.nc
 }
 
 cd $INPUTPATH

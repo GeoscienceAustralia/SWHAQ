@@ -77,7 +77,7 @@ if [ ! -f "$CONFIGFILE" ]; then
 fi
 
 # Record the version of code used
-REV=`git -C $SOFTWARE/tcrm/$BRANCH/ log -1 '%h %ci'`
+REV=`git -C $SOFTWARE/tcrm/$BRANCH/ log -1 --pretty=format:'%h %ci'`
 echo "Using TCRM revision: $REV"
 
 # Run the complete simulation:
