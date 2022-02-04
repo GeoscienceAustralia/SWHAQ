@@ -16,19 +16,21 @@
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/003-00562/QFES_003-00562.csv
+ - save: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562.csv
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
-     filename: /g/data/w85/QFES_SWHA/impact/003-00562/QFES_003-00562.shp
+     filename: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562.shp
      impactcode: MB_CODE
      boundarycode: MB_CODE16
+     fields:
+      structural: [mean]
      
  - aggregation:
      groupby: SA1_CODE
      kwargs:
-      structural_loss_ratio: [mean, max, std]
+      structural: [mean, max, std]
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
       
- - save_agg: /g/data/w85/QFES_SWHA/impact/003-00562/QFES_003-00562_agg.csv
+ - save_agg: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562_agg.csv
