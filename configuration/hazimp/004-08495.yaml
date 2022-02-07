@@ -11,16 +11,16 @@
     exposure_longitude: LONGITUDE  
  
  - load_wind:
-     file_list: /g/data/w85/QFES_SWHA/wind/local/004-08495a/local_wind.tif
+     file_list: /g/data/w85/QFES_SWHA/wind/local/004-08495/local_wind.tif
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/2020/004-08495a/QFES_004-08495a.csv
+ - save: /g/data/w85/QFES_SWHA/impact/2020/004-08495/QFES_004-08495.csv
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
-     filename: /g/data/w85/QFES_SWHA/impact/2020/004-08495a/QFES_004-08495a.shp
+     filename: /g/data/w85/QFES_SWHA/impact/2020/004-08495/QFES_004-08495.shp
      impactcode: MB_CODE
      boundarycode: MB_CODE16
      fields:
@@ -33,4 +33,4 @@
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
       
- - save_agg: /g/data/w85/QFES_SWHA/impact/2020/004-08495a/QFES_004-08495a_agg.csv
+ - save_agg: /g/data/w85/QFES_SWHA/impact/2020/004-08495/QFES_004-08495_agg.csv
