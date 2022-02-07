@@ -56,11 +56,13 @@ sns.set_palette(palette)
 # directory, and are stored as csv files.
 
 data_path = "../data/impact"
+data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020"
 
 events = ['007-02914', '016-04518', '011-01326']
+events = ['020-07522', '004-08495', '003-00562', '010-08276', '014-01920']
 
 res = 600
-context='talk'
+context='paper'
 fmt = "png"
 
 # To review an event, change the event number in the following
@@ -68,13 +70,13 @@ fmt = "png"
 for event_num in events:
     print("Processing event {0}".format(event_num))
 
-    output_path = pjoin(data_path, event_num)
+    output_path = pjoin(data_path, event_num, 'paper')
     try:
         os.makedirs(output_path)
     except:
         pass
 
-    event_file = pjoin(data_path, "QFES_{0}.csv".format(event_num))
+    event_file = pjoin(data_path, event_num, f"QFES_{event_num}.csv")
 
     YEAR_ORDER = ['Pre 1914', '1914 - 1946', '1947 - 1961',
                   '1962 - 1981', '1982 - 1996', '1997 - present']
@@ -93,7 +95,7 @@ for event_num in events:
     fig, ax = plt.subplots(figsize=(16,9))
     sns.set_context(context,font_scale=1.)
     g = sns.lmplot(x='0.2s gust at 10m height m/s',
-                   y='structural_loss_ratio', 
+                   y='structural', 
                    hue='YEAR_BUILT',
                    hue_order=YEAR_ORDER,
                    data=df,
@@ -117,7 +119,7 @@ for event_num in events:
     fig, ax = plt.subplots(figsize=(16,9))
     sns.set_context(context,font_scale=1.5)
 
-    sns.stripplot(x='YEAR_BUILT', y='structural_loss_ratio', 
+    sns.stripplot(x='YEAR_BUILT', y='structural', 
                   hue='ROOF_TYPE', order=YEAR_ORDER, 
                   data=df, jitter=True, ax=ax)
     ax.set_xlabel("Construction era", fontsize='large')
@@ -155,12 +157,19 @@ for event_num in events:
 
     bins=[0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
     labels=['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
-    df['Damage state'] = pd.cut(df['structural_loss_ratio'], bins,
+    df['Damage state'] = pd.cut(df['structural'], bins,
                                 right=True, labels=labels)
 
     # Save a table of number of buildings in each damage state per LGA:
-    df.pivot_table(index='LGA_NAME', columns='Damage state', aggfunc='size', fill_value=0).to_excel(pjoin(output_path, "{0}_damage_state_lga.xlsx".format(event_num)))
+    df.pivot_table(index='LGA_NAME',
+                   columns='Damage state',
+                   aggfunc='size',
+                   fill_value=0).to_excel(pjoin(output_path, "{0}_damage_state_lga.xlsx".format(event_num)))
 
+    df.pivot_table(index=["LGA_NAME", "YEAR_BUILT"],
+                   columns='Damage state',
+                   aggfunc='size',
+                   fill_value=0).to_excel(pjoin(output_path, "{0}_damage_state_lga_age.xlsx".format(event_num)))
     # Save a table of number of buildings in each damage state, broken
     # down by construction era, roof type and wall type:
     df.pivot_table(index=['Damage state', 'YEAR_BUILT'], 
@@ -194,7 +203,7 @@ for event_num in events:
 
     fig, ax = plt.subplots(figsize=(16,9))
     sns.set_context(context,font_scale=1.5)
-    ax = sns.pointplot(x='Damage state', y='structural_loss_ratio',
+    ax = sns.pointplot(x='Damage state', y='structural',
                        data=df, order=labels,
                        hue='YEAR_BUILT', hue_order=YEAR_ORDER)
     ax.set_ylabel("Structural loss ratio")
