@@ -53,6 +53,11 @@ DATE=`date +%Y%m%d%H%M`
 OUTPUT=/g/data/w85/QFES_SWHA/wind/local/$EVENTID
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/pm/QLD_$EVENTID\_pm.ini
 
+
+# Substitute the paths into the template configuration file:
+sed 's|EVENTID|'$EVENTID'|g' /g/data/w85/QFES_SWHA/configuration/pm/pm_template.ini > $CONFIGFILE
+sed -i 's|OUTPUTPATH|'$OUTPUT'|g' $CONFIGFILE
+
 # Add path to where TCRM is installed.
 SOFTWARE=/g/data/w85/software
 BRANCH=master
