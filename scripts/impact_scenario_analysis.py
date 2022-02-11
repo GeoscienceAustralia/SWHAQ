@@ -56,10 +56,11 @@ sns.set_palette(palette)
 # directory, and are stored as csv files.
 
 data_path = "../data/impact"
-data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020"
+data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020NV"
 
 events = ['007-02914', '016-04518', '011-01326']
 events = ['020-07522', '004-08495', '003-00562', '010-08276', '014-01920']
+events = ['004-08495']
 
 res = 600
 context='paper'
@@ -175,6 +176,7 @@ for event_num in events:
     df.pivot_table(index=['Damage state', 'YEAR_BUILT'], 
                    columns=['WALL_TYPE', 'ROOF_TYPE'], 
                    aggfunc='size', fill_value=0).to_excel(pjoin(output_path, "{0}_damage_state_type.xlsx".format(event_num)))
+
 
     # Save a table of number of buildings in each damage state, broken
     # down by construction era
