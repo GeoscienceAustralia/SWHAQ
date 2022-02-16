@@ -4,9 +4,9 @@
 #        "C:\Program Files\FME_2020.2.2\fme.exe" C:\WorkSpace\swhaq\scripts\fme\create_HazImp_files_for_mapping_products_using_mesh_blocks2016.fmw
 #              --MB_GDB "\\prod.lan\active\ops\built_env\2_SourceInformation\AdminBoundaries\AdministrativeBoundaries.gdb"
 #              --Scenario_CSV "\\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\scenario_lookup_table.csv"
-#              --DestDataset_GEODATABASE_FILE "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImpNEXISV11.gdb"
+#              --DestDataset_GEODATABASE_FILE "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImp2020NV.gdb"
 #              --SourceDataset_GEODATABASE_FILE_3 "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\maps\MapExtents.gdb"
-#              --HazImp_CSV "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020\004-08495\QFES_004-08495.csv"
+#              --HazImp_CSV "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020NV\004-08495\QFES_004-08495.csv"
 #    
 #!   ATTR_TYPE_ENCODING="SDF"
 #!   BEGIN_PYTHON=""
@@ -21,8 +21,8 @@
 #!   END_TCL=""
 #!   EXPLICIT_BOOKMARK_ORDER="false"
 #!   FME_BUILD_NUM="20817"
-#!   FME_DOCUMENT_GUID="185840aa-ec10-4e73-bcfe-2793c3601078"
-#!   FME_DOCUMENT_PRIORGUID="981183f5-74f4-42c2-937d-354a84c30aca,b98041a6-4317-4d84-9856-ff180eed5982,36f13a1a-fa81-422a-b4c7-04126afaeae0,010f75e3-f376-450b-b73e-dd32da98b9fd,0e53d5f8-9f39-4160-b2b2-60fa429b4f45,3aca990b-7a7c-48f9-a28a-b7dbfc9bf81c,7d83962b-a7f4-49cf-a0c7-2f369d0a7527,830278c4-46da-4552-902a-76b41815040a,0de7aae7-8db3-4ab9-a85b-2d025103e295,d2fe5495-6bfd-4b2b-933f-8aed3c97b6cf,d26642b5-cf03-4851-b4c4-cc0ee6d07133,b0a2f7b8-bb70-4549-bd5e-966d61cd3ed1,22808ba7-7e13-4cb8-947a-4c9c892886b4,6f563b9c-5155-4063-bdb0-2da0ff7364b1,9fc246d9-2754-4c4e-92e5-feb75e626417,5d9d8d25-f367-46b3-b16f-d3cbe0a34dcc,a15c9fde-cd8b-4194-9a14-cc88811938a1,366447f0-f199-4e00-a362-c62280458a7a,a5b9203f-4371-458b-aa2b-f31fcbd6a389,63200cde-de44-4540-817b-094f806b0575,e155dd38-1e9c-4f76-ba50-02c49b98ba7f,239355f8-079b-4570-85bc-b2f987d415ab,7bc17470-a7c0-424e-a536-b6e447b205d1,24ff4754-292e-4191-8bb2-6a5e7442b2a0,d0d31425-0981-4283-b891-d049d4769e8a,8c1a6827-7f45-4399-88e1-2816a21620f2,d6c6d91a-b3e3-46d1-a591-880bf986533f,4e8cf60b-d8ef-4c73-983a-eee43d64abdc,d43e59ce-8dc6-4f4a-bc90-f9012bf5d4a3,9ac032fd-2740-4e64-8e9c-cfca54518d23,45b38313-4bd5-44fa-a79d-ec43fb160ec1,36b553f5-977d-46ac-a22a-0ae62393ebfe,218fd1c8-0421-4f77-87dc-c5810a3d7c7e,02bc02e0-a669-43a1-8976-fc2650c910cb,a18b4f6f-ce65-452c-a6eb-ebd11bf2ee35,5b0bd11c-6c75-4d5f-ace6-10f4aa80b25b,86a5489b-393f-40b7-85fb-d2a5ed94dbc3,cbe90208-6c00-449c-a720-87e58a7106c6,a90b69b1-4a94-4496-8423-b4e8565fe47d,3fbdc06f-b6b2-49e5-8dc2-67ce4b4dd994,b52e2778-7db2-42a9-8be5-9ffa87622cbe,06835dac-a6e6-4374-a251-2b4fc7184f85,eb3a4f61-91d5-4ca6-a302-101173ab8bc3,1650b7ae-c137-411f-a0fd-e45860535aea,8ab0db49-058c-4960-b1df-02ad3b0e617e,cbb5ccf9-4e06-4882-8c00-1d13deb395c4,1a48ff3a-c65c-4de2-a2bb-cf5da9a26c24,e88c2d13-a0be-46f2-bfc5-682e261e1916,8d01dc08-4ff9-47dd-bc4e-af3c68518566,e8f5e03e-f9d1-4871-83e6-343ea069a5e4,a54fc49a-458c-4a2f-bad5-e5ef1a028ef2,9ce55c52-f515-42b8-952c-8e79f779b00f,d53215a1-c749-45f4-9b69-0f7ba3c05cb3,549ef5d8-5276-4c31-991b-0dfc2b58bfa8,915feddd-3c85-409f-88c0-4fd839adf8e0,f7fcd3b8-b2d3-4cfb-a11a-dc9ad33d7c1c,df16ca12-0b0d-4e0e-8b16-2f5f1a872782,2d7b6a8d-0a9a-476a-bdee-b535fc49493d,cf9311f0-f2ab-4505-86ae-515ff47b5ec9,6c5a0d9e-6d26-4a97-91f0-48cb201f8940,b3065fd5-2a50-4fde-9cb1-a8a8c2b9dc2f,221f8e80-c1d1-4dbf-8ac8-343e8481c0ae,7b9faaba-ff84-4f4a-bbc3-77e4e52c7a24"
+#!   FME_DOCUMENT_GUID="1eaf3cc5-66d7-4112-9180-f2c331f3c7c1"
+#!   FME_DOCUMENT_PRIORGUID="981183f5-74f4-42c2-937d-354a84c30aca,b98041a6-4317-4d84-9856-ff180eed5982,36f13a1a-fa81-422a-b4c7-04126afaeae0,010f75e3-f376-450b-b73e-dd32da98b9fd,0e53d5f8-9f39-4160-b2b2-60fa429b4f45,3aca990b-7a7c-48f9-a28a-b7dbfc9bf81c,7d83962b-a7f4-49cf-a0c7-2f369d0a7527,830278c4-46da-4552-902a-76b41815040a,0de7aae7-8db3-4ab9-a85b-2d025103e295,d2fe5495-6bfd-4b2b-933f-8aed3c97b6cf,d26642b5-cf03-4851-b4c4-cc0ee6d07133,b0a2f7b8-bb70-4549-bd5e-966d61cd3ed1,22808ba7-7e13-4cb8-947a-4c9c892886b4,6f563b9c-5155-4063-bdb0-2da0ff7364b1,9fc246d9-2754-4c4e-92e5-feb75e626417,5d9d8d25-f367-46b3-b16f-d3cbe0a34dcc,a15c9fde-cd8b-4194-9a14-cc88811938a1,366447f0-f199-4e00-a362-c62280458a7a,a5b9203f-4371-458b-aa2b-f31fcbd6a389,63200cde-de44-4540-817b-094f806b0575,e155dd38-1e9c-4f76-ba50-02c49b98ba7f,239355f8-079b-4570-85bc-b2f987d415ab,7bc17470-a7c0-424e-a536-b6e447b205d1,24ff4754-292e-4191-8bb2-6a5e7442b2a0,d0d31425-0981-4283-b891-d049d4769e8a,8c1a6827-7f45-4399-88e1-2816a21620f2,d6c6d91a-b3e3-46d1-a591-880bf986533f,4e8cf60b-d8ef-4c73-983a-eee43d64abdc,d43e59ce-8dc6-4f4a-bc90-f9012bf5d4a3,9ac032fd-2740-4e64-8e9c-cfca54518d23,45b38313-4bd5-44fa-a79d-ec43fb160ec1,36b553f5-977d-46ac-a22a-0ae62393ebfe,218fd1c8-0421-4f77-87dc-c5810a3d7c7e,02bc02e0-a669-43a1-8976-fc2650c910cb,a18b4f6f-ce65-452c-a6eb-ebd11bf2ee35,5b0bd11c-6c75-4d5f-ace6-10f4aa80b25b,86a5489b-393f-40b7-85fb-d2a5ed94dbc3,cbe90208-6c00-449c-a720-87e58a7106c6,a90b69b1-4a94-4496-8423-b4e8565fe47d,3fbdc06f-b6b2-49e5-8dc2-67ce4b4dd994,b52e2778-7db2-42a9-8be5-9ffa87622cbe,06835dac-a6e6-4374-a251-2b4fc7184f85,eb3a4f61-91d5-4ca6-a302-101173ab8bc3,1650b7ae-c137-411f-a0fd-e45860535aea,8ab0db49-058c-4960-b1df-02ad3b0e617e,cbb5ccf9-4e06-4882-8c00-1d13deb395c4,1a48ff3a-c65c-4de2-a2bb-cf5da9a26c24,e88c2d13-a0be-46f2-bfc5-682e261e1916,8d01dc08-4ff9-47dd-bc4e-af3c68518566,e8f5e03e-f9d1-4871-83e6-343ea069a5e4,a54fc49a-458c-4a2f-bad5-e5ef1a028ef2,9ce55c52-f515-42b8-952c-8e79f779b00f,d53215a1-c749-45f4-9b69-0f7ba3c05cb3,549ef5d8-5276-4c31-991b-0dfc2b58bfa8,915feddd-3c85-409f-88c0-4fd839adf8e0,f7fcd3b8-b2d3-4cfb-a11a-dc9ad33d7c1c,df16ca12-0b0d-4e0e-8b16-2f5f1a872782,2d7b6a8d-0a9a-476a-bdee-b535fc49493d,cf9311f0-f2ab-4505-86ae-515ff47b5ec9,6c5a0d9e-6d26-4a97-91f0-48cb201f8940,b3065fd5-2a50-4fde-9cb1-a8a8c2b9dc2f,221f8e80-c1d1-4dbf-8ac8-343e8481c0ae,7b9faaba-ff84-4f4a-bbc3-77e4e52c7a24,185840aa-ec10-4e73-bcfe-2793c3601078"
 #!   FME_GEOMETRY_HANDLING="Enhanced"
 #!   FME_IMPLICIT_CSMAP_REPROJECTION_MODE="Auto"
 #!   FME_REPROJECTION_ENGINE="FME"
@@ -31,7 +31,7 @@
 #!   HISTORY=""
 #!   IGNORE_READER_FAILURE="No"
 #!   LAST_SAVE_BUILD="FME(R) 2020.2.2.0 (20210111 - Build 20817 - WIN64)"
-#!   LAST_SAVE_DATE="2022-02-08T21:49:31"
+#!   LAST_SAVE_DATE="2022-02-16T21:29:48"
 #!   LOG_FILE=""
 #!   LOG_MAX_RECORDED_FEATURES="200"
 #!   MARKDOWN_DESCRIPTION=""
@@ -50,7 +50,7 @@
 #!   TITLE=""
 #!   USAGE=""
 #!   USE_MARKDOWN=""
-#!   VIEW_POSITION="-2187.52 1698.61"
+#!   VIEW_POSITION="-2182.48 766.137"
 #!   WARN_INVALID_XFORM_PARAM="Yes"
 #!   WORKSPACE_VERSION="1"
 #!   ZOOM_SCALE="62"
@@ -69,7 +69,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE=""
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="fme_sweep_angle float fme_primary_axis float multi_reader_keyword text csv_total_number_of_columns number(11,0) fme_geometry text fme_rotation float fme_basename text fme_feature_type text fme_dataset text fme_text_string text multi_reader_id int multi_reader_type text fme_color text fme_start_angle float multi_reader_full_id int fme_text_size float csv_line_number number(11,0) csv_type char(50) csv_number_of_fields number(11,0) fme_fill_color text fme_secondary_axis float fme_type text"
+#!   EXPOSABLE_ATTRS="fme_primary_axis float fme_type text multi_reader_full_id int fme_start_angle float fme_dataset text csv_type char(50) fme_color text fme_text_size float csv_line_number number(11,0) multi_reader_type text fme_sweep_angle float fme_basename text multi_reader_keyword text fme_rotation float csv_total_number_of_columns number(11,0) fme_secondary_axis float multi_reader_id int fme_feature_type text csv_number_of_fields number(11,0) fme_geometry text fme_fill_color text fme_text_string text"
 #!   DEFLINE_PARMS=""
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -133,7 +133,7 @@
 #!   ROLE="READER"
 #!   FORMAT="CSV"
 #!   DATASET="$(Scenario_CSV)"
-#!   KEYWORD="CSV_3"
+#!   KEYWORD="CSV_2"
 #!   MULTI_GEOM_ALLOWED="false"
 #!   ATTR_MAX_LENGTH="0"
 #!   ATTR_CASE="ANY"
@@ -141,7 +141,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE=""
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="fme_sweep_angle float fme_primary_axis float multi_reader_keyword text csv_total_number_of_columns number(11,0) fme_geometry fme_char(50) fme_rotation float fme_basename text fme_feature_type text fme_dataset text fme_text_string text multi_reader_id int multi_reader_type text fme_color text fme_start_angle float multi_reader_full_id int fme_text_size float csv_line_number number(11,0) csv_type char(50) csv_number_of_fields number(11,0) fme_fill_color text fme_secondary_axis float fme_type text"
+#!   EXPOSABLE_ATTRS="fme_primary_axis float fme_type text multi_reader_full_id int fme_start_angle float fme_dataset text csv_type char(50) fme_color text fme_text_size float csv_line_number number(11,0) multi_reader_type text fme_sweep_angle float fme_basename text multi_reader_keyword text fme_rotation float csv_total_number_of_columns number(11,0) fme_secondary_axis float multi_reader_id int fme_feature_type text csv_number_of_fields number(11,0) fme_geometry fme_char(50) fme_fill_color text fme_text_string text"
 #!   DEFLINE_PARMS=""
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -209,7 +209,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE="geodb_type {FME_GEN_GEOMETRY} geodb_where_wwjd &quot;&quot;"
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="geodb_right_to_left boolean geodb_linked_feature_id integer geodb_v_align char(50) fme_text_size double geodb_dim_end_dimension_x double geodb_text_leader_line_width double fme_type char(50) geodb_dim_end_dimension_y double multi_reader_type char(50) geodb_rel_destination_oid integer multi_reader_id integer geodb_dim_line_x double geodb_start_angle double geodb_font_italic boolean geodb_dim_line_display smallint geodb_text_scale boolean geodb_dim_end_dimension_z double geodb_anno_class_id integer geodb_feature_dataset char(254) geodb_text_lc_margin_right double geodb_text_lc_accent_bar_color char(50) geodb_symbol_id integer geodb_raster_pyramid_resample_type char(100) geodb_dim_text_angle double geodb_dim_line_y double geodb_font_underline boolean geodb_text_lc_textbox_x3 double geodb_dim_using_custom_length boolean geodb_text_string_with_format_tags char(254) geodb_from_junction_element_id integer fme_rotation double geodb_text_lc_margin_left double geodb_text_ref_scale double geodb_metadata_string char(254) geodb_font_strikethrough boolean fme_basename char(50) geodb_text_lc_margin_top double geodb_text_part_count integer geodb_text_lc_textbox_y4 double fme_start_angle double geodb_element_id integer geodb_feature_is_simple boolean geodb_dim_text_y double geodb_text_break_char integer geodb_text_lc_textbox_y3 double geodb_text_leader_line_color char(50) geodb_oid integer geodb_dim_begin_dimension_y double geodb_rel_origin_oid integer geodb_subtype_name char(254) fme_fill_color char(50) geodb_dim_length double geodb_dim_style_id integer geodb_text_lc_textbox_x1 double geodb_dim_line_z double geodb_font_bold boolean geodb_dim_extn_line_angle double geodb_text_string char(254) fme_color char(50) geodb_text_clip boolean geodb_element_index integer geodb_text_lc_gap double geodb_dim_text_x double geodb_text_character_width double geodb_font_size double geodb_feature_class_alias char(254) geodb_dim_text_z double geodb_feature_has_relationships boolean geodb_text_line_spacing double geodb_text_lc_style char(20) geodb_font_charset smallint geodb_text_leader_line_anchor_point char(254) geodb_text_lc_textbox_x2 double geodb_text_y_offset double geodb_text_point_scale_factor double fme_feature_type char(50) geodb_junction_element_count integer geodb_raster_compression_type char(100) geodb_text_color char(254) geodb_text_x_offset double geodb_secondary_axis double geodb_measures char(254) multi_reader_keyword char(50) multi_reader_full_id integer geodb_dim_custom_length double geodb_text_lc_accent_bar_width double geodb_raster_pyramid_level integer fme_geometry char(50) geodb_text_lc_textbox_y1 double geodb_dim_marker_display smallint geodb_text_lc_margin_bottom double geodb_text_size double fme_secondary_axis double geodb_text_word_spacing double geodb_text_leader_line_tolerance double geodb_font_weight smallint geodb_dim_begin_dimension_x double geodb_sweep_angle double fme_sweep_angle double geodb_raster_compression_quality integer geodb_text_angle double geodb_dim_begin_dimension_z double geodb_text_lc_textbox_x4 double geodb_ancillary_role char(7) geodb_edge_element_count integer geodb_font_name char(254) geodb_text_leader_line char(254) fme_dataset char(50) geodb_rotation double geodb_primary_axis double geodb_h_align char(50) geodb_text_char_spacing double geodb_text_lc_textbox_y2 double fme_text_string char(50) geodb_type char(25) geodb_edge_feature_count integer geodb_dim_type smallint fme_primary_axis double geodb_junction_feature_count integer geodb_dim_extn_line_display smallint geodb_to_junction_element_id integer geodb_topological_configuration char(6) geodb_color char(50)"
+#!   EXPOSABLE_ATTRS="geodb_text_angle double geodb_dim_text_y double geodb_dim_extn_line_angle double geodb_dim_begin_dimension_y double geodb_text_character_width double geodb_text_part_count integer geodb_dim_line_x double geodb_font_underline boolean fme_feature_type char(50) geodb_raster_pyramid_level integer fme_primary_axis double geodb_feature_dataset char(254) multi_reader_type char(50) geodb_dim_extn_line_display smallint geodb_dim_end_dimension_y double geodb_anno_class_id integer geodb_metadata_string char(254) geodb_font_charset smallint geodb_font_weight smallint geodb_edge_element_count integer geodb_feature_class_alias char(254) geodb_feature_has_relationships boolean geodb_dim_style_id integer geodb_edge_feature_count integer geodb_dim_text_angle double geodb_dim_using_custom_length boolean geodb_text_break_char integer geodb_type char(25) geodb_text_clip boolean geodb_dim_text_x double geodb_measures char(254) fme_text_size double geodb_font_size double geodb_element_id integer geodb_text_lc_margin_bottom double geodb_text_size double geodb_raster_compression_quality integer geodb_v_align char(50) geodb_font_name char(254) geodb_junction_element_count integer geodb_text_char_spacing double fme_fill_color char(50) geodb_dim_line_display smallint geodb_sweep_angle double geodb_feature_is_simple boolean geodb_dim_line_y double geodb_text_ref_scale double geodb_dim_begin_dimension_x double geodb_text_lc_textbox_x4 double geodb_dim_length double geodb_text_point_scale_factor double fme_secondary_axis double geodb_text_lc_textbox_x3 double geodb_secondary_axis double geodb_text_lc_textbox_x2 double geodb_text_y_offset double geodb_dim_text_z double geodb_rel_origin_oid integer geodb_ancillary_role char(7) fme_rotation double geodb_subtype_name char(254) geodb_text_lc_textbox_y3 double geodb_to_junction_element_id integer geodb_text_string char(254) fme_sweep_angle double geodb_dim_marker_display smallint geodb_primary_axis double fme_start_angle double geodb_dim_begin_dimension_z double geodb_text_lc_textbox_x1 double geodb_text_lc_accent_bar_color char(50) geodb_text_leader_line_color char(50) geodb_text_lc_style char(20) multi_reader_keyword char(50) geodb_dim_custom_length double fme_type char(50) geodb_topological_configuration char(6) geodb_dim_end_dimension_x double geodb_rel_destination_oid integer geodb_text_word_spacing double geodb_text_lc_margin_left double geodb_right_to_left boolean geodb_symbol_id integer geodb_text_color char(254) multi_reader_id integer geodb_raster_compression_type char(100) fme_geometry char(50) geodb_text_lc_textbox_y2 double fme_basename char(50) geodb_text_leader_line char(254) geodb_h_align char(50) geodb_start_angle double geodb_text_line_spacing double geodb_text_x_offset double multi_reader_full_id integer geodb_junction_feature_count integer geodb_text_lc_margin_top double geodb_dim_line_z double geodb_text_lc_textbox_y4 double geodb_dim_end_dimension_z double geodb_text_leader_line_width double geodb_text_scale boolean fme_color char(50) geodb_text_leader_line_tolerance double geodb_text_lc_gap double geodb_rotation double geodb_text_lc_margin_right double geodb_font_italic boolean geodb_raster_pyramid_resample_type char(100) geodb_font_bold boolean geodb_element_index integer geodb_text_leader_line_anchor_point char(254) geodb_oid integer geodb_text_string_with_format_tags char(254) geodb_text_lc_textbox_y1 double geodb_text_lc_accent_bar_width double fme_dataset char(50) fme_text_string char(50) geodb_font_strikethrough boolean geodb_linked_feature_id integer geodb_dim_type smallint geodb_color char(50) geodb_from_junction_element_id integer"
 #!   DEFLINE_PARMS="&quot;GUI OPTIONAL NAMEDGROUP geodb_table_settings_group geodb_where_wwjd Table Settings&quot; &quot;&quot; &quot;GUI OPTIONAL TEXT_EDIT_SQL_CFG geodb_where_wwjd MODE,WHERE WHERE Clause&quot; &quot;&quot; "
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -281,7 +281,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE="geodb_type {FME_GEN_GEOMETRY} geodb_where_wwjd &quot;&quot;"
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="geodb_right_to_left boolean geodb_linked_feature_id integer geodb_v_align char(50) fme_text_size double geodb_dim_end_dimension_x double geodb_text_leader_line_width double fme_type char(50) geodb_dim_end_dimension_y double multi_reader_type char(50) geodb_rel_destination_oid integer multi_reader_id integer geodb_dim_line_x double geodb_start_angle double geodb_font_italic boolean geodb_dim_line_display smallint geodb_text_scale boolean geodb_dim_end_dimension_z double geodb_anno_class_id integer geodb_feature_dataset char(254) geodb_text_lc_margin_right double geodb_text_lc_accent_bar_color char(50) geodb_symbol_id integer geodb_raster_pyramid_resample_type char(100) geodb_dim_text_angle double geodb_dim_line_y double geodb_font_underline boolean geodb_text_lc_textbox_x3 double geodb_dim_using_custom_length boolean geodb_text_string_with_format_tags char(254) geodb_from_junction_element_id integer fme_rotation double geodb_text_lc_margin_left double geodb_text_ref_scale double geodb_metadata_string char(254) geodb_font_strikethrough boolean fme_basename char(50) geodb_text_lc_margin_top double geodb_text_part_count integer geodb_text_lc_textbox_y4 double fme_start_angle double geodb_element_id integer geodb_feature_is_simple boolean geodb_dim_text_y double geodb_text_break_char integer geodb_text_lc_textbox_y3 double geodb_text_leader_line_color char(50) geodb_oid integer geodb_dim_begin_dimension_y double geodb_rel_origin_oid integer geodb_subtype_name char(254) fme_fill_color char(50) geodb_dim_length double geodb_dim_style_id integer geodb_text_lc_textbox_x1 double geodb_dim_line_z double geodb_font_bold boolean geodb_dim_extn_line_angle double geodb_text_string char(254) fme_color char(50) geodb_text_clip boolean geodb_element_index integer geodb_text_lc_gap double geodb_dim_text_x double geodb_text_character_width double geodb_font_size double geodb_feature_class_alias char(254) geodb_dim_text_z double geodb_feature_has_relationships boolean geodb_text_line_spacing double geodb_text_lc_style char(20) geodb_font_charset smallint geodb_text_leader_line_anchor_point char(254) geodb_text_lc_textbox_x2 double geodb_text_y_offset double geodb_text_point_scale_factor double fme_feature_type char(50) geodb_junction_element_count integer geodb_raster_compression_type char(100) geodb_text_color char(254) geodb_text_x_offset double geodb_secondary_axis double geodb_measures char(254) multi_reader_keyword char(50) multi_reader_full_id integer geodb_dim_custom_length double geodb_text_lc_accent_bar_width double geodb_raster_pyramid_level integer fme_geometry char(50) geodb_text_lc_textbox_y1 double geodb_dim_marker_display smallint geodb_text_lc_margin_bottom double geodb_text_size double fme_secondary_axis double geodb_text_word_spacing double geodb_text_leader_line_tolerance double geodb_font_weight smallint geodb_dim_begin_dimension_x double geodb_sweep_angle double fme_sweep_angle double geodb_raster_compression_quality integer geodb_text_angle double geodb_dim_begin_dimension_z double geodb_text_lc_textbox_x4 double geodb_ancillary_role char(7) geodb_edge_element_count integer geodb_font_name char(254) geodb_text_leader_line char(254) fme_dataset char(50) geodb_rotation double geodb_primary_axis double geodb_h_align char(50) geodb_text_char_spacing double geodb_text_lc_textbox_y2 double fme_text_string char(50) geodb_type char(25) geodb_edge_feature_count integer geodb_dim_type smallint fme_primary_axis double geodb_junction_feature_count integer geodb_dim_extn_line_display smallint geodb_to_junction_element_id integer geodb_topological_configuration char(6) geodb_color char(50)"
+#!   EXPOSABLE_ATTRS="geodb_text_angle double geodb_dim_text_y double geodb_dim_extn_line_angle double geodb_dim_begin_dimension_y double geodb_text_character_width double geodb_text_part_count integer geodb_dim_line_x double geodb_font_underline boolean fme_feature_type char(50) geodb_raster_pyramid_level integer fme_primary_axis double geodb_feature_dataset char(254) multi_reader_type char(50) geodb_dim_extn_line_display smallint geodb_dim_end_dimension_y double geodb_anno_class_id integer geodb_metadata_string char(254) geodb_font_charset smallint geodb_font_weight smallint geodb_edge_element_count integer geodb_feature_class_alias char(254) geodb_feature_has_relationships boolean geodb_dim_style_id integer geodb_edge_feature_count integer geodb_dim_text_angle double geodb_dim_using_custom_length boolean geodb_text_break_char integer geodb_type char(25) geodb_text_clip boolean geodb_dim_text_x double geodb_measures char(254) fme_text_size double geodb_font_size double geodb_element_id integer geodb_text_lc_margin_bottom double geodb_text_size double geodb_raster_compression_quality integer geodb_v_align char(50) geodb_font_name char(254) geodb_junction_element_count integer geodb_text_char_spacing double fme_fill_color char(50) geodb_dim_line_display smallint geodb_sweep_angle double geodb_feature_is_simple boolean geodb_dim_line_y double geodb_text_ref_scale double geodb_dim_begin_dimension_x double geodb_text_lc_textbox_x4 double geodb_dim_length double geodb_text_point_scale_factor double fme_secondary_axis double geodb_text_lc_textbox_x3 double geodb_secondary_axis double geodb_text_lc_textbox_x2 double geodb_text_y_offset double geodb_dim_text_z double geodb_rel_origin_oid integer geodb_ancillary_role char(7) fme_rotation double geodb_subtype_name char(254) geodb_text_lc_textbox_y3 double geodb_to_junction_element_id integer geodb_text_string char(254) fme_sweep_angle double geodb_dim_marker_display smallint geodb_primary_axis double fme_start_angle double geodb_dim_begin_dimension_z double geodb_text_lc_textbox_x1 double geodb_text_lc_accent_bar_color char(50) geodb_text_leader_line_color char(50) geodb_text_lc_style char(20) multi_reader_keyword char(50) geodb_dim_custom_length double fme_type char(50) geodb_topological_configuration char(6) geodb_dim_end_dimension_x double geodb_rel_destination_oid integer geodb_text_word_spacing double geodb_text_lc_margin_left double geodb_right_to_left boolean geodb_symbol_id integer geodb_text_color char(254) multi_reader_id integer geodb_raster_compression_type char(100) fme_geometry char(50) geodb_text_lc_textbox_y2 double fme_basename char(50) geodb_text_leader_line char(254) geodb_h_align char(50) geodb_start_angle double geodb_text_line_spacing double geodb_text_x_offset double multi_reader_full_id integer geodb_junction_feature_count integer geodb_text_lc_margin_top double geodb_dim_line_z double geodb_text_lc_textbox_y4 double geodb_dim_end_dimension_z double geodb_text_leader_line_width double geodb_text_scale boolean fme_color char(50) geodb_text_leader_line_tolerance double geodb_text_lc_gap double geodb_rotation double geodb_text_lc_margin_right double geodb_font_italic boolean geodb_raster_pyramid_resample_type char(100) geodb_font_bold boolean geodb_element_index integer geodb_text_leader_line_anchor_point char(254) geodb_oid integer geodb_text_string_with_format_tags char(254) geodb_text_lc_textbox_y1 double geodb_text_lc_accent_bar_width double fme_dataset char(50) fme_text_string char(50) geodb_font_strikethrough boolean geodb_linked_feature_id integer geodb_dim_type smallint geodb_color char(50) geodb_from_junction_element_id integer"
 #!   DEFLINE_PARMS="&quot;GUI OPTIONAL NAMEDGROUP geodb_table_settings_group geodb_where_wwjd Table Settings&quot; &quot;&quot; &quot;GUI OPTIONAL TEXT_EDIT_SQL_CFG geodb_where_wwjd MODE,WHERE WHERE Clause&quot; &quot;&quot; "
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -353,7 +353,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE="geodb_type {FME_GEN_GEOMETRY} GEODB_UPDATE_KEY_COLUMNS &quot;&quot; GEODB_DROP_TABLE NO GEODB_TRUNCATE_TABLE NO GEODB_OBJECT_ID_NAME OBJECTID GEODB_OBJECT_ID_ALIAS OBJECTID GEODB_SHAPE_NAME SHAPE GEODB_SHAPE_ALIAS SHAPE GEODB_CONFIG_KEYWORD DEFAULTS GEODB_FEATURE_DATASET &quot;&quot; GEODB_GRID{1} &quot;&quot; GEODB_AVG_NUM_POINTS &quot;&quot; GEODB_HAS_Z_VALUES &quot;&quot; GEODB_HAS_MEASURES &quot;&quot; GEODB_ANNO_REFERENCE_SCALE &quot;&quot;"
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="geodb_right_to_left boolean geodb_text_feat_class_name char(254) geodb_linked_feature_id integer geodb_v_align char(50) fme_text_size double geodb_dim_end_dimension_x double geodb_text_leader_line_width double fme_type char(50) geodb_dim_end_dimension_y double geodb_dim_line_x double geodb_start_angle double geodb_font_italic boolean geodb_dim_line_display smallint geodb_text_scale boolean geodb_dim_end_dimension_z double geodb_anno_class_id integer geodb_feature_dataset char(254) geodb_text_lc_margin_right double geodb_text_lc_accent_bar_color char(50) geodb_symbol_id integer geodb_raster_pyramid_resample_type char(100) geodb_dim_text_angle double geodb_dim_line_y double geodb_font_underline boolean geodb_dim_using_custom_length boolean geodb_text_string_with_format_tags char(254) fme_rotation double geodb_text_lc_margin_left double geodb_text_ref_scale double fme_db_operation char(8) geodb_metadata_string char(254) geodb_font_strikethrough boolean fme_basename char(50) geodb_text_lc_margin_top double fme_start_angle double geodb_dim_text_y double geodb_text_break_char integer geodb_text_leader_line_color char(50) geodb_dim_begin_dimension_y double geodb_subtype_name char(254) fme_fill_color char(50) geodb_dim_length double geodb_dim_style_id integer geodb_dim_line_z double geodb_font_bold boolean geodb_dim_extn_line_angle double geodb_text_string char(254) fme_color char(50) geodb_text_clip boolean geodb_text_lc_gap double geodb_dim_text_x double geodb_text_character_width double geodb_font_size double geodb_feature_class_alias char(254) geodb_dim_text_z double geodb_text_lc_style char(20) geodb_text_line_spacing double geodb_font_charset smallint geodb_text_leader_line_anchor_point char(254) geodb_text_y_offset double fme_feature_type char(50) geodb_raster_compression_type char(100) geodb_text_color char(254) geodb_text_x_offset double geodb_secondary_axis double geodb_measures char(254) geodb_dim_custom_length double geodb_text_lc_accent_bar_width double geodb_raster_pyramid_level integer fme_geometry fme_char(50) geodb_dim_marker_display smallint geodb_text_lc_margin_bottom double geodb_text_size double fme_secondary_axis double geodb_text_word_spacing double geodb_text_leader_line_tolerance double geodb_font_weight smallint geodb_dim_begin_dimension_x double geodb_sweep_angle double fme_sweep_angle double geodb_raster_compression_quality integer geodb_text_angle double geodb_dim_begin_dimension_z double geodb_ancillary_role char(7) fme_where char(254) geodb_font_name char(254) geodb_text_leader_line char(254) geodb_rotation double fme_dataset char(50) geodb_primary_axis double geodb_h_align char(50) geodb_text_x_coord double geodb_text_char_spacing double fme_text_string char(50) geodb_type char(25) geodb_dim_type smallint fme_primary_axis double geodb_dim_extn_line_display smallint geodb_allow_symbol_overrides boolean geodb_color char(50) geodb_text_y_coord double"
+#!   EXPOSABLE_ATTRS="geodb_text_angle double geodb_dim_text_y double geodb_dim_extn_line_angle double geodb_dim_begin_dimension_y double geodb_text_character_width double geodb_dim_line_x double geodb_font_underline boolean fme_feature_type char(50) geodb_raster_pyramid_level integer fme_primary_axis double geodb_feature_dataset char(254) geodb_dim_extn_line_display smallint geodb_dim_end_dimension_y double geodb_anno_class_id integer geodb_metadata_string char(254) geodb_font_charset smallint geodb_font_weight smallint geodb_feature_class_alias char(254) geodb_dim_style_id integer geodb_text_y_coord double geodb_dim_text_angle double geodb_dim_using_custom_length boolean geodb_text_break_char integer geodb_type char(25) geodb_text_clip boolean geodb_dim_text_x double geodb_measures char(254) fme_text_size double geodb_font_size double geodb_text_lc_margin_bottom double geodb_text_size double geodb_raster_compression_quality integer geodb_v_align char(50) geodb_font_name char(254) geodb_text_char_spacing double fme_fill_color char(50) geodb_dim_line_display smallint geodb_sweep_angle double geodb_dim_line_y double fme_where char(254) geodb_text_ref_scale double geodb_dim_begin_dimension_x double geodb_dim_length double fme_secondary_axis double geodb_secondary_axis double geodb_text_y_offset double geodb_dim_text_z double geodb_ancillary_role char(7) fme_rotation double geodb_subtype_name char(254) geodb_text_string char(254) fme_sweep_angle double fme_db_operation char(8) geodb_dim_marker_display smallint geodb_primary_axis double fme_start_angle double geodb_dim_begin_dimension_z double geodb_text_lc_accent_bar_color char(50) geodb_text_leader_line_color char(50) geodb_text_lc_style char(20) geodb_dim_custom_length double fme_type char(50) geodb_dim_end_dimension_x double geodb_text_word_spacing double geodb_text_lc_margin_left double geodb_right_to_left boolean geodb_symbol_id integer geodb_text_color char(254) geodb_raster_compression_type char(100) fme_geometry fme_char(50) fme_basename char(50) geodb_text_leader_line char(254) geodb_h_align char(50) geodb_text_line_spacing double geodb_start_angle double geodb_text_x_offset double geodb_text_lc_margin_top double geodb_dim_line_z double geodb_dim_end_dimension_z double geodb_text_leader_line_width double geodb_text_scale boolean fme_color char(50) geodb_text_leader_line_tolerance double geodb_text_lc_gap double geodb_rotation double geodb_text_lc_margin_right double geodb_font_italic boolean geodb_text_x_coord double geodb_raster_pyramid_resample_type char(100) geodb_font_bold boolean geodb_text_leader_line_anchor_point char(254) geodb_text_string_with_format_tags char(254) geodb_text_lc_accent_bar_width double fme_dataset char(50) fme_text_string char(50) geodb_font_strikethrough boolean geodb_linked_feature_id integer geodb_allow_symbol_overrides boolean geodb_dim_type smallint geodb_color char(50) geodb_text_feat_class_name char(254)"
 #!   DEFLINE_PARMS="&quot;GUI OPTIONAL NAMEDGROUP GEODB_FT_GROUP GEODB_GENERAL_GROUP Feature Class Settings&quot; &quot;&quot; &quot;GUI OPTIONAL NAMEDGROUP GEODB_GENERAL_GROUP GEODB_DROP_TABLE%GEODB_TRUNCATE_TABLE%GEODB_ROW_SELECTION_GROUP%GEODB_FT_CLASS_CREATION_GROUP General&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_ROW_SELECTION_GROUP FME_DISCLOSURE_OPEN%GEODB_UPDATE_KEY_COLUMNS Row Selection&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_FT_CLASS_CREATION_GROUP FME_DISCLOSURE_OPEN%GEODB_FEATURE_DATASET%GEODB_HAS_Z_VALUES%GEODB_HAS_MEASURES%GEODB_ORIGIN_GROUP%GEODB_ANNO_GROUP%GEODB_ADVANCED_GROUP Feature Class Creation Parameters&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_ORIGIN_GROUP GEODB_XY_GROUP%GEODB_Z_GROUP%GEODB_MEASURES_GROUP Origin and Scale&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_ANNO_GROUP GEODB_ANNO_REFERENCE_SCALE Annotation&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_ADVANCED_GROUP GEODB_OBJECT_ID_NAME%GEODB_OBJECT_ID_ALIAS%GEODB_SHAPE_NAME%GEODB_SHAPE_ALIAS%GEODB_CONFIG_KEYWORD%GEODB_GRID{1}%GEODB_AVG_NUM_POINTS Advanced&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_XY_GROUP GEODB_XORIGIN%GEODB_YORIGIN%GEODB_XYSCALE X/Y&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_Z_GROUP GEODB_ZORIGIN%GEODB_ZSCALE Z&quot; &quot;&quot; &quot;GUI OPTIONAL DISCLOSUREGROUP GEODB_MEASURES_GROUP GEODB_MEASURES_ORIGIN%GEODB_MEASURES_SCALE Measures&quot; &quot;&quot; &quot;GUI CHOICE GEODB_DROP_TABLE YES%NO Drop Table&quot; NO &quot;GUI CHOICE GEODB_TRUNCATE_TABLE YES%NO Truncate Table&quot; NO &quot;GUI FORCE_DEFS OPTIONAL WHOLE_LINE ATTRLIST_COMMAS GEODB_UPDATE_KEY_COLUMNS \&quot; \&quot; Update/Delete Key Fields&quot; &quot;&quot; &quot;GUI TEXT GEODB_OBJECT_ID_NAME Object ID Field&quot; OBJECTID &quot;GUI TEXT GEODB_OBJECT_ID_ALIAS Object ID Alias&quot; OBJECTID &quot;GUI TEXT GEODB_SHAPE_NAME Shape Field&quot; SHAPE &quot;GUI TEXT GEODB_SHAPE_ALIAS Shape Alias&quot; SHAPE &quot;GUI TEXT GEODB_CONFIG_KEYWORD Configuration Keyword&quot; DEFAULTS &quot;GUI OPTIONAL TEXT GEODB_FEATURE_DATASET Feature Dataset&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_GRID{1} Grid 1&quot; &quot;&quot; &quot;GUI OPTIONAL INTEGER GEODB_AVG_NUM_POINTS Avgerage Number of Points&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_XORIGIN X Origin&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_YORIGIN Y Origin&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_XYSCALE X/Y Scale&quot; &quot;&quot; &quot;GUI OPTIONAL CHOICE GEODB_HAS_Z_VALUES yes%no Contains Z Values&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_ZORIGIN Z Origin&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_ZSCALE Z Scale&quot; &quot;&quot; &quot;GUI OPTIONAL CHOICE GEODB_HAS_MEASURES yes%no Contains Measures&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_MEASURES_ORIGIN Measure Origin&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_MEASURES_SCALE Measure Scale&quot; &quot;&quot; &quot;GUI OPTIONAL FLOAT GEODB_ANNO_REFERENCE_SCALE Annotation Reference Scale&quot; &quot;&quot; "
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=":. %-#[]&quot;()!?*&apos;&amp;+\/{}|="
@@ -399,180 +399,6 @@
 #! </DATASET>
 #! </DATASETS>
 #! <DATA_TYPES>
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_buffer"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_binarybuffer"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_xml"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_json"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="auto"
-#!   FME_TYPE="fme_buffer"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_varchar(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_varbinary(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char(width)"
-#!   FME_TYPE="fme_varchar(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_char(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="text"
-#!   FME_TYPE="fme_binary(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char(width)"
-#!   FME_TYPE="fme_char(width)"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char(20)"
-#!   FME_TYPE="fme_datetime"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char(12)"
-#!   FME_TYPE="fme_time"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char(8)"
-#!   FME_TYPE="fme_date"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="float"
-#!   FME_TYPE="fme_real64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="x_coordinate"
-#!   FME_TYPE="fme_real64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="y_coordinate"
-#!   FME_TYPE="fme_real64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="z_coordinate"
-#!   FME_TYPE="fme_real64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="float"
-#!   FME_TYPE="fme_real32"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_int32"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_uint32"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_int64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_uint64"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="logical"
-#!   FME_TYPE="fme_boolean"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_int16"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_uint16"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_int8"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_uint8"
-#!   FORMAT="CSV"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="number(width,decimal)"
-#!   FME_TYPE="fme_decimal(width,decimal)"
-#!   FORMAT="CSV"
-#! />
 #! <DATA_TYPE
 #!   IS_SOURCE="true"
 #!   FORMAT_TYPE="char(width)"
@@ -746,6 +572,180 @@
 #!   FORMAT_TYPE="coded_domain(coded_domain)"
 #!   FME_TYPE="fme_char(width)"
 #!   FORMAT="GEODATABASE_FILE"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_buffer"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_binarybuffer"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_xml"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_json"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="auto"
+#!   FME_TYPE="fme_buffer"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_varchar(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_varbinary(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char(width)"
+#!   FME_TYPE="fme_varchar(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_char(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="text"
+#!   FME_TYPE="fme_binary(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char(width)"
+#!   FME_TYPE="fme_char(width)"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char(20)"
+#!   FME_TYPE="fme_datetime"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char(12)"
+#!   FME_TYPE="fme_time"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char(8)"
+#!   FME_TYPE="fme_date"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="float"
+#!   FME_TYPE="fme_real64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="x_coordinate"
+#!   FME_TYPE="fme_real64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="y_coordinate"
+#!   FME_TYPE="fme_real64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="z_coordinate"
+#!   FME_TYPE="fme_real64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="float"
+#!   FME_TYPE="fme_real32"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_int32"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_uint32"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_int64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_uint64"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="logical"
+#!   FME_TYPE="fme_boolean"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_int16"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_uint16"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_int8"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_uint8"
+#!   FORMAT="CSV"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="number(width,decimal)"
+#!   FME_TYPE="fme_decimal(width,decimal)"
+#!   FORMAT="CSV"
 #! />
 #! <DATA_TYPE
 #!   IS_SOURCE="false"
@@ -925,114 +925,6 @@
 #! <GEOM_TYPES>
 #! <GEOM_TYPE
 #!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_no_geom"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_point"
-#!   FME_TYPE="fme_point"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_point"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_line"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_area"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_text"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_ellipse"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_arc"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_rectangle"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_rounded_rectangle"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_no_geom"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_no_map"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_collection"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_raster"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_surface"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_solid"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_point_cloud"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="csv_none"
-#!   FME_TYPE="fme_feature_table"
-#!   FORMAT="CSV"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
 #!   FORMAT_TYPE="geodb_point"
 #!   FME_TYPE="fme_point"
 #!   FORMAT="GEODATABASE_FILE"
@@ -1180,6 +1072,114 @@
 #!   FORMAT_TYPE="geodb_table"
 #!   FME_TYPE="fme_feature_table"
 #!   FORMAT="GEODATABASE_FILE"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_no_geom"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_point"
+#!   FME_TYPE="fme_point"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_point"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_line"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_area"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_text"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_ellipse"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_arc"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_rectangle"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_rounded_rectangle"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_no_geom"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_no_map"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_collection"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_raster"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_surface"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_solid"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_point_cloud"
+#!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="csv_none"
+#!   FME_TYPE="fme_feature_table"
+#!   FORMAT="CSV"
 #! />
 #! <GEOM_TYPE
 #!   IS_SOURCE="false"
@@ -1339,7 +1339,7 @@
 #!   BOUNDING_RECT="-600 -1180.9960000000001 431 71"
 #!   ORDER="500000000000045"
 #!   COLLAPSED="false"
-#!   KEYWORD="CSV_3"
+#!   KEYWORD="CSV_2"
 #!   PARMS_EDITED="true"
 #!   ENABLED="true"
 #!   HIDDEN_USER_ATTRS=""
@@ -1647,16 +1647,16 @@
 #!   DATASET="CSV_1/QFES_004-08495.csv"
 #! />
 #! <DATASET
-#!   NAME="CSV_3"
-#!   OVERRIDE="-CSV_3_DATASET"
-#!   DATASET="CSV_3/scenario_lookup_table.csv"
+#!   NAME="CSV_2"
+#!   OVERRIDE="-CSV_2_DATASET"
+#!   DATASET="CSV_2/scenario_lookup_table.csv"
 #! />
 #! </READER_DATASETS>
 #! <WRITER_DATASETS>
 #! <DATASET
 #!   NAME="GEODATABASE_FILE_3"
 #!   OVERRIDE="-GEODATABASE_FILE_3_DATASET"
-#!   DATASET="GEODATABASE_FILE_3/HazImpNEXISV11.gdb"
+#!   DATASET="GEODATABASE_FILE_3/HazImp2020NV.gdb"
 #! />
 #! </WRITER_DATASETS>
 #! </FMESERVER>
@@ -1673,7 +1673,7 @@
 #! />
 #! <GLOBAL_PARAMETER
 #!   GUI_LINE="GUI DEST_GEODATABASE DestDataset_GEODATABASE_FILE Destination Esri File Geodatabase:"
-#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImpNEXISV11.gdb"
+#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImp2020NV.gdb"
 #!   IS_STAND_ALONE="false"
 #! />
 #! <GLOBAL_PARAMETER
@@ -1683,7 +1683,7 @@
 #! />
 #! <GLOBAL_PARAMETER
 #!   GUI_LINE="GUI MULTIFILE HazImp_CSV CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|Compressed_Files(*.bz2;*.gz)|*.bz2;*.gz|Archive_Files(*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx)|*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx|All_Files|* HazImp CSV File(s):"
-#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020\004-08495\QFES_004-08495.csv"
+#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020NV\004-08495\QFES_004-08495.csv"
 #!   IS_STAND_ALONE="false"
 #! />
 #! </GLOBAL_PARAMETERS>
@@ -2078,7 +2078,7 @@
 #!   BOUNDING_RECT="-1585.9533595335952 900 1684.6543595335947 2554.1700000000001"
 #!   STICKY="true"
 #!   COLOUR="0.17254901960784313,0.69803921568627447,0.45098039215686275,0.39215686274509803"
-#!   CONTENTS="122 53 97 77 73 124 "
+#!   CONTENTS="73 122 77 53 124 97 "
 #! >
 #! </BOOKMARK>
 #! <BOOKMARK
@@ -2092,7 +2092,7 @@
 #!   BOUNDING_RECT="3450 887.82455357021115 5612.5906259062576 2570.2723366341356"
 #!   STICKY="true"
 #!   COLOUR="0.51764705882352946,0.10196078431372549,0.24705882352941178,0.39215686274509803"
-#!   CONTENTS="107 75 120 19 119 111 115 5 34 101 29 114 93 106 79 95 102 105 108 30 112 113 11 116 70 100 117 110 103 3 109 76 "
+#!   CONTENTS="111 19 114 70 116 110 108 95 100 117 113 93 103 79 11 120 34 102 109 101 107 105 106 115 29 76 3 112 5 75 119 30 "
 #! >
 #! </BOOKMARK>
 #! <BOOKMARK
@@ -2106,7 +2106,7 @@
 #!   BOUNDING_RECT="3450 -1737.4843748437488 2863.8400000000001 675.76300000000003"
 #!   STICKY="true"
 #!   COLOUR="0.76470588235294112,0.59607843137254901,0.48627450980392156,0.39215686274509803"
-#!   CONTENTS="42 90 104 118 91 60 121 96 "
+#!   CONTENTS="90 118 121 96 91 104 42 60 "
 #! >
 #! </BOOKMARK>
 #! <BOOKMARK
@@ -2120,7 +2120,7 @@
 #!   BOUNDING_RECT="150 900 3147.23 3334.5921694511044"
 #!   STICKY="true"
 #!   COLOUR="0.53725490196078429,0.71372549019607845,0.20392156862745098,0.39215686274509803"
-#!   CONTENTS="83 62 38 37 54 87 58 88 85 86 26 32 92 99 78 48 57 80 44 64 55 89 71 98 "
+#!   CONTENTS="44 37 71 32 92 54 98 83 99 38 86 64 55 48 87 80 58 26 57 78 88 85 62 89 "
 #! >
 #! </BOOKMARK>
 #! </BOOKMARKS>
@@ -4498,16 +4498,16 @@
 #! </WORKSPACE>
 
 FME_PYTHON_VERSION 37
-GUI IGNORE SourceDataset_CSV_1,CSV_IN_NETWORK_AUTHENTICATION_CSV_1,_SKIP_LINES_CSV_1,_SKIP_FOOTER_CSV_1,_STRIP_QUOTES_CSV_1,_DUPLICATE_DELIMS_CSV_1,SORT_GROUP_CSV_1,_SORT_PARAMS_CSV_1,FILTER_GROUP_CSV_1,_FILTER_PARAMS_CSV_1,_ENCODING_CSV_1,SourceDataset_CSV_3,CSV_IN_NETWORK_AUTHENTICATION_CSV_3,_SKIP_LINES_CSV_3,_SKIP_FOOTER_CSV_3,_STRIP_QUOTES_CSV_3,_DUPLICATE_DELIMS_CSV_3,SORT_GROUP_CSV_3,_SORT_PARAMS_CSV_3,FILTER_GROUP_CSV_3,_FILTER_PARAMS_CSV_3,_ENCODING_CSV_3,SourceDataset_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_FME_CONNECTION_GROUP_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_FME_GROUP_NAMED1_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_WHERE_WWJD_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_TRANSLATE_SPATIAL_DATA_ONLY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_RESOLVE_DOMAINS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_RESOLVE_SUBTYPE_NAMES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_IGNORE_NETWORK_INFO_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_IGNORE_RELATIONSHIP_INFO_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_COMPLEX_EDGES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_MULTI_PART_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_USE_SEARCH_ENVELOPE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINX_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXX_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CLIP_TO_ENVELOPE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_GEODB_SHARED_RDR_ADV_PARM_GROUP_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_COMPLEX_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CACHE_MULTIPATCH_TEXTURES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_METHOD_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ORDER_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_FEATURE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CHECK_SIMPLE_GEOM_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_MERGE_FEAT_LINKED_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_BEGIN_SQL{0}_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_END_SQL{0}_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_NETWORK_AUTHENTICATION_GEODATABASE_FILE_1,_GEODB_IN_ALIAS_MODE_GEODATABASE_FILE_1,SourceDataset_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_FME_CONNECTION_GROUP_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_FME_GROUP_NAMED1_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_WHERE_WWJD_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_TRANSLATE_SPATIAL_DATA_ONLY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_RESOLVE_DOMAINS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_RESOLVE_SUBTYPE_NAMES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_IGNORE_NETWORK_INFO_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_IGNORE_RELATIONSHIP_INFO_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_COMPLEX_EDGES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_MULTI_PART_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_USE_SEARCH_ENVELOPE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINX_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXX_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CLIP_TO_ENVELOPE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_GEODB_SHARED_RDR_ADV_PARM_GROUP_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_COMPLEX_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CACHE_MULTIPATCH_TEXTURES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_METHOD_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ORDER_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_FEATURE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CHECK_SIMPLE_GEOM_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_MERGE_FEAT_LINKED_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_BEGIN_SQL{0}_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_END_SQL{0}_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_NETWORK_AUTHENTICATION_GEODATABASE_FILE_2,_GEODB_IN_ALIAS_MODE_GEODATABASE_FILE_2,DestDataset_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_OVERWRITE_GEODB_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DATASET_TEMPLATE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TEMPLATEFILE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_TYPE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_SIMPLIFY_GEOM_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_HAS_Z_VALUES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_GEODB_SHARED_WRT_ADV_PARM_GROUP_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_REQUESTED_GEODATABASE_VERSION_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DEFAULT_Z_VALUE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_WRITER_MODE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_INTERVAL_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_IGNORE_FAILED_FEATURE_ENTRY_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_MAX_NUMBER_FAILED_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DUMP_FAILED_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_FFS_DUMP_FILE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_ANNOTATION_UNITS_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_COMPRESS_AT_END_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_VALIDATE_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_SIMPLIFY_NETWORK_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_BEGIN_SQL{0}_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_END_SQL{0}_GEODATABASE_FILE_3,_GEODBOutMeasures_GEODATABASE_FILE_3
+GUI IGNORE SourceDataset_CSV_1,CSV_IN_NETWORK_AUTHENTICATION_CSV_1,_SKIP_LINES_CSV_1,_SKIP_FOOTER_CSV_1,_STRIP_QUOTES_CSV_1,_DUPLICATE_DELIMS_CSV_1,SORT_GROUP_CSV_1,_SORT_PARAMS_CSV_1,FILTER_GROUP_CSV_1,_FILTER_PARAMS_CSV_1,_ENCODING_CSV_1,SourceDataset_CSV_2,CSV_IN_NETWORK_AUTHENTICATION_CSV_2,_SKIP_LINES_CSV_2,_SKIP_FOOTER_CSV_2,_STRIP_QUOTES_CSV_2,_DUPLICATE_DELIMS_CSV_2,SORT_GROUP_CSV_2,_SORT_PARAMS_CSV_2,FILTER_GROUP_CSV_2,_FILTER_PARAMS_CSV_2,_ENCODING_CSV_2,SourceDataset_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_FME_CONNECTION_GROUP_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_FME_GROUP_NAMED1_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_WHERE_WWJD_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_TRANSLATE_SPATIAL_DATA_ONLY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_RESOLVE_DOMAINS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_RESOLVE_SUBTYPE_NAMES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_IGNORE_NETWORK_INFO_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_IGNORE_RELATIONSHIP_INFO_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_COMPLEX_EDGES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_MULTI_PART_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_USE_SEARCH_ENVELOPE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINX_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXX_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXY_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CLIP_TO_ENVELOPE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_GEODB_SHARED_RDR_ADV_PARM_GROUP_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SPLIT_COMPLEX_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CACHE_MULTIPATCH_TEXTURES_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_METHOD_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_ORDER_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_SEARCH_FEATURE_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_CHECK_SIMPLE_GEOM_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_MERGE_FEAT_LINKED_ANNOS_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_BEGIN_SQL{0}_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_END_SQL{0}_GEODATABASE_FILE_1,GEODATABASE_FILE_IN_NETWORK_AUTHENTICATION_GEODATABASE_FILE_1,_GEODB_IN_ALIAS_MODE_GEODATABASE_FILE_1,SourceDataset_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_FME_CONNECTION_GROUP_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_FME_GROUP_NAMED1_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_WHERE_WWJD_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_TRANSLATE_SPATIAL_DATA_ONLY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_RESOLVE_DOMAINS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_RESOLVE_SUBTYPE_NAMES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_IGNORE_NETWORK_INFO_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_IGNORE_RELATIONSHIP_INFO_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_COMPLEX_EDGES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_MULTI_PART_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_USE_SEARCH_ENVELOPE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINX_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MINY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXX_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_MAXY_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CLIP_TO_ENVELOPE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_GEODB_SHARED_RDR_ADV_PARM_GROUP_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SPLIT_COMPLEX_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CACHE_MULTIPATCH_TEXTURES_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_METHOD_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_ORDER_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_SEARCH_FEATURE_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_CHECK_SIMPLE_GEOM_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_MERGE_FEAT_LINKED_ANNOS_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_BEGIN_SQL{0}_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_END_SQL{0}_GEODATABASE_FILE_2,GEODATABASE_FILE_IN_NETWORK_AUTHENTICATION_GEODATABASE_FILE_2,_GEODB_IN_ALIAS_MODE_GEODATABASE_FILE_2,DestDataset_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_OVERWRITE_GEODB_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DATASET_TEMPLATE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TEMPLATEFILE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_TYPE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_SIMPLIFY_GEOM_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_HAS_Z_VALUES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_GEODB_SHARED_WRT_ADV_PARM_GROUP_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_REQUESTED_GEODATABASE_VERSION_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DEFAULT_Z_VALUE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_WRITER_MODE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_TRANSACTION_INTERVAL_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_IGNORE_FAILED_FEATURE_ENTRY_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_MAX_NUMBER_FAILED_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_DUMP_FAILED_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_FFS_DUMP_FILE_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_ANNOTATION_UNITS_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_COMPRESS_AT_END_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_VALIDATE_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_SIMPLIFY_NETWORK_FEATURES_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_BEGIN_SQL{0}_GEODATABASE_FILE_3,GEODATABASE_FILE_OUT_END_SQL{0}_GEODATABASE_FILE_3,_GEODBOutMeasures_GEODATABASE_FILE_3
 DEFAULT_MACRO MB_GDB \\prod.lan\active\ops\built_env\2_SourceInformation\AdminBoundaries\AdministrativeBoundaries.gdb
 GUI SOURCE_GEODATABASE MB_GDB GDB containing Mesh Blocks 2016:
 DEFAULT_MACRO Scenario_CSV \\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\scenario_lookup_table.csv
 GUI OPTIONAL MULTIFILE Scenario_CSV CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|All_Files|* Scenario lookup CSV:
-DEFAULT_MACRO DestDataset_GEODATABASE_FILE T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImpNEXISV11.gdb
+DEFAULT_MACRO DestDataset_GEODATABASE_FILE T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazimp\HazImp2020NV.gdb
 GUI DEST_GEODATABASE DestDataset_GEODATABASE_FILE Destination Esri File Geodatabase:
 DEFAULT_MACRO SourceDataset_GEODATABASE_FILE_3 T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\maps\MapExtents.gdb
 GUI SOURCE_GEODATABASE SourceDataset_GEODATABASE_FILE_3 File Geodatabase:
-DEFAULT_MACRO HazImp_CSV T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020\004-08495\QFES_004-08495.csv
+DEFAULT_MACRO HazImp_CSV T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\2020NV\004-08495\QFES_004-08495.csv
 GUI MULTIFILE HazImp_CSV CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|Compressed_Files(*.bz2;*.gz)|*.bz2;*.gz|Archive_Files(*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx)|*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx|All_Files|* HazImp CSV File(s):
 INCLUDE [ if {{$(MB_GDB)} == {}} { puts_real {Parameter 'MB_GDB' must be given a value.}; exit 1; }; ]
 INCLUDE [ if {{$(DestDataset_GEODATABASE_FILE)} == {}} { puts_real {Parameter 'DestDataset_GEODATABASE_FILE' must be given a value.}; exit 1; }; ]
@@ -4520,7 +4520,7 @@ MULTI_READER_TYPE{0} CSV
 MULTI_READER_KEYWORD{0} CSV_1
 MULTI_READER_GEN_DIRECTIVES{0} _MERGE_SCHEMAS,YES
 MULTI_READER_TYPE{1} CSV
-MULTI_READER_KEYWORD{1} CSV_3
+MULTI_READER_KEYWORD{1} CSV_2
 MULTI_READER_GEN_DIRECTIVES{1} _FIELD_NAMES_AFTER_HEADER,no,FILTER_GROUP,NO,_IN_SEPARATOR,<comma>,_SCHEMA_WITH_COL_NAMES,,_DUPLICATE_DELIMS,no,_GROUP_BY_DATASET,no,_IN_FIELD_NAMES,YES,_SKIP_LINES,1,SCAN_MAX_FEATURES,1000,_FILTER_PARAMS,,groupBox_2,,_SORT_TABLE_CONFIG,<quote>NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:<semicolon>%COL_DELIM:<comma>%HAS_DEFAULTS%START_NUM_ROWS:3%<backslash><quote>Attribute<backslash><quote>%<backslash><quote>STRING_OR_CHOICE_ENCODED<space>ATTRIBUTES<space>%<backslash><quote>%%<backslash><quote>Alpha<solidus>Num<backslash><quote>%<backslash><quote>LOOKUP_CHOICE<space>SORT_CHOICE<space>Alphabetic<comma>alphabetic%Numeric<comma>numeric<backslash><quote>%alphabetic%<backslash><quote>Order<backslash><quote>%<backslash><quote>LOOKUP_CHOICE<space>SORT_ORDER<space>Ascending<comma>ascending%Descending<comma>descending<backslash><quote>%ascending<quote>,_ENCODING,,_FILTER_TABLE_CONFIG,<quote>NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:<semicolon>%COL_DELIM:<comma>%HAS_DEFAULTS%START_NUM_ROWS:3%<backslash><quote>Field<space>Name<backslash><quote>%<backslash><quote>STRING_OR_CHOICE_ENCODED<space>ATTRIBUTES<space>%<backslash><quote>%%<backslash><quote>Filter<backslash><quote>%<backslash><quote>STRING_ENCODED<space>_FILTER_REGEX<space><backslash><quote>%%<backslash><quote>Invert<space>Filter<backslash><quote>%<backslash><quote>CHECKBOX<space>_FILTER_UNMATCHED<space>yes%no<backslash><quote>%no<quote>,_MERGE_SCHEMAS,YES,_SKIP_FOOTER,0,groupBox_4,,_STRIP_QUOTES,yes,_SCHEMA,,groupBox_6,,SORT_GROUP,NO,groupBox_5,,groupBox,,_ALLOW_SPACES_IN_COLUMN_NAMES,yes,_SORT_PARAMS,
 MULTI_READER_TYPE{2} GEODATABASE_FILE
 MULTI_READER_KEYWORD{2} GEODATABASE_FILE_1
@@ -4630,9 +4630,9 @@ CSV_1_ENCODING $(_ENCODING_CSV_1)
 CSV_1_DATASET "$(SourceDataset_CSV_1)"
 #! END_SOURCE_HEADER
 #! START_WB_HEADER
-MACRO WB_KEYWORD "CSV_3"
+MACRO WB_KEYWORD "CSV_2"
 #! END_WB_HEADER
-#! START_SOURCE_HEADER CSV CSV_3
+#! START_SOURCE_HEADER CSV CSV_2
 # ============================================================================
 # The following GUI line prompts for a folder to be used as the
 # source of the CSV files.
@@ -4643,77 +4643,77 @@ MACRO WB_KEYWORD "CSV_3"
 #! START_WB_HEADER
 DEFAULT_MACRO SourceDataset
 INCLUDE [ if {{$(SourceDataset)} != ""} {                        \
- puts {DEFAULT_MACRO SourceDataset_CSV_3 $(SourceDataset)}     \
+ puts {DEFAULT_MACRO SourceDataset_CSV_2 $(SourceDataset)}     \
  } ]
 #! END_WB_HEADER
-#! START_SOURCE_HEADER CSV CSV_3
-DEFAULT_MACRO SourceDataset_CSV_3 $(Scenario_CSV)
-GUI MULTIFILE SourceDataset_CSV_3 CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|All_Files|* Source CSV (Comma Separated Value) File(s):
+#! START_SOURCE_HEADER CSV CSV_2
+DEFAULT_MACRO SourceDataset_CSV_2 $(Scenario_CSV)
+GUI MULTIFILE SourceDataset_CSV_2 CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|All_Files|* Source CSV (Comma Separated Value) File(s):
 # ============================================================================
 # Hardcode the settings that were used to generate this mapping file
 #
-DEFAULT_MACRO _SCHEMA_CSV_3 
-DEFAULT_MACRO _IN_FIELD_NAMES_CSV_3 YES
-DEFAULT_MACRO _FIELD_NAMES_AFTER_HEADER_CSV_3 no
-DEFAULT_MACRO _EXTENSION_CSV_3 CSV
-DEFAULT_MACRO _ALLOW_SPACES_IN_COLUMN_NAMES_CSV_3 yes
-DEFAULT_MACRO _GROUP_BY_DATASET_CSV_3 no
-CSV_3_SCHEMA 
-DEFAULT_MACRO _SKIP_LINES_CSV_3 1
-CSV_3_SKIP_LINES $(_SKIP_LINES_CSV_3)
-DEFAULT_MACRO _SKIP_FOOTER_CSV_3 0
-CSV_3_SKIP_FOOTER $(_SKIP_FOOTER_CSV_3)
-CSV_3_FIELD_NAMES $(_IN_FIELD_NAMES_CSV_3)
-CSV_3_FIELD_NAMES_AFTER_HEADER $(_FIELD_NAMES_AFTER_HEADER_CSV_3)
-DEFAULT_MACRO _STRIP_QUOTES_CSV_3 yes
-CSV_3_STRIP_QUOTES $(_STRIP_QUOTES_CSV_3)
-CSV_3_SEPARATOR (",")
-CSV_3_EXTENSION CSV
-DEFAULT_MACRO _DUPLICATE_DELIMS_CSV_3 no
-CSV_3_DUPLICATE_DELIMS $(_DUPLICATE_DELIMS_CSV_3)
-CSV_3_SEQUENCED no
-CSV_3_ALLOW_SPACES_IN_COLUMN_NAMES $(_ALLOW_SPACES_IN_COLUMN_NAMES_CSV_3)
-CSV_3_GROUP_BY_DATASET $(_GROUP_BY_DATASET_CSV_3)
-DEFAULT_MACRO SORT_GROUP_CSV_3 no
-CSV_3_SORT_GROUP $(SORT_GROUP_CSV_3)
-DEFAULT_MACRO _SORT_PARAMS_CSV_3 
-CSV_3_SORT_PARAMS $(_SORT_PARAMS_CSV_3)
-DEFAULT_MACRO FILTER_GROUP_CSV_3 no
-CSV_3_FILTER_GROUP $(FILTER_GROUP_CSV_3)
-DEFAULT_MACRO _FILTER_PARAMS_CSV_3 
-CSV_3_FILTER_PARAMS $(_FILTER_PARAMS_CSV_3)
+DEFAULT_MACRO _SCHEMA_CSV_2 
+DEFAULT_MACRO _IN_FIELD_NAMES_CSV_2 YES
+DEFAULT_MACRO _FIELD_NAMES_AFTER_HEADER_CSV_2 no
+DEFAULT_MACRO _EXTENSION_CSV_2 CSV
+DEFAULT_MACRO _ALLOW_SPACES_IN_COLUMN_NAMES_CSV_2 yes
+DEFAULT_MACRO _GROUP_BY_DATASET_CSV_2 no
+CSV_2_SCHEMA 
+DEFAULT_MACRO _SKIP_LINES_CSV_2 1
+CSV_2_SKIP_LINES $(_SKIP_LINES_CSV_2)
+DEFAULT_MACRO _SKIP_FOOTER_CSV_2 0
+CSV_2_SKIP_FOOTER $(_SKIP_FOOTER_CSV_2)
+CSV_2_FIELD_NAMES $(_IN_FIELD_NAMES_CSV_2)
+CSV_2_FIELD_NAMES_AFTER_HEADER $(_FIELD_NAMES_AFTER_HEADER_CSV_2)
+DEFAULT_MACRO _STRIP_QUOTES_CSV_2 yes
+CSV_2_STRIP_QUOTES $(_STRIP_QUOTES_CSV_2)
+CSV_2_SEPARATOR (",")
+CSV_2_EXTENSION CSV
+DEFAULT_MACRO _DUPLICATE_DELIMS_CSV_2 no
+CSV_2_DUPLICATE_DELIMS $(_DUPLICATE_DELIMS_CSV_2)
+CSV_2_SEQUENCED no
+CSV_2_ALLOW_SPACES_IN_COLUMN_NAMES $(_ALLOW_SPACES_IN_COLUMN_NAMES_CSV_2)
+CSV_2_GROUP_BY_DATASET $(_GROUP_BY_DATASET_CSV_2)
+DEFAULT_MACRO SORT_GROUP_CSV_2 no
+CSV_2_SORT_GROUP $(SORT_GROUP_CSV_2)
+DEFAULT_MACRO _SORT_PARAMS_CSV_2 
+CSV_2_SORT_PARAMS $(_SORT_PARAMS_CSV_2)
+DEFAULT_MACRO FILTER_GROUP_CSV_2 no
+CSV_2_FILTER_GROUP $(FILTER_GROUP_CSV_2)
+DEFAULT_MACRO _FILTER_PARAMS_CSV_2 
+CSV_2_FILTER_PARAMS $(_FILTER_PARAMS_CSV_2)
 # =====================================================================
 # Provide some control over what attributes have the user-selected
 # encoding applied. Normally all attributes are updated after being
 # read, but the following lines exclude from this treatment all
 # attributes whose names start with fme_ or csv_.
-CSV_3_UNENCODED_ATTR_PREFIX fme_ csv_
+CSV_2_UNENCODED_ATTR_PREFIX fme_ csv_
 # ===========================================================================
-DEFAULT_MACRO CSV_IN_NETWORK_AUTHENTICATION_CSV_3 
-CSV_3_NETWORK_AUTHENTICATION "$(CSV_IN_NETWORK_AUTHENTICATION_CSV_3)"
-GUI OPTIONAL AUTHENTICATOR CSV_IN_NETWORK_AUTHENTICATION_CSV_3 CONTAINER%GROUP%CONTAINER_TITLE%"Network Authentication"%PROMPT_TYPE%NETWORK Network Authentication
+DEFAULT_MACRO CSV_IN_NETWORK_AUTHENTICATION_CSV_2 
+CSV_2_NETWORK_AUTHENTICATION "$(CSV_IN_NETWORK_AUTHENTICATION_CSV_2)"
+GUI OPTIONAL AUTHENTICATOR CSV_IN_NETWORK_AUTHENTICATION_CSV_2 CONTAINER%GROUP%CONTAINER_TITLE%"Network Authentication"%PROMPT_TYPE%NETWORK Network Authentication
 # ===========================================================================
-DEFAULT_MACRO CSV_IN_ATTRIBUTE_READING_CSV_3 ALL
-CSV_3_ATTRIBUTE_READING "$(CSV_IN_ATTRIBUTE_READING_CSV_3)"
-GUI INTEGER _SKIP_LINES_CSV_3 Number of Lines to Skip:
-GUI INTEGER _SKIP_FOOTER_CSV_3 Number of Footer Lines to Skip:
+DEFAULT_MACRO CSV_IN_ATTRIBUTE_READING_CSV_2 ALL
+CSV_2_ATTRIBUTE_READING "$(CSV_IN_ATTRIBUTE_READING_CSV_2)"
+GUI INTEGER _SKIP_LINES_CSV_2 Number of Lines to Skip:
+GUI INTEGER _SKIP_FOOTER_CSV_2 Number of Footer Lines to Skip:
 # GUI CHOICE _IN_FIELD_NAMES yes%no Field Names in File:
 # GUI CHOICE _FIELD_NAMES_AFTER_HEADER yes%no Field After Header:
-GUI CHOICE _STRIP_QUOTES_CSV_3 yes%no Strip Quotes From Fields:
+GUI CHOICE _STRIP_QUOTES_CSV_2 yes%no Strip Quotes From Fields:
 # GUI TEXT _IN_SEPARATOR Field Delimiter:
 # GUI TEXT _EXTENSION Default File Extension:
-GUI CHOICE _DUPLICATE_DELIMS_CSV_3 yes%no Skip Duplicate Delimiters:
-GUI CHOICE SORT_GROUP_CSV_3 yes%no Sorting Enabled:
-GUI OPTIONAL GUI_LINE_TABLE _SORT_PARAMS_CSV_3 NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:;%COL_DELIM:,%HAS_DEFAULTS%START_NUM_ROWS:3%"Attribute"%"STRING_OR_CHOICE_ENCODED ATTRIBUTES %"%%"Alpha/Num"%"LOOKUP_CHOICE SORT_CHOICE Alphabetic,alphabetic%Numeric,numeric"%alphabetic%"Order"%"LOOKUP_CHOICE SORT_ORDER Ascending,ascending%Descending,descending"%ascending Sorting Parameters:
-GUI CHOICE FILTER_GROUP_CSV_3 yes%no Filter Enabled:
-GUI OPTIONAL GUI_LINE_TABLE _FILTER_PARAMS_CSV_3 NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:;%COL_DELIM:,%HAS_DEFAULTS%START_NUM_ROWS:3%"Field Name"%"STRING_OR_CHOICE_ENCODED ATTRIBUTES %"%%"Filter"%"STRING_ENCODED _FILTER_REGEX "%%"Invert Filter"%"CHECKBOX _FILTER_UNMATCHED yes%no"%no Filter Parameters:
+GUI CHOICE _DUPLICATE_DELIMS_CSV_2 yes%no Skip Duplicate Delimiters:
+GUI CHOICE SORT_GROUP_CSV_2 yes%no Sorting Enabled:
+GUI OPTIONAL GUI_LINE_TABLE _SORT_PARAMS_CSV_2 NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:;%COL_DELIM:,%HAS_DEFAULTS%START_NUM_ROWS:3%"Attribute"%"STRING_OR_CHOICE_ENCODED ATTRIBUTES %"%%"Alpha/Num"%"LOOKUP_CHOICE SORT_CHOICE Alphabetic,alphabetic%Numeric,numeric"%alphabetic%"Order"%"LOOKUP_CHOICE SORT_ORDER Ascending,ascending%Descending,descending"%ascending Sorting Parameters:
+GUI CHOICE FILTER_GROUP_CSV_2 yes%no Filter Enabled:
+GUI OPTIONAL GUI_LINE_TABLE _FILTER_PARAMS_CSV_2 NOT_OK_IF_INVALID%NO_LABEL%ROW_DELIM:;%COL_DELIM:,%HAS_DEFAULTS%START_NUM_ROWS:3%"Field Name"%"STRING_OR_CHOICE_ENCODED ATTRIBUTES %"%%"Filter"%"STRING_ENCODED _FILTER_REGEX "%%"Invert Filter"%"CHECKBOX _FILTER_UNMATCHED yes%no"%no Filter Parameters:
 # =====================================================================
 # Allows to set one of the character encodings for output file
-DEFAULT_MACRO _ENCODING_CSV_3 
-GUI OPTIONAL STRING_OR_ENCODING _ENCODING_CSV_3 SYSTEM%* Character Encoding:
-CSV_3_ENCODING $(_ENCODING_CSV_3)
-CSV_3_DATASET "$(SourceDataset_CSV_3)"
-CSV_3_GENERATE_FME_BUILD_NUM 16492
+DEFAULT_MACRO _ENCODING_CSV_2 
+GUI OPTIONAL STRING_OR_ENCODING _ENCODING_CSV_2 SYSTEM%* Character Encoding:
+CSV_2_ENCODING $(_ENCODING_CSV_2)
+CSV_2_DATASET "$(SourceDataset_CSV_2)"
+CSV_2_GENERATE_FME_BUILD_NUM 16492
 #! END_SOURCE_HEADER
 #! START_WB_HEADER
 MACRO WB_KEYWORD "GEODATABASE_FILE_1"
@@ -5316,17 +5316,17 @@ FME_IMPLICIT_CSMAP_REPROJECTION_MODE Auto
 FME_GEOMETRY_HANDLING Enhanced
 FME_STROKE_MAX_DEVIATION 0
 DEFAULT_MACRO DATASET_KEYWORD_CSV_1 CSV_1
-DEFAULT_MACRO DATASET_KEYWORD_CSV_3 CSV_3
+DEFAULT_MACRO DATASET_KEYWORD_CSV_2 CSV_2
 DEFAULT_MACRO DATASET_KEYWORD_GEODATABASE_FILE_1 GEODATABASE_FILE_1
 DEFAULT_MACRO DATASET_KEYWORD_GEODATABASE_FILE_2 GEODATABASE_FILE_2
 DEFAULT_MACRO DATASET_KEYWORD_GEODATABASE_FILE_3 GEODATABASE_FILE_3
 # -------------------------------------------------------------------------
 
-CSV_1_READER_META_ATTRIBUTES fme_basename fme_feature_type fme_dataset
+CSV_1_READER_META_ATTRIBUTES fme_basename fme_dataset fme_feature_type
 
 # -------------------------------------------------------------------------
 
-CSV_3_READER_META_ATTRIBUTES fme_feature_type
+CSV_2_READER_META_ATTRIBUTES fme_feature_type
 
 # -------------------------------------------------------------------------
 
@@ -5348,23 +5348,23 @@ MACRO FME_VIEWER_APP fmedatainspector
 # -------------------------------------------------------------------------
 CSV_1_DEF CSV   exposure_latitude            number(17,13)   exposure_longitude           number(13,9)   LID                          char(21)   MB_CODE                      number(12,0)   MB_CAT                       char(19)   SA1_CODE                     number(12,0)   SA2_CODE                     number(10,0)   SA2_NAME                     char(27)   SA3_CODE                     number(6,0)   SA3_NAME                     char(18)   SA4_CODE                     number(4,0)   SA4_NAME                     char(9)   UCL_CODE                     number(7,0)   UCL_NAME                     char(35)   GCC_CODE                     char(6)   GCC_NAME                     char(12)   LGA_CODE                     number(6,0)   LGA_NAME                     char(11)   SUBURB                       char(14)   POSTCODE                     number(5,0)   YEAR_BUILT                   char(15)   CONSTRUCTION_TYPE            char(3)   ROOF_TYPE                    char(33)   WALL_TYPE                    char(33)   REPLACEMENT_VALUE            number(8,0)   CONTENTS_VALUE               number(7,0)   WIND_VULNERABILTY_MODEL_NUMBER number(4,0)   WIND_VULNERABILITY_FUNCTION_ID char(6)   AS4055_CLASS                 char(3)   WIND_REGION_CLASSIFCATION    char(2)   WIND_VULNERABILITY_SET       char(24)   M4                           number(17,15)   internal_id                  number(4,0)   "0.2s gust at 10m height m/s" number(18,15)   structural                   number(31,20)   structural_loss              number(21,15)
 # -------------------------------------------------------------------------
-CSV_3_DEF CSV   ID                           char(10)   Cat                          number(2,0)   Loc                          char(13)
+CSV_2_DEF CSV   ID                           char(10)   Cat                          number(2,0)   Loc                          char(13)
 # -------------------------------------------------------------------------
 
-FACTORY_DEF * RoutingFactory   FACTORY_NAME "Router and Unexpected Input Remover"   COMMAND_PARM_EVALUATION SINGLE_PASS   INPUT FEATURE_TYPE *    ROUTE CSV CSV_1::CSV multi_reader_keyword,$(DATASET_KEYWORD_CSV_1) TO FME_GENERIC ::CSV ALIAS_GEOMETRY    ROUTE CSV CSV_3::CSV multi_reader_keyword,$(DATASET_KEYWORD_CSV_3) TO FME_GENERIC ::CSV ALIAS_GEOMETRY    ROUTE GEODATABASE_FILE GEODATABASE_FILE_1::Mesh_Block_2016 multi_reader_keyword,$(DATASET_KEYWORD_GEODATABASE_FILE_1) TO FME_GENERIC ::Mesh_Block_2016 ALIAS_GEOMETRY    ROUTE GEODATABASE_FILE GEODATABASE_FILE_2::MapExtents multi_reader_keyword,$(DATASET_KEYWORD_GEODATABASE_FILE_2) TO FME_GENERIC ::MapExtents ALIAS_GEOMETRY    MERGE_INPUT Yes   OUTPUT ROUTED FEATURE_TYPE *
+FACTORY_DEF * RoutingFactory   FACTORY_NAME "Router and Unexpected Input Remover"   COMMAND_PARM_EVALUATION SINGLE_PASS   INPUT FEATURE_TYPE *    ROUTE CSV CSV_1::CSV multi_reader_keyword,$(DATASET_KEYWORD_CSV_1) TO FME_GENERIC ::CSV ALIAS_GEOMETRY    ROUTE CSV CSV_2::CSV multi_reader_keyword,$(DATASET_KEYWORD_CSV_2) TO FME_GENERIC ::CSV ALIAS_GEOMETRY    ROUTE GEODATABASE_FILE GEODATABASE_FILE_1::Mesh_Block_2016 multi_reader_keyword,$(DATASET_KEYWORD_GEODATABASE_FILE_1) TO FME_GENERIC ::Mesh_Block_2016 ALIAS_GEOMETRY    ROUTE GEODATABASE_FILE GEODATABASE_FILE_2::MapExtents multi_reader_keyword,$(DATASET_KEYWORD_GEODATABASE_FILE_2) TO FME_GENERIC ::MapExtents ALIAS_GEOMETRY    MERGE_INPUT Yes   OUTPUT ROUTED FEATURE_TYPE *
 CSV_1_MERGE_DEF CSV_1::CSV EXACT CSV
-CSV_3_MERGE_DEF CSV_3::CSV EXACT CSV
+CSV_2_MERGE_DEF CSV_2::CSV EXACT CSV
 GEODATABASE_FILE_1_MERGE_DEF GEODATABASE_FILE_1::Mesh_Block_2016 EXACT Mesh_Block_2016 DEFLINE geodb_type,geodb_polygon,geodb_where_wwjd,,fme_attribute_reading,defined,OBJECTID,integer,MB_CODE16,char<openparen>11<closeparen>,MB_CAT16,char<openparen>30<closeparen>,SA1_MAIN16,char<openparen>11<closeparen>,SA1_7DIG16,char<openparen>28<closeparen>,SA2_MAIN16,char<openparen>9<closeparen>,SA2_5DIG16,char<openparen>20<closeparen>,SA2_NAME16,char<openparen>50<closeparen>,SA3_CODE16,char<openparen>5<closeparen>,SA3_NAME16,char<openparen>50<closeparen>,SA4_CODE16,char<openparen>3<closeparen>,SA4_NAME16,char<openparen>50<closeparen>,GCC_CODE16,char<openparen>5<closeparen>,GCC_NAME16,char<openparen>50<closeparen>,STE_CODE16,char<openparen>3<closeparen>,STE_NAME16,char<openparen>50<closeparen>,AREASQKM16,double,Shape_Length,double,Shape_Area,double
 GEODATABASE_FILE_2_MERGE_DEF GEODATABASE_FILE_2::MapExtents EXACT MapExtents DEFLINE geodb_type,geodb_polygon,geodb_where_wwjd,,fme_attribute_reading,defined,OBJECTID,integer,Region,char<openparen>50<closeparen>,SHAPE_Length,double,SHAPE_Area,double
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TeeFactory    FACTORY_NAME "CSV_CSV_2 Splitter"    INPUT FEATURE_TYPE CSV      multi_reader_keyword $(DATASET_KEYWORD_CSV_2)    OUTPUT FEATURE_TYPE CSV_CSV_2
 # -------------------------------------------------------------------------
 
 FACTORY_DEF * TeeFactory    FACTORY_NAME "Mesh_Block_2016_GEODATABASE_FILE_1 Splitter"    INPUT FEATURE_TYPE Mesh_Block_2016    OUTPUT FEATURE_TYPE Mesh_Block_2016_GEODATABASE_FILE_1
 # -------------------------------------------------------------------------
 
 FACTORY_DEF * TeeFactory    FACTORY_NAME "MapExtents_GEODATABASE_FILE_2 Splitter"    INPUT FEATURE_TYPE MapExtents    OUTPUT FEATURE_TYPE MapExtents_GEODATABASE_FILE_2
-# -------------------------------------------------------------------------
-
-FACTORY_DEF * TeeFactory    FACTORY_NAME "CSV_CSV_3 Splitter"    INPUT FEATURE_TYPE CSV      multi_reader_keyword $(DATASET_KEYWORD_CSV_3)    OUTPUT FEATURE_TYPE CSV_CSV_3
 # -------------------------------------------------------------------------
 
 FACTORY_DEF * TeeFactory    FACTORY_NAME "CSV_CSV_1 Splitter"    INPUT FEATURE_TYPE CSV      multi_reader_keyword $(DATASET_KEYWORD_CSV_1)    OUTPUT FEATURE_TYPE CSV_CSV_1
@@ -5375,7 +5375,7 @@ FACTORY_DEF {*} AttrSetFactory    FACTORY_NAME AttributeManager    INPUT  FEATUR
 FACTORY_DEF {*} AttributeKeeperFactory    FACTORY_NAME AttributeKeeper_4    INPUT  FEATURE_TYPE Mesh_Block_2016_GEODATABASE_FILE_1    KEEP_ATTRS { MB_CODE16 }    KEEP_LISTS {  }    KEEP_FME_ATTRIBUTES Yes    BUILD_FEATURE_TABLES { No }    OUTPUT_ON_ATTRIBUTE_CHANGE {  }    OUTPUT { OUTPUT FEATURE_TYPE AttributeKeeper_4_OUTPUT        }
 # -------------------------------------------------------------------------
 INCLUDE [if { {ATTRIBUTES} == {ATTRIBUTES} } {                puts "MACRO FeatureMerger_2_REFERENCE_INFO ATTRIBUTES";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {POLYGONS}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_BUILD_POLYS";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {AGGREGATES}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {LINESFROMPOINTS}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_BUILD_LINES_FROM_POINTS";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {POLYGONS}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_AND_ATTR_BUILD_POLYS";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {AGGREGATES}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_AND_ATTR_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {LINESFROMPOINTS}} {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_AND_ATTR_BUILD_LINES_FROM_POINTS";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} } {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} } {                puts "MACRO FeatureMerger_2_REFERENCE_INFO GEOM_AND_ATTR_BUILD_AGGREGATES";             }          else {}; ]
-FACTORY_DEF {*} ReferenceFactory    FACTORY_NAME FeatureMerger_2    INPUT REFERENCER FEATURE_TYPE AttributeManager_OUTPUT    INPUT REFERENCEE FEATURE_TYPE CSV_CSV_3    REFERENCE_INFO $(FeatureMerger_2_REFERENCE_INFO)    REFERENCE_TABLE @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>ID<closeparen>,FeatureMerger_2) @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>ID<closeparen>,FeatureMerger_2) AUTO    ATTR_ACCUM_MODE "HANDLE_CONFLICT"    ATTR_CONFLICT_RES "REQUESTOR_IF_CONFLICT"    IGNORE_NULLS "No"    HANDLE_NULL_MISSING_KEYS_LIKE_FME2013 No    MERGE_ATTRIBUTES Yes    MANAGE_FME_TYPE Yes    MODE COMPLETE    PROCESS_DUPLICATE_REFERENCEES No    REFERENCEES_FIRST No    OUTPUT COMPLETE FEATURE_TYPE FeatureMerger_2_MERGED
+FACTORY_DEF {*} ReferenceFactory    FACTORY_NAME FeatureMerger_2    INPUT REFERENCER FEATURE_TYPE AttributeManager_OUTPUT    INPUT REFERENCEE FEATURE_TYPE CSV_CSV_2    REFERENCE_INFO $(FeatureMerger_2_REFERENCE_INFO)    REFERENCE_TABLE @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>ID<closeparen>,FeatureMerger_2) @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>ID<closeparen>,FeatureMerger_2) AUTO    ATTR_ACCUM_MODE "HANDLE_CONFLICT"    ATTR_CONFLICT_RES "REQUESTOR_IF_CONFLICT"    IGNORE_NULLS "No"    HANDLE_NULL_MISSING_KEYS_LIKE_FME2013 No    MERGE_ATTRIBUTES Yes    MANAGE_FME_TYPE Yes    MODE COMPLETE    PROCESS_DUPLICATE_REFERENCEES No    REFERENCEES_FIRST No    OUTPUT COMPLETE FEATURE_TYPE FeatureMerger_2_MERGED
 FACTORY_DEF * TeeFactory   FACTORY_NAME "FeatureMerger_2 MERGED Splitter"   INPUT FEATURE_TYPE FeatureMerger_2_MERGED   OUTPUT FEATURE_TYPE FeatureMerger_2_MERGED_0_knF9TdE9dMM=   OUTPUT FEATURE_TYPE FeatureMerger_2_MERGED_1_vTDIdYgpypM=
 # -------------------------------------------------------------------------
 INCLUDE [if { {ATTRIBUTES} == {ATTRIBUTES} } {                puts "MACRO FeatureMerger_3_REFERENCE_INFO ATTRIBUTES";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {POLYGONS}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_BUILD_POLYS";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {AGGREGATES}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} && {<Unused>} == {LINESFROMPOINTS}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_BUILD_LINES_FROM_POINTS";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {POLYGONS}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_AND_ATTR_BUILD_POLYS";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {AGGREGATES}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_AND_ATTR_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} && {<Unused>} == {LINESFROMPOINTS}} {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_AND_ATTR_BUILD_LINES_FROM_POINTS";             }          elseif { {ATTRIBUTES} == {GEOM_BUILD} } {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_BUILD_AGGREGATES";             }          elseif { {ATTRIBUTES} == {GEOM_AND_ATTRS} } {                puts "MACRO FeatureMerger_3_REFERENCE_INFO GEOM_AND_ATTR_BUILD_AGGREGATES";             }          else {}; ]
@@ -5397,17 +5397,17 @@ FACTORY_DEF * TeeFactory    FACTORY_NAME ClassifyDamageState    INPUT  FEATURE_T
 # -------------------------------------------------------------------------
 FACTORY_DEF {*} OverlayFactory    FACTORY_NAME PointOnAreaOverlayer    INPUT POINT FEATURE_TYPE CoordinateSystemSetter_OUTPUT_0_PL4N+Vr4nAw=    INPUT POLYGON FEATURE_TYPE SpatialFilter_PASSED    OVERLAP_COUNT_ATTRIBUTE "_overlaps"    DEAGGREGATE_INPUT Yes    ATTR_ACCUM_MODE "HANDLE_CONFLICT"    ATTR_CONFLICT_RES "ORIGINAL_IF_CONFLICT"    MODE COMPLETE    POLYS_FIRST "No"    REJECT_INVALID_GEOM YES    OUTPUT POINT FEATURE_TYPE PointOnAreaOverlayer_POINT    OUTPUT POLYGON FEATURE_TYPE PointOnAreaOverlayer_AREA
 # -------------------------------------------------------------------------
-DEFAULT_MACRO __StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_GROUP_BY
-MACRO __StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_GROUP_BY MB_CODE16
+DEFAULT_MACRO __StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_GROUP_BY
+MACRO __StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_GROUP_BY MB_CODE16
 # If the cumulative port is connected, the _PORT_SPECIFIED macro
-MACRO StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_PORT_SPECIFIED no
+MACRO StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_PORT_SPECIFIED no
 # Force splitting of feature tables when the CUMULATIVE port is connected
-MACRO StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_SPLIT_FEATURE_TABLES Yes
-INCLUDE [if { {$(StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_PORT_SPECIFIED)} == "no" } {     puts {MACRO StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_SPLIT_FEATURE_TABLES No} }
+MACRO StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_SPLIT_FEATURE_TABLES Yes
+INCLUDE [if { {$(StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_PORT_SPECIFIED)} == "no" } {     puts {MACRO StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_SPLIT_FEATURE_TABLES No} }
 DYNAMIC_FUNCTION_CONFIGURATION Python FMEOBJECTS
 DYNAMIC_FUNCTION_CONFIGURATION Python import StatisticsCalculator
-DYNAMIC_FUNCTION_CONFIGURATION Python "StatisticsCalculator.connectTransformer(    'StatisticsCalculator',{     'GROUP_BY_MACRO':'__StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_GROUP_BY',     'GROUP_BY':'MB_CODE16',     'STATS_ATTRS':'structural_loss_ratio',     'COUNT_ATTR':'_count',     'MEAN_ATTR':'_mean',     'COMPUTE_HISTOGRAM':'NO',     'HISTO_ATTR':'<Unused>',     'PREPEND_ATTR_NAME':'No',     'encoded_result_attrs':True,     'cumulative_mode':'$(StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_PORT_SPECIFIED)',     None:None})"
-FACTORY_DEF * TeeFactory    FACTORY_NAME StatisticsCalculator_InputProcessor    INPUT  FEATURE_TYPE PointOnAreaOverlayer_POINT    SPLIT_FEATURE_TABLES $(StatisticsCalculator_72bdd81f_244e_4f0d_af0a_d6163656ce1b2_SPLIT_FEATURE_TABLES)    OUTPUT FEATURE_TYPE __ORIGINAL__       @Python(StatisticsCalculator.recordFeature,StatisticsCalculator)
+DYNAMIC_FUNCTION_CONFIGURATION Python "StatisticsCalculator.connectTransformer(    'StatisticsCalculator',{     'GROUP_BY_MACRO':'__StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_GROUP_BY',     'GROUP_BY':'MB_CODE16',     'STATS_ATTRS':'structural_loss_ratio',     'COUNT_ATTR':'_count',     'MEAN_ATTR':'_mean',     'COMPUTE_HISTOGRAM':'NO',     'HISTO_ATTR':'<Unused>',     'PREPEND_ATTR_NAME':'No',     'encoded_result_attrs':True,     'cumulative_mode':'$(StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_PORT_SPECIFIED)',     None:None})"
+FACTORY_DEF * TeeFactory    FACTORY_NAME StatisticsCalculator_InputProcessor    INPUT  FEATURE_TYPE PointOnAreaOverlayer_POINT    SPLIT_FEATURE_TABLES $(StatisticsCalculator_ccf822f2_3846_4528_ba7e_e31335c672883_SPLIT_FEATURE_TABLES)    OUTPUT FEATURE_TYPE __ORIGINAL__       @Python(StatisticsCalculator.recordFeature,StatisticsCalculator)
 FACTORY_DEF * TeeFactory    FACTORY_NAME StatisticsCalculator_UnneededInputNuker    INPUT FEATURE_TYPE __ORIGINAL__
 FACTORY_DEF * SortFactory    FACTORY_NAME StatisticsCalculator_CompleteOutputter    INPUT FEATURE_TYPE __UNUSED_INPUT_TO_GUARANTEE_FACTORY_DOESNT_CONSUME_EVERYTHING__
 FACTORY_DEF * CreationFactory    FACTORY_NAME StatisticsCalculator_SummaryCreator    CREATE_AT_END    NUMBER_TO_CREATE 1    OUTPUT FEATURE_TYPE StatisticsCalculator_SUMMARY
@@ -5445,6 +5445,6 @@ FACTORY_DEF * RoutingFactory FACTORY_NAME "Destination Feature Type Routing Corr
 FACTORY_DEF * TeeFactory   FACTORY_NAME "Final Output Nuker"   INPUT FEATURE_TYPE __nuke_me__
 
 # -------------------------------------------------------------------------
-GEODATABASE_FILE_3_DEF a   geodb_type                   geodb_point   GEODB_DROP_TABLE             YES   GEODB_TRUNCATE_TABLE         NO   GEODB_OBJECT_ID_NAME         OBJECTID   GEODB_OBJECT_ID_ALIAS        OBJECTID   GEODB_SHAPE_NAME             SHAPE   GEODB_SHAPE_ALIAS            SHAPE   GEODB_CONFIG_KEYWORD         DEFAULTS   GEODB_FEATURE_DATASET        ""   GEODB_GRID{1}                ""   GEODB_AVG_NUM_POINTS         ""   GEODB_HAS_Z_VALUES           ""   GEODB_HAS_MEASURES           ""   GEODB_ANNO_REFERENCE_SCALE   ""   GEODB_XYSCALE                ""   GEODB_YORIGIN                ""   GEODB_ZSCALE                 ""   GEODB_XORIGIN                ""   GEODB_ZORIGIN                ""   GEODB_MEASURES_SCALE         ""   GEODB_MEASURES_ORIGIN        ""   exposure_latitude            double   exposure_longitude           double   LID                          char(20)   SA2_NAME                     char(50)   structural_loss_ratio        double   SA2_CODE                     integer   WIND_VULNERABILITY_FUNCTION_ID char(5)   WIND_VULNERABILITY_SET       char(24)   GCC_CODE                     char(6)   POSTCODE                     integer   WIND_REGION_CLASSIFCATION    char(2)   LGA_CODE                     double   LGA_NAME                     char(50)   WALL_TYPE                    char(33)   AS4055_CLASS                 char(4)   ROOF_TYPE                    char(40)   SA4_CODE                     double   internal_id                  integer   UCL_NAME                     char(40)   MB_CODE                      double   MB_CAT                       char(40)   CONSTRUCTION_TYPE            char(3)   YEAR_BUILT                   char(15)   SA3_CODE                     double   structural_loss              double   SUBURB                       char(40)   UCL_CODE                     double   REPLACEMENT_VALUE            double   CONTENTS_VALUE               double   GCC_NAME                     char(11)   WIND_VULNERABILTY_MODEL_NUMBER double   _0_2s_gust_at_10m_height_m_s double   SA3_NAME                     char(40)   SA4_NAME                     char(36)   SA1_CODE                     double   FME_source                   char(100)   FME_process_date             date   damage_state                 char(20)
+GEODATABASE_FILE_3_DEF CSV0100   geodb_type                   geodb_polygon   GEODB_DROP_TABLE             YES   GEODB_TRUNCATE_TABLE         NO   GEODB_OBJECT_ID_NAME         OBJECTID   GEODB_OBJECT_ID_ALIAS        OBJECTID   GEODB_SHAPE_NAME             SHAPE   GEODB_SHAPE_ALIAS            SHAPE   GEODB_CONFIG_KEYWORD         DEFAULTS   GEODB_FEATURE_DATASET        ""   GEODB_GRID{1}                ""   GEODB_AVG_NUM_POINTS         ""   GEODB_HAS_Z_VALUES           ""   GEODB_HAS_MEASURES           ""   GEODB_ANNO_REFERENCE_SCALE   ""   GEODB_ZORIGIN                ""   GEODB_MEASURES_ORIGIN        ""   GEODB_YORIGIN                ""   GEODB_XYSCALE                ""   GEODB_ZSCALE                 ""   GEODB_MEASURES_SCALE         ""   GEODB_XORIGIN                ""   MB_CODE16                    char(20)   avg_structural_loss_ratio    double   count_hazimp_pts             double   FME_source                   char(100)   FME_process_date             date   damage_state                 char(20)
 # -------------------------------------------------------------------------
-GEODATABASE_FILE_3_DEF CSV0100   geodb_type                   geodb_polygon   GEODB_DROP_TABLE             YES   GEODB_TRUNCATE_TABLE         NO   GEODB_OBJECT_ID_NAME         OBJECTID   GEODB_OBJECT_ID_ALIAS        OBJECTID   GEODB_SHAPE_NAME             SHAPE   GEODB_SHAPE_ALIAS            SHAPE   GEODB_CONFIG_KEYWORD         DEFAULTS   GEODB_FEATURE_DATASET        ""   GEODB_GRID{1}                ""   GEODB_AVG_NUM_POINTS         ""   GEODB_HAS_Z_VALUES           ""   GEODB_HAS_MEASURES           ""   GEODB_ANNO_REFERENCE_SCALE   ""   GEODB_XYSCALE                ""   GEODB_YORIGIN                ""   GEODB_ZSCALE                 ""   GEODB_XORIGIN                ""   GEODB_ZORIGIN                ""   GEODB_MEASURES_SCALE         ""   GEODB_MEASURES_ORIGIN        ""   MB_CODE16                    char(20)   avg_structural_loss_ratio    double   count_hazimp_pts             double   FME_source                   char(100)   FME_process_date             date   damage_state                 char(20)
+GEODATABASE_FILE_3_DEF a   geodb_type                   geodb_point   GEODB_DROP_TABLE             YES   GEODB_TRUNCATE_TABLE         NO   GEODB_OBJECT_ID_NAME         OBJECTID   GEODB_OBJECT_ID_ALIAS        OBJECTID   GEODB_SHAPE_NAME             SHAPE   GEODB_SHAPE_ALIAS            SHAPE   GEODB_CONFIG_KEYWORD         DEFAULTS   GEODB_FEATURE_DATASET        ""   GEODB_GRID{1}                ""   GEODB_AVG_NUM_POINTS         ""   GEODB_HAS_Z_VALUES           ""   GEODB_HAS_MEASURES           ""   GEODB_ANNO_REFERENCE_SCALE   ""   GEODB_ZORIGIN                ""   GEODB_MEASURES_ORIGIN        ""   GEODB_YORIGIN                ""   GEODB_XYSCALE                ""   GEODB_ZSCALE                 ""   GEODB_MEASURES_SCALE         ""   GEODB_XORIGIN                ""   exposure_latitude            double   exposure_longitude           double   LID                          char(20)   SA2_NAME                     char(50)   structural_loss_ratio        double   SA2_CODE                     integer   WIND_VULNERABILITY_FUNCTION_ID char(5)   WIND_VULNERABILITY_SET       char(24)   GCC_CODE                     char(6)   POSTCODE                     integer   WIND_REGION_CLASSIFCATION    char(2)   LGA_CODE                     double   LGA_NAME                     char(50)   WALL_TYPE                    char(33)   AS4055_CLASS                 char(4)   ROOF_TYPE                    char(40)   SA4_CODE                     double   internal_id                  integer   UCL_NAME                     char(40)   MB_CODE                      double   MB_CAT                       char(40)   CONSTRUCTION_TYPE            char(3)   YEAR_BUILT                   char(15)   SA3_CODE                     double   structural_loss              double   SUBURB                       char(40)   UCL_CODE                     double   REPLACEMENT_VALUE            double   CONTENTS_VALUE               double   GCC_NAME                     char(11)   WIND_VULNERABILTY_MODEL_NUMBER double   _0_2s_gust_at_10m_height_m_s double   SA3_NAME                     char(40)   SA4_NAME                     char(36)   SA1_CODE                     double   FME_source                   char(100)   FME_process_date             date   damage_state                 char(20)
