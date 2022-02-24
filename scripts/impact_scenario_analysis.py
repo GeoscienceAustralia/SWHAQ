@@ -33,7 +33,6 @@ import os
 from os.path import join as pjoin
 import numpy as np
 import pandas as pd
-import geopandas as gpd
 
 import matplotlib.pyplot as plt
 
@@ -60,6 +59,7 @@ data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\202
 
 events = ['007-02914', '016-04518', '011-01326']
 events = ['020-07522', '004-08495', '003-00562', '010-08276', '014-01920']
+events = ['004-08495']
 
 res = 600
 context='paper'
@@ -176,6 +176,12 @@ for event_num in events:
                    columns=['WALL_TYPE', 'ROOF_TYPE'], 
                    aggfunc='size', fill_value=0).to_excel(pjoin(output_path, "{0}_damage_state_type.xlsx".format(event_num)))
 
+    df.groupby(['SA1_CODE', 'Damage state', 'YEAR_BUILT']).\
+        agg({'0.2s gust at 10m height m/s': np.mean,
+             'structural': np.mean,
+             'SA1_CODE': len}).\
+        to_csv(pjoin(data_path, f"{event_num}_mean_dmg_windspeed_SA1.csv"),
+                     float_format="%0.3f")
     # Save a table of number of buildings in each damage state, broken
     # down by construction era
     df.pivot_table(index='YEAR_BUILT', 

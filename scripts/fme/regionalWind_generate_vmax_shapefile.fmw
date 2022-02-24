@@ -1,8 +1,8 @@
 #! <?xml version="1.0" encoding="UTF-8" ?>
 #! <WORKSPACE
 #    Command-line to run this workspace:
-#        "C:\Program Files\FME_2020.2.2\fme.exe" X:\georisk\HaRIA_B_Wind\projects\qfes_swha\software\fme\regionalWind_generate_vmax_shapefile.fmw
-#              --SourceDataset_NETCDF_3 "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\014-01920\windfield\gust.014-01920.nc"
+#        "C:\Program Files\FME_2020.2.2\fme.exe" C:\WorkSpace\swhaq\scripts\fme\regionalWind_generate_vmax_shapefile.fmw
+#              --SourceDataset_NETCDF_3 "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\004-08495\windfield\gust.004-08495.nc"
 #              --SourceDataset_CSV "\\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\scenario_lookup_table.csv"
 #              --DestDataset_ESRISHAPE_4 "T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\SHP"
 #              --Mainlands_shp "\\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\reference_data\Mainlands_and_Islands_WGS84.shp"
@@ -20,8 +20,8 @@
 #!   END_TCL=""
 #!   EXPLICIT_BOOKMARK_ORDER="false"
 #!   FME_BUILD_NUM="20817"
-#!   FME_DOCUMENT_GUID="0f2ddb4a-02a9-4696-84fc-98a11e9ee586"
-#!   FME_DOCUMENT_PRIORGUID="b61bf658-53ec-4a8a-9051-612f362d2872,aba8fd7e-5e9c-4cdf-bcc8-95641a426583,c445ca1c-4f5c-4f34-9051-3c7d5b04472f,e3d48c41-b723-44bd-85ee-75b7d7db83d9,7c65d399-6ae4-4813-94c7-897666297055,670509dc-3149-4f42-a084-fbe4c147dfe5,0056b527-c639-4bea-b336-de5eb0e9f77b,1d19cc3d-dcc6-47d3-970b-042ed110ee20,0e596d9d-6d2d-49a2-bd27-2d8f35d0173c,c1fb4c59-8b2e-4e9a-8ea1-e4c2b179741a,6fde0d59-afb8-495b-83cf-03f6d2b964cf,10173a45-ff3d-4051-8577-34a8cee2fd97,2023eaf3-b536-4923-9425-8a1d10de5795,7b4a0344-c5df-4196-8b98-37f38f51e331,6a992757-d453-4fee-a212-93719907ebb0,6b1370a0-aada-40ca-b604-42e9c47503e5,a0971696-9560-4520-b4ee-c6a5fb2f15e3,ce8ac0ae-127f-41b0-af28-d363ffb29fb1,59fac228-47aa-4bfc-813c-2e95de23d4b1,6ab49274-d4e3-49a1-ac0f-25bb828192a7,bf7523a2-1c1b-4d0c-9f38-be3213a53bf2,7c799ea9-dc02-4506-b9a9-0a8b4fecb3e0,aaa99a05-b870-4515-91ac-74613ee3b816,61717327-1b3f-43ae-8587-c6c98e17587c,74aa10d2-ecc2-4b5c-b0bb-f87635dd7950,ab8d5e51-e8f3-4584-a8cd-855dcae9c25d,d9c619a2-ec43-4b09-8974-b0c5a02c9ff5,07e8a9f4-f504-4838-8c36-4f651e9698db,650cd9fc-1f19-47b3-9bbe-e616d9886cb1,8ae23a17-944d-49ec-8b1c-763414cf529c,f4f61a66-ee06-442e-baca-76b030f5e56d"
+#!   FME_DOCUMENT_GUID="5f38e388-1a9e-4ea3-b6b1-a30932f9d498"
+#!   FME_DOCUMENT_PRIORGUID="b61bf658-53ec-4a8a-9051-612f362d2872,aba8fd7e-5e9c-4cdf-bcc8-95641a426583,c445ca1c-4f5c-4f34-9051-3c7d5b04472f,e3d48c41-b723-44bd-85ee-75b7d7db83d9,7c65d399-6ae4-4813-94c7-897666297055,670509dc-3149-4f42-a084-fbe4c147dfe5,0056b527-c639-4bea-b336-de5eb0e9f77b,1d19cc3d-dcc6-47d3-970b-042ed110ee20,0e596d9d-6d2d-49a2-bd27-2d8f35d0173c,c1fb4c59-8b2e-4e9a-8ea1-e4c2b179741a,6fde0d59-afb8-495b-83cf-03f6d2b964cf,10173a45-ff3d-4051-8577-34a8cee2fd97,2023eaf3-b536-4923-9425-8a1d10de5795,7b4a0344-c5df-4196-8b98-37f38f51e331,6a992757-d453-4fee-a212-93719907ebb0,6b1370a0-aada-40ca-b604-42e9c47503e5,a0971696-9560-4520-b4ee-c6a5fb2f15e3,ce8ac0ae-127f-41b0-af28-d363ffb29fb1,59fac228-47aa-4bfc-813c-2e95de23d4b1,6ab49274-d4e3-49a1-ac0f-25bb828192a7,bf7523a2-1c1b-4d0c-9f38-be3213a53bf2,7c799ea9-dc02-4506-b9a9-0a8b4fecb3e0,aaa99a05-b870-4515-91ac-74613ee3b816,61717327-1b3f-43ae-8587-c6c98e17587c,74aa10d2-ecc2-4b5c-b0bb-f87635dd7950,ab8d5e51-e8f3-4584-a8cd-855dcae9c25d,d9c619a2-ec43-4b09-8974-b0c5a02c9ff5,07e8a9f4-f504-4838-8c36-4f651e9698db,650cd9fc-1f19-47b3-9bbe-e616d9886cb1,8ae23a17-944d-49ec-8b1c-763414cf529c,f4f61a66-ee06-442e-baca-76b030f5e56d,0f2ddb4a-02a9-4696-84fc-98a11e9ee586"
 #!   FME_GEOMETRY_HANDLING="Enhanced"
 #!   FME_IMPLICIT_CSMAP_REPROJECTION_MODE="Auto"
 #!   FME_REPROJECTION_ENGINE="FME"
@@ -30,7 +30,7 @@
 #!   HISTORY=""
 #!   IGNORE_READER_FAILURE="No"
 #!   LAST_SAVE_BUILD="FME(R) 2020.2.2.0 (20210111 - Build 20817 - WIN64)"
-#!   LAST_SAVE_DATE="2022-02-04T16:01:23"
+#!   LAST_SAVE_DATE="2022-02-16T14:10:58"
 #!   LOG_FILE=""
 #!   LOG_MAX_RECORDED_FEATURES="200"
 #!   MARKDOWN_DESCRIPTION=""
@@ -49,7 +49,7 @@
 #!   TITLE=""
 #!   USAGE=""
 #!   USE_MARKDOWN=""
-#!   VIEW_POSITION="-2219.69 477.946"
+#!   VIEW_POSITION="-2495.43 519.307"
 #!   WARN_INVALID_XFORM_PARAM="Yes"
 #!   WORKSPACE_VERSION="1"
 #!   ZOOM_SCALE="68"
@@ -68,7 +68,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE="SHAPE_GEOMETRY {FME_GEN_GEOMETRY}"
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="multi_reader_keyword char(50) fme_feature_type char(50) fme_text_string char(50) fme_start_angle double fme_fill_color char(50) fme_type char(50) shape_geometry_error{} char(254) multi_reader_full_id long multi_reader_id long multi_reader_type char(50) fme_basename char(50) fme_text_size double fme_primary_axis double fme_secondary_axis double fme_dataset char(50) shape_measures char(254) SHAPE_GEOMETRY char(50) fme_color char(50) fme_rotation double fme_sweep_angle double fme_geometry fme_char(50)"
+#!   EXPOSABLE_ATTRS="fme_primary_axis double multi_reader_type char(50) fme_secondary_axis double fme_type char(50) shape_geometry_error{} char(254) fme_color char(50) fme_text_string char(50) fme_dataset char(50) shape_measures char(254) fme_geometry fme_char(50) fme_text_size double fme_basename char(50) fme_feature_type char(50) fme_fill_color char(50) fme_rotation double fme_sweep_angle double fme_start_angle double SHAPE_GEOMETRY char(50) multi_reader_keyword char(50) multi_reader_full_id long multi_reader_id long"
 #!   DEFLINE_PARMS=""
 #!   ATTR_INDEX_TYPES="INDEX"
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -127,7 +127,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE=""
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="multi_reader_keyword text fme_feature_type text fme_text_string text csv_line_number number(11,0) fme_start_angle float fme_fill_color text fme_type text multi_reader_full_id int multi_reader_id int multi_reader_type text fme_basename text csv_total_number_of_columns number(11,0) fme_text_size float fme_primary_axis float fme_secondary_axis float csv_type char(50) fme_dataset text csv_number_of_fields number(11,0) fme_color text fme_rotation float fme_sweep_angle float fme_geometry fme_char(50)"
+#!   EXPOSABLE_ATTRS="csv_type char(50) fme_primary_axis float multi_reader_type text fme_secondary_axis float fme_type text fme_color text csv_number_of_fields number(11,0) fme_text_string text csv_total_number_of_columns number(11,0) fme_dataset text fme_geometry fme_char(50) fme_text_size float fme_basename text fme_feature_type text fme_fill_color text fme_rotation float fme_sweep_angle float fme_start_angle float multi_reader_keyword text csv_line_number number(11,0) multi_reader_full_id int multi_reader_id int"
 #!   DEFLINE_PARMS=""
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -194,7 +194,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE=""
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="netcdf_data_variable.flag_masks{} double netcdf_coordinate_variable{}.valid_min double netcdf_subdataset_name char netcdf_data_variable.ancillary_variables char fme_basename char netcdf_coordinate_variable{}.calendar char netcdf_title char netcdf_coordinate_variable{}.leap_year int multi_reader_full_id int fme_type char fme_primary_axis double netcdf_data_variable.cell_measures char netcdf_source char netcdf_data_variable.scale_factor double netcdf_data_variable.flag_meanings char netcdf_coordinate_variable{}.user_attrs{}.value char netcdf_coordinate_variable{}.type char netcdf_coordinate_variable{}.user_attrs{}.type char multi_reader_keyword char netcdf_coordinate_variable{}.climatology char netcdf_coordinate_variable{}.formula_terms char fme_sweep_angle double netcdf_references char multi_reader_id int netcdf_data_variable.valid_range{} double multi_reader_type char netcdf_coordinate_variable{}.valid_max double netcdf_data_variable.user_attrs{}.type char netcdf_data_variable.valid_min double netcdf_coordinate_variable{}.units char fme_fill_color char fme_dataset char netcdf_data_variable.standard_error_multiplier double netcdf_data_variable.name char netcdf_data_variable.standard_name char netcdf_data_variable.source char netcdf_data_variable.user_attrs{}.value char netcdf_coordinate_variable{}.month_lengths{} int netcdf_data_variable.add_offset double netcdf_comment char fme_geometry char fme_text_string char netcdf_institution char netcdf_coordinate_variable{}.leap_month int fme_rotation double netcdf_coordinate_variable{}.standard_name char netcdf_data_variable.cell_methods char netcdf_format char netcdf_coordinate_variable{}.long_name char netcdf_coordinate_variable{}.valid_range{} double netcdf_data_variable.user_attrs{}.name char fme_feature_type char fme_color char netcdf_data_variable.institution char fme_secondary_axis double netcdf_data_variable.valid_max double netcdf_data_variable.flag_values{} double netcdf_coordinate_variable{}.name char netcdf_subdataset_description char netcdf_coordinate_variable{}.bounds char netcdf_coordinate_variable{}.positive char fme_start_angle double netcdf_band{}.coordinate_variable{} double netcdf_coordinate_variable{}.axis char netcdf_data_variable.coordinates char netcdf_coordinate_variable{}.user_attrs{}.name char netcdf_data_variable.long_name char netcdf_data_variable.comment char netcdf_conventions char netcdf_history char netcdf_type char netcdf_data_variable.units char netcdf_data_variable.grid_mapping char netcdf_coordinate_variable{}.compress char netcdf_data_variable.references char fme_text_size double"
+#!   EXPOSABLE_ATTRS="netcdf_coordinate_variable{}.valid_min double netcdf_data_variable.units char netcdf_subdataset_description char netcdf_data_variable.standard_name char netcdf_data_variable.institution char netcdf_coordinate_variable{}.axis char netcdf_history char netcdf_title char netcdf_data_variable.valid_range{} double multi_reader_full_id int netcdf_data_variable.valid_min double netcdf_data_variable.ancillary_variables char fme_secondary_axis double netcdf_format char netcdf_data_variable.source char netcdf_data_variable.cell_measures char fme_dataset char netcdf_data_variable.comment char netcdf_coordinate_variable{}.units char netcdf_data_variable.valid_max double netcdf_data_variable.name char netcdf_data_variable.user_attrs{}.value char fme_basename char netcdf_data_variable.references char netcdf_type char fme_sweep_angle double netcdf_conventions char netcdf_coordinate_variable{}.compress char netcdf_coordinate_variable{}.name char fme_color char netcdf_coordinate_variable{}.user_attrs{}.type char fme_feature_type char fme_fill_color char fme_rotation double netcdf_coordinate_variable{}.valid_range{} double netcdf_coordinate_variable{}.leap_month int netcdf_subdataset_name char netcdf_coordinate_variable{}.leap_year int netcdf_data_variable.flag_meanings char netcdf_coordinate_variable{}.calendar char netcdf_data_variable.grid_mapping char netcdf_coordinate_variable{}.user_attrs{}.name char netcdf_data_variable.add_offset double netcdf_coordinate_variable{}.formula_terms char netcdf_institution char netcdf_coordinate_variable{}.positive char netcdf_source char netcdf_data_variable.scale_factor double fme_primary_axis double fme_start_angle double netcdf_data_variable.user_attrs{}.name char netcdf_data_variable.standard_error_multiplier double multi_reader_type char netcdf_coordinate_variable{}.bounds char netcdf_coordinate_variable{}.type char multi_reader_keyword char netcdf_band{}.coordinate_variable{} double netcdf_data_variable.coordinates char netcdf_references char netcdf_data_variable.cell_methods char multi_reader_id int fme_type char netcdf_comment char netcdf_coordinate_variable{}.climatology char netcdf_coordinate_variable{}.user_attrs{}.value char netcdf_data_variable.user_attrs{}.type char fme_geometry char netcdf_data_variable.flag_masks{} double fme_text_string char netcdf_coordinate_variable{}.month_lengths{} int netcdf_coordinate_variable{}.long_name char fme_text_size double netcdf_data_variable.flag_values{} double netcdf_coordinate_variable{}.valid_max double netcdf_coordinate_variable{}.standard_name char netcdf_data_variable.long_name char"
 #!   DEFLINE_PARMS=""
 #!   ATTR_INDEX_TYPES=""
 #!   ATTR_NAME_INVALID_CHARS=""
@@ -253,7 +253,7 @@
 #!   WRITE_DEFS="true"
 #!   DEFLINE_TEMPLATE="SHAPE_GEOMETRY {FME_GEN_GEOMETRY} shape_dimension auto"
 #!   DEFLINE_ATTRS="true"
-#!   EXPOSABLE_ATTRS="fme_start_angle double fme_fill_color char(50) fme_rotation double fme_dataset char(50) fme_type char(50) fme_basename char(50) SHAPE_GEOMETRY char(50) fme_color char(50) fme_sweep_angle double fme_feature_type char(50) fme_text_string char(50) fme_primary_axis double fme_text_size double fme_secondary_axis double fme_geometry fme_char(50) shape_measures char(254)"
+#!   EXPOSABLE_ATTRS="fme_rotation double fme_start_angle double fme_fill_color char(50) fme_color char(50) fme_text_size double fme_basename char(50) fme_type char(50) fme_sweep_angle double fme_secondary_axis double fme_text_string char(50) fme_geometry fme_char(50) fme_feature_type char(50) fme_primary_axis double SHAPE_GEOMETRY char(50) shape_measures char(254) fme_dataset char(50)"
 #!   DEFLINE_PARMS="&quot;GUI OPTIONAL NAMEDGROUP shape_layer_group shape_dimension Shapefile Settings&quot; &quot;&quot; &quot;GUI LOOKUP_CHOICE shape_dimension Dimension&lt;space&gt;From&lt;space&gt;First&lt;space&gt;Feature,auto%2D,2d%2D&lt;space&gt;+&lt;space&gt;Measures,2dm%3D&lt;space&gt;+&lt;space&gt;Measures,3dm Output Dimension:&quot; auto "
 #!   ATTR_INDEX_TYPES="INDEX"
 #!   ATTR_NAME_INVALID_CHARS=". -%[]&quot;!?*&apos;&amp;\/{}"
@@ -298,144 +298,6 @@
 #! </DATASET>
 #! </DATASETS>
 #! <DATA_TYPES>
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_buffer"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_binarybuffer"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_xml"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_json"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_varchar(width)"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_varbinary(width)"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_char(width)"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_binary(width)"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_datetime"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_time"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_date"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_boolean"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="double"
-#!   FME_TYPE="fme_real64"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_decimal(width,decimal)"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="float"
-#!   FME_TYPE="fme_real32"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_int32"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="int"
-#!   FME_TYPE="fme_uint32"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_int64"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="char"
-#!   FME_TYPE="fme_uint64"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="short"
-#!   FME_TYPE="fme_int16"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="short"
-#!   FME_TYPE="fme_uint16"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="short"
-#!   FME_TYPE="fme_int8"
-#!   FORMAT="NETCDF"
-#! />
-#! <DATA_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="byte"
-#!   FME_TYPE="fme_uint8"
-#!   FORMAT="NETCDF"
-#! />
 #! <DATA_TYPE
 #!   IS_SOURCE="true"
 #!   FORMAT_TYPE="char(width)"
@@ -803,6 +665,144 @@
 #!   FORMAT="CSV"
 #! />
 #! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_buffer"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_binarybuffer"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_xml"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_json"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_varchar(width)"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_varbinary(width)"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_char(width)"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_binary(width)"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_datetime"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_time"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_date"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_boolean"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="double"
+#!   FME_TYPE="fme_real64"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_decimal(width,decimal)"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="float"
+#!   FME_TYPE="fme_real32"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_int32"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="int"
+#!   FME_TYPE="fme_uint32"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_int64"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="char"
+#!   FME_TYPE="fme_uint64"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="short"
+#!   FME_TYPE="fme_int16"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="short"
+#!   FME_TYPE="fme_uint16"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="short"
+#!   FME_TYPE="fme_int8"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="byte"
+#!   FME_TYPE="fme_uint8"
+#!   FORMAT="NETCDF"
+#! />
+#! <DATA_TYPE
 #!   IS_SOURCE="false"
 #!   FORMAT_TYPE="char(width)"
 #!   FME_TYPE="fme_varchar(width)"
@@ -996,102 +996,6 @@
 #! />
 #! </DATA_TYPES>
 #! <GEOM_TYPES>
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="netcdf_raster"
-#!   FME_TYPE="fme_raster"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="netcdf_none"
-#!   FME_TYPE="fme_no_geom"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_point"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_text"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_line"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_arc"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_area"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_ellipse"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_rectangle"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_rounded_rectangle"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_no_geom"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_surface"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_solid"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="fme_no_map"
-#!   FME_TYPE="fme_point_cloud"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="netcdf_none"
-#!   FME_TYPE="fme_feature_table"
-#!   FORMAT="NETCDF"
-#! />
-#! <GEOM_TYPE
-#!   IS_SOURCE="true"
-#!   FORMAT_TYPE="netcdf_none"
-#!   FME_TYPE="fme_collection"
-#!   FORMAT="NETCDF"
-#! />
 #! <GEOM_TYPE
 #!   IS_SOURCE="true"
 #!   FORMAT_TYPE="shape_point"
@@ -1301,6 +1205,102 @@
 #!   FORMAT_TYPE="csv_none"
 #!   FME_TYPE="fme_feature_table"
 #!   FORMAT="CSV"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="netcdf_raster"
+#!   FME_TYPE="fme_raster"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="netcdf_none"
+#!   FME_TYPE="fme_no_geom"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_point"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_text"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_line"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_arc"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_area"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_ellipse"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_rectangle"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_rounded_rectangle"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_no_geom"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_surface"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_solid"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="fme_no_map"
+#!   FME_TYPE="fme_point_cloud"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="netcdf_none"
+#!   FME_TYPE="fme_feature_table"
+#!   FORMAT="NETCDF"
+#! />
+#! <GEOM_TYPE
+#!   IS_SOURCE="true"
+#!   FORMAT_TYPE="netcdf_none"
+#!   FME_TYPE="fme_collection"
+#!   FORMAT="NETCDF"
 #! />
 #! <GEOM_TYPE
 #!   IS_SOURCE="false"
@@ -1614,7 +1614,7 @@
 #! <DATASET
 #!   NAME="NETCDF_1"
 #!   OVERRIDE="-NETCDF_1_DATASET"
-#!   DATASET="NETCDF_1/gust.014-01920.nc"
+#!   DATASET="NETCDF_1/gust.004-08495.nc"
 #! />
 #! <DATASET
 #!   NAME="ESRISHAPE_1"
@@ -1638,7 +1638,7 @@
 #! <GLOBAL_PARAMETERS>
 #! <GLOBAL_PARAMETER
 #!   GUI_LINE="GUI MULTIFILE SourceDataset_NETCDF_3 NetCDF_Files(*.nc)|*.nc|Compressed_Files(*.bz2;*.gz)|*.bz2;*.gz|Archive_Files(*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx)|*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx|All_Files(*)|* Regional Wind NetCDF File:"
-#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\014-01920\windfield\gust.014-01920.nc"
+#!   DEFAULT_VALUE="T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\004-08495\windfield\gust.004-08495.nc"
 #!   IS_STAND_ALONE="false"
 #! />
 #! <GLOBAL_PARAMETER
@@ -1853,7 +1853,7 @@
 #!   BOUNDING_RECT="-3000 600 1000.010000100001 2175.9086162290196"
 #!   STICKY="true"
 #!   COLOUR="0.34901960784313724,0.47058823529411764,0.69803921568627447,0.39215686274509803"
-#!   CONTENTS="2 34 36 4 5 "
+#!   CONTENTS="36 4 5 2 34 "
 #! >
 #! </BOOKMARK>
 #! <BOOKMARK
@@ -1867,7 +1867,7 @@
 #!   BOUNDING_RECT="-1911.7838237205899 600 4880.4322076834296 2193.7659376593765"
 #!   STICKY="true"
 #!   COLOUR="0.38823529411764707,0.5490196078431373,0.17254901960784313,0.39215686274509803"
-#!   CONTENTS="11 17 10 25 27 6 18 20 21 31 22 8 19 30 12 32 26 33 9 7 13 35 24 "
+#!   CONTENTS="19 8 30 18 33 24 20 12 22 26 13 35 6 7 21 10 32 27 9 17 11 31 25 "
 #! >
 #! </BOOKMARK>
 #! <BOOKMARK
@@ -1895,7 +1895,7 @@
 #!   ORDER="500000000000000"
 #!   PARMS_EDITED="true"
 #!   ENABLED="true"
-#!   LAST_PARM_EDIT="16492"
+#!   LAST_PARM_EDIT="20817"
 #! >
 #!     <OUTPUT_FEAT NAME="RESULT"/>
 #!     <FEAT_COLLAPSED COLLAPSED="0"/>
@@ -1997,7 +1997,7 @@
 #!     <XFORM_ATTR ATTR_NAME="fme_dataset" IS_USER_CREATED="false" FEAT_INDEX="0" />
 #!     <XFORM_ATTR ATTR_NAME="fme_feature_type" IS_USER_CREATED="false" FEAT_INDEX="0" />
 #!     <XFORM_PARM PARM_NAME="EXPRESSION_GROUP" PARM_VALUE=""/>
-#!     <XFORM_PARM PARM_NAME="EXPRESSION_LIST" PARM_VALUE="INTERPRETATION_LIST &quot;AUTO&quot; EXPRESSION_LIST &quot;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;90&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;125&lt;comma&gt;1&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;125&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;170&lt;comma&gt;2&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;170&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;225&lt;comma&gt;3&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;225&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;280&lt;comma&gt;4&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;280&lt;comma&gt;5&lt;comma&gt;0&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&quot;"/>
+#!     <XFORM_PARM PARM_NAME="EXPRESSION_LIST" PARM_VALUE="INTERPRETATION_LIST &quot;AUTO&quot; EXPRESSION_LIST &quot;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;90*1.1&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;125*1.1&lt;comma&gt;1&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;125*1.1&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;170*1.1&lt;comma&gt;2&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;170*1.1&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;225*1.1&lt;comma&gt;3&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;225*1.1&lt;space&gt;&lt;amp&gt;&lt;amp&gt;&lt;space&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;lt&gt;=&lt;space&gt;280*1.1&lt;comma&gt;4&lt;comma&gt;&lt;lf&gt;&lt;at&gt;if&lt;openparen&gt;A&lt;openbracket&gt;0&lt;closebracket&gt;*3.6&lt;space&gt;&lt;gt&gt;&lt;space&gt;280*1.1&lt;comma&gt;5&lt;comma&gt;0&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&lt;closeparen&gt;&quot;"/>
 #!     <XFORM_PARM PARM_NAME="GROUP_BY" PARM_VALUE="&lt;Unused&gt;"/>
 #!     <XFORM_PARM PARM_NAME="MODE" PARM_VALUE="One Raster"/>
 #!     <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
@@ -3917,7 +3917,7 @@
 
 FME_PYTHON_VERSION 37
 GUI IGNORE SourceDataset_ESRISHAPE_1,ESRISHAPE_IN_SIMPLE_DONUT_GEOMETRY_ESRISHAPE_1,ESRISHAPE_IN_ENCODING_ESRISHAPE_1,ESRISHAPE_IN_EXPOSE_ATTRS_GROUP_ESRISHAPE_1,ESRISHAPE_IN_SEARCH_ENVELOPE_MINX_ESRISHAPE_1,ESRISHAPE_IN_SEARCH_ENVELOPE_MINY_ESRISHAPE_1,ESRISHAPE_IN_SEARCH_ENVELOPE_MAXX_ESRISHAPE_1,ESRISHAPE_IN_SEARCH_ENVELOPE_MAXY_ESRISHAPE_1,ESRISHAPE_IN_CLIP_TO_ENVELOPE_ESRISHAPE_1,ESRISHAPE_IN_NETWORK_AUTHENTICATION_ESRISHAPE_1,ESRISHAPE_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_ESRISHAPE_1,_MEASURES_AS_Z_ESRISHAPE_1,ESRISHAPE_IN_DISSOLVE_HOLES_ESRISHAPE_1,ESRISHAPE_IN_REPORT_BAD_GEOMETRY_ESRISHAPE_1,ESRISHAPE_IN_TRIM_PRECEDING_SPACES_ESRISHAPE_1,SourceDataset_CSV_1,CSV_IN_NETWORK_AUTHENTICATION_CSV_1,_SKIP_LINES_CSV_1,_SKIP_FOOTER_CSV_1,_STRIP_QUOTES_CSV_1,_DUPLICATE_DELIMS_CSV_1,SORT_GROUP_CSV_1,_SORT_PARAMS_CSV_1,FILTER_GROUP_CSV_1,_FILTER_PARAMS_CSV_1,_ENCODING_CSV_1,SourceDataset_NETCDF_1,NETCDF_IN_FME_GROUP_NAMED1_NETCDF_1,NETCDF_IN_REVERSE_VERTICAL_ORDER_NETCDF_1,NETCDF_IN_USE_SEARCH_ENVELOPE_NETCDF_1,NETCDF_IN_SEARCH_ENVELOPE_MINX_NETCDF_1,NETCDF_IN_SEARCH_ENVELOPE_MINY_NETCDF_1,NETCDF_IN_SEARCH_ENVELOPE_MAXX_NETCDF_1,NETCDF_IN_SEARCH_ENVELOPE_MAXY_NETCDF_1,NETCDF_IN_SEARCH_ENVELOPE_COORDINATE_SYSTEM_NETCDF_1,NETCDF_IN_CLIP_TO_ENVELOPE_NETCDF_1,NETCDF_IN_NETWORK_AUTHENTICATION_NETCDF_1,DestDataset_ESRISHAPE_2,ESRISHAPE_OUT_ENCODING_ESRISHAPE_2,ESRISHAPE_OUT_WRITE_SPATIAL_INDEX_ESRISHAPE_2,ESRISHAPE_OUT_COMPRESSED_SHAPE_FILE_ESRISHAPE_2,ESRISHAPE_OUT_DIMENSION_GROUP_ESRISHAPE_2,ESRISHAPE_OUT_SHAPE_WRT_ADV_PARM_GROUP_ESRISHAPE_2,ESRISHAPE_OUT_STRICT_COMPATIBILITY_ESRISHAPE_2,ESRISHAPE_OUT_PRESERVE_RING_VERTEX_ORDER_ESRISHAPE_2,_MEASURES_AS_Z_ESRISHAPE_2
-DEFAULT_MACRO SourceDataset_NETCDF_3 T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\014-01920\windfield\gust.014-01920.nc
+DEFAULT_MACRO SourceDataset_NETCDF_3 T:\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\windfields\regional\004-08495\windfield\gust.004-08495.nc
 GUI MULTIFILE SourceDataset_NETCDF_3 NetCDF_Files(*.nc)|*.nc|Compressed_Files(*.bz2;*.gz)|*.bz2;*.gz|Archive_Files(*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx)|*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx|All_Files(*)|* Regional Wind NetCDF File:
 DEFAULT_MACRO SourceDataset_CSV \\prod.lan\active\ops\community_safety\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\scenario_lookup_table.csv
 GUI OPTIONAL MULTIFILE SourceDataset_CSV CSV/Compressed_CSV/TEXT_Files(*.csv;*.gz;*.txt)|*.csv;*.gz;*.txt|CSV_Files(*.csv)|*.csv|Compressed_CSV_Files(*.gz)|*.gz|Text_Files(*.txt)|*.txt|Compressed_Files(*.bz2;*.gz)|*.bz2;*.gz|Archive_Files(*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx)|*.7z;*.7zip;*.rar;*.rvz;*.tar;*.tar.bz2;*.tar.gz;*.tgz;*.zip;*.zipx|All_Files|* Scenario lookup table:
@@ -4325,7 +4325,7 @@ CSV_1_READER_META_ATTRIBUTES fme_feature_type
 
 # -------------------------------------------------------------------------
 
-NETCDF_1_READER_META_ATTRIBUTES fme_dataset fme_basename fme_feature_type
+NETCDF_1_READER_META_ATTRIBUTES fme_basename fme_feature_type fme_dataset
 
 # -------------------------------------------------------------------------
 
@@ -4349,13 +4349,13 @@ CSV_1_MERGE_DEF CSV_1::CSV EXACT CSV
 NETCDF_1_MERGE_DEF NETCDF_1::NETCDF EXACT NETCDF
 # -------------------------------------------------------------------------
 
+FACTORY_DEF * TeeFactory    FACTORY_NAME "NETCDF_NETCDF_1 Splitter"    INPUT FEATURE_TYPE NETCDF    OUTPUT FEATURE_TYPE NETCDF_NETCDF_1
+# -------------------------------------------------------------------------
+
 FACTORY_DEF * TeeFactory    FACTORY_NAME "Mainlands_and_Islands_WGS84_ESRISHAPE_1 Splitter"    INPUT FEATURE_TYPE Mainlands_and_Islands_WGS84    OUTPUT FEATURE_TYPE Mainlands_and_Islands_WGS84_ESRISHAPE_1
 # -------------------------------------------------------------------------
 
 FACTORY_DEF * TeeFactory    FACTORY_NAME "CSV_CSV_1 Splitter"    INPUT FEATURE_TYPE CSV    OUTPUT FEATURE_TYPE CSV_CSV_1
-# -------------------------------------------------------------------------
-
-FACTORY_DEF * TeeFactory    FACTORY_NAME "NETCDF_NETCDF_1 Splitter"    INPUT FEATURE_TYPE NETCDF    OUTPUT FEATURE_TYPE NETCDF_NETCDF_1
 DEFAULT_MACRO WB_CURRENT_CONTEXT
 # -------------------------------------------------------------------------
 FACTORY_DEF * TeeFactory    FACTORY_NAME AttributeFilter_2    INPUT  FEATURE_TYPE NETCDF_NETCDF_1    OUTPUT FEATURE_TYPE AttributeFilter_2_FILTER
@@ -4365,14 +4365,14 @@ FACTORY_DEF * TeeFactory   FACTORY_NAME "AttributeFilter_2 <lt>MISSING<gt> Trans
 FACTORY_DEF * TeeFactory   FACTORY_NAME "AttributeFilter_2 <lt>NULL<gt> Transformer Output Nuker"   INPUT FEATURE_TYPE AttributeFilter_2_<lt>NULL<gt>
 FACTORY_DEF * TeeFactory   FACTORY_NAME "AttributeFilter_2 <lt>UNFILTERED<gt> Transformer Output Nuker"   INPUT FEATURE_TYPE AttributeFilter_2_<lt>UNFILTERED<gt>
 # -------------------------------------------------------------------------
-FACTORY_DEF {*} RasterEvaluationFactory    FACTORY_NAME RasterExpressionEvaluator    INPUT A FEATURE_TYPE AttributeFilter_2_vmax    INTERPRETATION_LIST "AUTO" EXPRESSION_LIST "<at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>90<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>125<comma>1<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>125<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>170<comma>2<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>170<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>225<comma>3<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>225<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>280<comma>4<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>280<comma>5<comma>0<closeparen><closeparen><closeparen><closeparen><closeparen>"    FORCE_FLOAT_DIVISION yes    OUTPUT RESULT FEATURE_TYPE RasterExpressionEvaluator_RESULT
+FACTORY_DEF {*} RasterEvaluationFactory    FACTORY_NAME RasterExpressionEvaluator    INPUT A FEATURE_TYPE AttributeFilter_2_vmax    INTERPRETATION_LIST "AUTO" EXPRESSION_LIST "<at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>90*1.1<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>125*1.1<comma>1<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>125*1.1<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>170*1.1<comma>2<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>170*1.1<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>225*1.1<comma>3<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>225*1.1<space><amp><amp><space>A<openbracket>0<closebracket>*3.6<space><lt>=<space>280*1.1<comma>4<comma><lf><at>if<openparen>A<openbracket>0<closebracket>*3.6<space><gt><space>280*1.1<comma>5<comma>0<closeparen><closeparen><closeparen><closeparen><closeparen>"    FORCE_FLOAT_DIVISION yes    OUTPUT RESULT FEATURE_TYPE RasterExpressionEvaluator_RESULT
 # -------------------------------------------------------------------------
 FACTORY_DEF * RasterSegmentationFactory    FACTORY_NAME RasterToPolygonCoercer    INPUT  FEATURE_TYPE RasterExpressionEvaluator_RESULT    POLYGON_MODE UNIQUE    EXTRACT_NODATA Yes    PRESERVE_ATTRIBUTES YES    POLYGON_LABEL_ATTRIBUTE GRIDCODE    OUTPUT POLYGONS FEATURE_TYPE RasterToPolygonCoercer_POLYGONS
 # -------------------------------------------------------------------------
 MACRO casemac
 INCLUDE [ if { {no} == {no} } { puts {MACRO casemac -nocase}} ]
-Tcl2 proc StringSearcher_411f69f1_56dc_46b1_bd21_161f40b8b7bf3_doGrep { stringToSearch regExp matchedChars matches matchedParts } {   set subMatches 1;   set matches [FME_DecodeText $matches];   set matchedParts [FME_DecodeText $matchedParts];   set stringToSearch [FME_ReplaceRegex "\015\012?" [FME_DecodeText $stringToSearch] "\012"];   set results [FME_GetRegex $(casemac) [FME_DecodeText $regExp] $stringToSearch];   if {[llength [lindex $results 0]] > 0} {      set attrName [FME_DecodeText $matchedChars];      FME_SetAttribute $attrName [lindex [lindex [lindex $results 0] 0] 0];      set index 0;      set parts [lindex $results 1];      foreach part $parts {         if {[llength $matchedParts] > 0} {             set attrName "$matchedParts{$index}.part";             FME_SetAttribute $attrName [lindex $part 0];             set attrName "$matchedParts{$index}.startIndex";             FME_SetAttribute $attrName [lindex $part 1];         };         incr index;      };      set index 0;      set regexMatches [lindex $results 0];      foreach part $regexMatches {         if {[llength $matches] > 0} {             set attrName "$matches{$index}.match";             FME_SetAttribute $attrName [lindex $part 0];             set attrName "$matches{$index}.startIndex";             FME_SetAttribute $attrName [lindex $part 1];         };         set isFirstMatch 0;         incr index;      };      return $index;   };   return -1; }
-FACTORY_DEF * TestFactory    FACTORY_NAME StringSearcher    INPUT  FEATURE_TYPE RasterToPolygonCoercer_POLYGONS    TEST @Tcl2("StringSearcher_411f69f1_56dc_46b1_bd21_161f40b8b7bf3_doGrep {@EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>fme_dataset<closeparen>,StringSearcher)} {gust.<openparen>.*<closeparen>.nc} {_first_match} {} {sub_matches}") > 0    OUTPUT PASSED FEATURE_TYPE StringSearcher_MATCHED
+Tcl2 proc StringSearcher_f9c4438c_9159_4683_994b_e900b31f708a1_doGrep { stringToSearch regExp matchedChars matches matchedParts } {   set subMatches 1;   set matches [FME_DecodeText $matches];   set matchedParts [FME_DecodeText $matchedParts];   set stringToSearch [FME_ReplaceRegex "\015\012?" [FME_DecodeText $stringToSearch] "\012"];   set results [FME_GetRegex $(casemac) [FME_DecodeText $regExp] $stringToSearch];   if {[llength [lindex $results 0]] > 0} {      set attrName [FME_DecodeText $matchedChars];      FME_SetAttribute $attrName [lindex [lindex [lindex $results 0] 0] 0];      set index 0;      set parts [lindex $results 1];      foreach part $parts {         if {[llength $matchedParts] > 0} {             set attrName "$matchedParts{$index}.part";             FME_SetAttribute $attrName [lindex $part 0];             set attrName "$matchedParts{$index}.startIndex";             FME_SetAttribute $attrName [lindex $part 1];         };         incr index;      };      set index 0;      set regexMatches [lindex $results 0];      foreach part $regexMatches {         if {[llength $matches] > 0} {             set attrName "$matches{$index}.match";             FME_SetAttribute $attrName [lindex $part 0];             set attrName "$matches{$index}.startIndex";             FME_SetAttribute $attrName [lindex $part 1];         };         set isFirstMatch 0;         incr index;      };      return $index;   };   return -1; }
+FACTORY_DEF * TestFactory    FACTORY_NAME StringSearcher    INPUT  FEATURE_TYPE RasterToPolygonCoercer_POLYGONS    TEST @Tcl2("StringSearcher_f9c4438c_9159_4683_994b_e900b31f708a1_doGrep {@EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>fme_dataset<closeparen>,StringSearcher)} {gust.<openparen>.*<closeparen>.nc} {_first_match} {} {sub_matches}") > 0    OUTPUT PASSED FEATURE_TYPE StringSearcher_MATCHED
 # -------------------------------------------------------------------------
 FACTORY_DEF {*} AttrSetFactory    FACTORY_NAME AttributeManager_3    INPUT  FEATURE_TYPE StringSearcher_MATCHED    MULTI_FEATURE_MODE NO     NULL_ATTR_MODE NO_OP     ATTRSET_CREATE_DIRECTIVES _PROPAGATE_MISSING_FDIV    ACTION_COLUMN 3    DEF_VAL_COLUMN 2    ATTR_ACTION { "GRIDCODE" "Category" "" "RENAME_SET_VALUE" }      ATTR_ACTION { "" "ID" "<at>Right<openparen><at>Value<openparen>sub_matches<opencurly>0<closecurly>.part<closeparen><comma>9<closeparen>" "SET_TO" }    OUTPUT OUTPUT FEATURE_TYPE AttributeManager_3_OUTPUT
 # -------------------------------------------------------------------------
