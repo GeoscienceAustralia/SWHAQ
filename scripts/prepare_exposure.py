@@ -109,17 +109,18 @@ df2.drop('idx', axis=1, inplace=True)
 df2 = df2.reset_index([1, 2]).reset_index()
 
 ### Now do the legacy buildings:
-df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
-       (df2.ROOF_TYPE=='Metal Sheeting') & 
-       (df2.WALL_TYPE=='Brick Veneer'), 'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw352'
+df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) & \
+        df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) & \
+        df2.WALL_TYPE.isin(['Brick Veneer', 'Double Brick']), 'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw352'
 
 df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
-       (df2.ROOF_TYPE=='Tiles') & 
-       (df2.WALL_TYPE=='Brick Veneer'), 'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw351'
+       (df2.ROOF_TYPE=='Tiles'), 
+       'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw351'
 
 df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
-       (df2.ROOF_TYPE=='Metal Sheeting') & 
-       (df2.WALL_TYPE=='Timber'), 'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw350'
+       df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) & 
+       df2.WALL_TYPE.isin(['Timber', 'Fibro / asbestos cement sheeting']),
+       'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw350'
 
 df2['TMPFUNC'] = df2.apply(lambda x: f"dw{x.WIND_VULNERABILITY_MODEL_NUMBER}", axis=1)
 df2.WIND_VULNERABILITY_FUNCTION_ID.fillna(df2.TMPFUNC, inplace=True)
