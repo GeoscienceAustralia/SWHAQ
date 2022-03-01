@@ -2,10 +2,11 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import matplotlib as mpl
+mpl.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from builtins import str
 from scipy.stats import ttest_ind_from_stats as ttest
 
 sns.set_style('whitegrid')
@@ -15,23 +16,29 @@ sns.set_palette(palette)
 sns.set_context('talk')
 basepath = "C:/WorkSpace/swhaq/data/tclv/landfall"
 basepath = "/scratch/w85/swhaq/hazard/output/QLD"
+basepath = "X:/georisk/HaRIA_B_Wind/projects/qfes_swha/data/derived/TCLV/landfall"
 groups = ['GROUP1', 'GROUP2']
 rcps = ['RCP45', 'RCP85']
-periods = ['1981-2020', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
-basefile = os.path.join(basepath, 'GROUP1_RCP45_1981-2020', 'plots', 'simulated_landfall_rates.csv')
+periods = ['1981-2010', '2021-2040', '2041-2060', '2061-2080', '2081-2100']
+basefile = os.path.join(basepath, 'GROUP1/RCP45/1981-2010', 'simulated_landfall_rates.csv')
 df = pd.read_csv(basefile)
 
 df['model'] = 'GROUP1'
 df['RCP'] = 'RCP45'
-df['period'] = '1981-2020'
+df['period'] = '1981-2010'
 
 df = pd.DataFrame(columns=df.columns)
+
+figmetadata = {"Software": sys.argv[0],
+               "Description": "Landfall rate analysis for synthetic cyclones",
+               "Copyright": "Geoscience Australia, 2021",
+               "Author": "Craig Arthur" }
 
 for g in groups:
     for r in rcps:
         for p in periods:
-            scenario = f"{g}_{r}_{p}"
-            d = pd.read_csv(os.path.join(basepath, scenario, 'plots', 'simulated_landfall_rates.csv'))
+            scenario = f"{g}/{r}/{p}"
+            d = pd.read_csv(os.path.join(basepath, scenario, 'simulated_landfall_rates.csv'))
             d['model'] = g
             d['RCP'] = r
             d['period'] = p
@@ -43,7 +50,7 @@ df = df.set_index(['model', 'RCP', 'period', 'gate'])
 stats = pd.DataFrame(columns=['model', 'RCP', 'period', 'gate', 'label', 'pval', 'sig'])
 for i, g in enumerate(groups):
     for j, r in enumerate(rcps):
-        baseidx = [g, r, '1981-2020']
+        baseidx = [g, r, '1981-2010']
         baserate = df.xs(baseidx)
         for p in periods[1:]:
             prjrate = df.xs([g, r, p])
@@ -79,7 +86,10 @@ ax[1].set_xticklabels(df.xs(['GROUP1', 'RCP45', p])['label'][ticks].fillna(''), 
 ax[1].set_xlim((22, 49))
 ax[0].legend()
 fig.tight_layout()
-plt.savefig(os.path.join(basepath, "landfall_rates_by_RCP.GROUP1.png"), bbox_inches='tight')
+metadata = figmetadata.update({"Title": "Landfall rates by RCP"})
+plt.savefig(os.path.join(basepath, "landfall_rates_by_RCP.GROUP1.png"),
+            bbox_inches='tight',
+            metadata=metadata)
 
 fig, ax = plt.subplots(2, 1, figsize=(16,9), sharex=True)
 
@@ -95,7 +105,13 @@ ax[1].set_xticklabels(df.xs(['GROUP2', 'RCP45', p])['label'][ticks].fillna(''), 
 ax[1].set_xlim((22, 49))
 ax[0].legend()
 fig.tight_layout()
-plt.savefig(os.path.join(basepath, "landfall_rates_by_RCP.GROUP2.png"), bbox_inches='tight')
+metadata = figmetadata.update({"Title": "Landfall rates by RCP"})
+
+plt.savefig(os.path.join(basepath, "landfall_rates_by_RCP.GROUP2.png"),
+            bbox_inches='tight',
+            metadata=metadata)
+
+breakpoint()
 
 fig, ax = plt.subplots(2, 1, figsize=(16,9), sharex=True)
 
@@ -247,5 +263,6 @@ ax[1, 0].set_ylabel("Relative change (%)")
 
 ax[0, 1].legend()
 fig.tight_layout()
+
 plt.savefig(os.path.join(basepath, "landfall_rate_relative_change.STC.png"), bbox_inches='tight')
 
