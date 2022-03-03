@@ -2,13 +2,13 @@
 
  - template: wind_nc
  
- - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_wJCU.xml
- - vulnerability_set: domestic_wind_2012
+ - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_2022.xml
+ - vulnerability_set: domestic_wind_2021
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/2020/SEQ_ResidentialExposure_NEXIS_2020_M4_updated.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/2021/SEQ_ResidentialExposure_NEXIS_2021_M4_updated.csv
     exposure_latitude: LATITUDE
-    exposure_longitude: LONGITUDE  
+    exposure_longitude: LONGITUDE
  
  - load_wind:
      file_list: /g/data/w85/QFES_SWHA/wind/local/003-00562/local_wind.tif
@@ -16,13 +16,19 @@
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562.csv
- 
+ - save: /g/data/w85/QFES_SWHA/impact/2021UV/003-00562/QFES_003-00562.csv
+
+ - categorise:
+     field_name: 'Damage state'
+     bins: [0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
+     labels: ['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
+
  - aggregate:
-     boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
-     filename: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562.shp
-     impactcode: MB_CODE
-     boundarycode: MB_CODE16
+     boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
+     filename: ['/g/data/w85/QFES_SWHA/impact/2021UV/003-00562/QFES_003-00562.shp','/g/data/w85/QFES_SWHA/impact/2021UV/003-00562/QFES_003-00562.json']
+     impactcode: SA1_CODE
+     boundarycode: SA1_MAIN16
+     categories: True
      fields:
       structural: [mean]
      
@@ -33,4 +39,4 @@
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
       
- - save_agg: /g/data/w85/QFES_SWHA/impact/2020/003-00562/QFES_003-00562_agg.csv
+ - save_agg: /g/data/w85/QFES_SWHA/impact/2021UV/003-00562/QFES_003-00562_agg.csv

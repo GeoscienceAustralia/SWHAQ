@@ -1,4 +1,4 @@
-##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/014-01920.yaml
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/020-07522a.yaml
 
  - template: wind_nc
  
@@ -11,25 +11,25 @@
     exposure_longitude: LONGITUDE  
  
  - load_wind:
-     file_list: /g/data/w85/QFES_SWHA/wind/local/014-01920/local_wind.tif
+     file_list: /g/data/w85/QFES_SWHA/wind/local/020-07522a/local_wind.tif
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/2021UV/014-01920/QFES_014-01920.csv
+ - save: /g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.csv
 
  - categorise:
-     field_name: 'Damage state'
-     bins: [0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
-     labels: ['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
+    field_name: 'Damage state'
+    bins: [0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
+    labels: ['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
      filename:
-     ['/g/data/w85/QFES_SWHA/impact/2021UV/014-01920/QFES_014-01920.shp', '/g/data/w85/QFES_SWHA/impact/2021UV/014-01920/QFES_014-01920.json']
+     ['/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.shp', '/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.json']
      impactcode: SA1_CODE
      boundarycode: SA1_MAIN16
-     categories: True
+     categorise: True
      fields:
       structural: [mean]
      
@@ -40,4 +40,4 @@
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
       
- - save_agg: /g/data/w85/QFES_SWHA/impact/2021UV/014-01920/QFES_014-01920_agg.csv
+ - save_agg: /g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a_agg.csv
