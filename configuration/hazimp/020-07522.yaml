@@ -10,7 +10,7 @@
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
- - load_wind:
+ - hazard_raster:
      file_list: /g/data/w85/QFES_SWHA/wind/local/020-07522a/local_wind.tif
  
  - calc_struct_loss:
@@ -25,8 +25,7 @@
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
-     filename:
-     ['/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.shp', '/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.json']
+     filename: ['/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.shp', '/g/data/w85/QFES_SWHA/impact/2021UV/020-07522/QFES_020-07522a.json']
      impactcode: SA1_CODE
      boundarycode: SA1_MAIN16
      categorise: True

@@ -10,7 +10,7 @@
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE
  
- - load_wind:
+ - hazard_raster:
      file_list: /g/data/w85/QFES_SWHA/wind/local/003-00562/local_wind.tif
  
  - calc_struct_loss:
