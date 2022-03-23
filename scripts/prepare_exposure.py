@@ -53,15 +53,15 @@ def buildingClass(df, classes, thresholds, AS1170='C'):
     
 datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\exposure\2021"
 filename = "SEQ_ResidentialExposure_NEXIS_2021_M4.csv"
-df = pd.read_csv(os.path.join(datapath, filename))
+df = pd.read_csv(os.path.join(datapath, filename), low_memory=False)
 
 # Set any data < 0 to default value - assume N2 classification
 df.loc[df['M4'] < 0., 'M4'] = 0.8
 #df.drop('M42', axis=1, inplace=True)
 
 # Assign AS4055 classes - overwrite existing data!!!
-thresholds = [0.0, 0.747, 0.8278, 0.973, 1.147, 1.3412, 2.]
-classes = ['N1', 'N2', 'N3', 'N4', 'N5', 'N6']
+thresholds = [0.0, 0.8109, 1.0063, 1.2209, 1.4334, 2.]
+classes = ['N2', 'N3', 'N4', 'N5', 'N6']
 
 # Only working with Region B in this case. If there's any region A buildings, we leave them alone.
 df = buildingClass(df, classes, thresholds, 'B')
@@ -127,7 +127,5 @@ df2.WIND_VULNERABILITY_FUNCTION_ID.fillna(df2.TMPFUNC, inplace=True)
 df2.drop('TMPFUNC', axis=1, inplace=True)
 
 
-outputfile ="SEQ_ResidentialExposure_NEXIS_2021_M4_updated.csv"
+outputfile ="SEQ_ResidentialExposure_NEXIS_2021_M4_updated_v2.csv"
 df2.to_csv(os.path.join(datapath, outputfile))
-
-
