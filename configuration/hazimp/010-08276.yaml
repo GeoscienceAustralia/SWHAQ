@@ -10,19 +10,25 @@
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE  
  
- - load_wind:
+ - hazard_raster:
      file_list: /g/data/w85/QFES_SWHA/wind/local/010-08276/local_wind.tif
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
     
- - save: /g/data/w85/QFES_SWHA/impact/2020/010-08276/QFES_010-08276.csv
+ - save: /g/data/w85/QFES_SWHA/impact/2021UV/010-08276/QFES_010-08276.csv
+
+ - categorise:
+     field_name: 'Damage state'
+     bins: [0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
+     labels: ['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
  
  - aggregate:
-     boundaries: /g/data/w85/QFES_SWHA/exposure/QLD_Mesh_Block_2016.shp
-     filename: /g/data/w85/QFES_SWHA/impact/2020/010-08276/QFES_010-08276.shp
-     impactcode: MB_CODE
-     boundarycode: MB_CODE16
+     boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
+     filename: ['/g/data/w85/QFES_SWHA/impact/2020/010-08276/QFES_010-08276.shp','/g/data/w85/QFES_SWHA/impact/2020/010-08276/QFES_010-08276.json']
+     impactcode: SA1_CODE
+     boundarycode: SA1_MAIN16
+     categories: True
      fields:
       structural: [mean]
      
@@ -33,4 +39,4 @@
       structural_loss: [mean, sum]
       REPLACEMENT_VALUE: [mean, sum]
       
- - save_agg: /g/data/w85/QFES_SWHA/impact/2020/010-08276/QFES_010-08276_agg.csv
+ - save_agg: /g/data/w85/QFES_SWHA/impact/2021UV/010-08276/QFES_010-08276_agg.csv
