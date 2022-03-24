@@ -42,6 +42,16 @@ def buildingClass(df, classes, thresholds, AS1170='C'):
     Assign a site classification (AS4055) based on wind loading region 
     (AS1170.2) and local site multiplier value ('M4')
 
+    :param df: :class:`pd.DataFrame` containing exposure data, with minimum set
+        of attributes in the list ['WIND_REGION_CLASSIFCATION', 'AS4055_CLASS',
+        'M4']
+    :param list classes: Labels to apply to each category
+    :param list thresholds: Values that define the categories
+    :param str AS1170: AS/NZS 1170.2 wind region. 
+
+    :NOTE: the label for the wind region classification in some versions of the
+        NEXIS TCRM files omits an 'I' in 'CLASSIFICATION'. Check the attribute
+        names!
 
     """
     df.loc[df['WIND_REGION_CLASSIFCATION'] == AS1170, 'AS4055_CLASS'] = \
