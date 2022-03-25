@@ -30,6 +30,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import os 
+import sys
 from os.path import join as pjoin
 import numpy as np
 import pandas as pd
@@ -55,7 +56,7 @@ sns.set_palette(palette)
 # directory, and are stored as csv files.
 
 data_path = "../data/impact"
-data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\NEXISV12UV"
+data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\NEXISV12_LIS"
 
 events = ['007-02914', '016-04518', '011-01326']
 events = ['020-07522', '004-08495', '003-00562', '010-08276', '014-01920']
@@ -85,8 +86,12 @@ for event_num in events:
     WALL_TYPE_ORDER = ['Double Brick', 'Fibro / asbestos cement sheeting',
                        'Timber', 'Brick Veneer']
 
-
-    df = pd.read_csv(event_file)
+    try:
+        df = pd.read_csv(event_file)
+    except FileNotFoundError:
+        print(f"Cannot find {event_file}")
+        print("Check the file path is correct")
+        sys.exit()
 
 
     # Start with plotting the structural loss ratio against 10m wind

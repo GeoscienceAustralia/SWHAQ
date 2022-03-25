@@ -48,23 +48,23 @@ def buildingClass(df, classes, thresholds, AS1170='C'):
 
 
 # Apply a basic AS4055 class, based on the M4 value
-thresholds = [-99999., 0.0, 0.8668, 1.008, 1.1811, 1.4406]
+thresholds = [-99999., 0.0, 0.8413, 1.0018, 1.2668, 1.5997]
 classes = ['N2', 'N1', 'N2', 'N3', 'N4', 'N5']
 df = buildingClass(df, classes, thresholds, 'A')
 
 
-thresholds = [-99999., 0.0, 0.747, 0.8278, 0.973, 1.147, 1.3412]
-classes = ['N2', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6']
+thresholds = [0.0, 0.8109, 1.0063, 1.2209, 1.4334]
+classes = ['N2', 'N3', 'N4', 'N5', 'N6']
 df = buildingClass(df, classes, thresholds, 'B')
 
 # Region C
-thresholds = [0.0, 0.8278, 0.973, 1.147]
-classes = ['C1', 'C2', 'C3', 'C4']
+thresholds = [0.0, 0.833, 1.0141, 1.2428, 1.4692]
+classes = ['C1', 'C2', 'C3', 'C4', 'Special']
 df = buildingClass(df, classes, thresholds, 'C')
 
 # Region D
-thresholds = [0.0, 0.8088, 0.9275]
-classes = ['C1', 'C2', 'C3']
+thresholds = [0.0, 0.8109, 0.9996, 1.1764]
+classes = ['C2', 'C3', 'C4', 'Special']
 df = buildingClass(df, classes, thresholds, 'D')
 
 
