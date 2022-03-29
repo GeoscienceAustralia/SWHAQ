@@ -6,7 +6,7 @@
  - vulnerability_set: domestic_wind_2021
  
  - load_exposure: 
-    file_name: /g/data/w85/QFES_SWHA/exposure/2021/SEQ_ResidentialExposure_NEXIS_2021_M4_updated.csv
+    file_name: /g/data/w85/QFES_SWHA/exposure/2021/SEQ_ResidentialExposure_NEXIS_2021_M4_updated_v2.csv
     exposure_latitude: LATITUDE
     exposure_longitude: LONGITUDE
  
