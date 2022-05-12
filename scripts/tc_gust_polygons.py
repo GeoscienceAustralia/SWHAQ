@@ -11,6 +11,7 @@ import fiona
 fp = "/g/data/w85/QFES_SWHA/wind/regional/004-08495/windfield/evolution.004-08495.nc"
 ds = xr.open_dataset(fp)
 
+# create transform
 lat = ds.lat.data
 lon = ds.lon.data
 
@@ -32,6 +33,8 @@ with fiona.open('004-08495-93kmh-winds.shp', 'w', 'ESRI Shapefile', schema, crs=
     for i in range(0, len(ds.time.data), 3):
         t = ds.time.data[i]
         xx = ds.gust_speed.sel(time=t).compute()
+
+        # mask and xtract polygons
         mask = xx.data >= 25.8
         if mask.any():
             all_polygons = []
