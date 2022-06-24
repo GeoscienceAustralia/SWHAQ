@@ -16,6 +16,4 @@ module purge
 module use /g/data/v10/public/modules/modulefiles
 module load dea/20210527
 
-cd $HOME/SWHAQ
-
-python3 apply_windmu.py
+python3 $HOME/SWHAQ/scripts/apply_wind_multipliers.py
