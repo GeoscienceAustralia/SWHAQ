@@ -27,8 +27,8 @@ schema = {
     'properties': {'timestamp': 'str'},
 }
 
-outfp = "/g/data/w85/kr4383/004-08495-93kmh-winds.shp"
-with fiona.open('004-08495-93kmh-winds.shp', 'w', 'ESRI Shapefile', schema, crs="EPSG:4326") as c:
+outfp = "/g/data/w85/kr4383/gust-polygons/004-08495-93kmh-winds.shp"
+with fiona.open(outfp, 'w', 'ESRI Shapefile', schema, crs="EPSG:4326") as c:
 
     for i in range(0, len(ds.time.data), 3):
         t = ds.time.data[i]
