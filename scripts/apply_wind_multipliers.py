@@ -125,21 +125,22 @@ out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 
 fn = "windspeed_200_yr.nc"
 
-# wm = xr.open_rasterio("/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt")
+wm = xr.open_rasterio("/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt", chunks='auto')
+wm = wm.sel(band=1).compute()
 
-m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt"
-m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
-
-ingust = xr.load_dataset(os.path.join(in_dir, fn))
-arr = ingust.windspeed.data
-dx = np.diff(ingust.lon).mean()
-dy = np.diff(ingust.lat).mean()
-
-wind_raster = createRaster(arr, ingust.lon, ingust.lat, dx, dy)
-wind_prj_file = os.path.join(out_dir, "reproj_" + fn)
-
-gdal.SetConfigOption('GDAL_NUM_THREADS', '4')
-reprojectDataset(wind_raster, m4_max_file_obj, wind_prj_file)
+# m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt"
+# m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
+#
+# ingust = xr.load_dataset(os.path.join(in_dir, fn))
+# arr = ingust.windspeed.data
+# dx = np.diff(ingust.lon).mean()
+# dy = np.diff(ingust.lat).mean()
+#
+# wind_raster = createRaster(arr, ingust.lon, ingust.lat, dx, dy)
+# wind_prj_file = os.path.join(out_dir, "reproj_" + fn)
+#
+# gdal.SetConfigOption('GDAL_NUM_THREADS', '4')
+# reprojectDataset(wind_raster, m4_max_file_obj, wind_prj_file)
 
 #
 #
