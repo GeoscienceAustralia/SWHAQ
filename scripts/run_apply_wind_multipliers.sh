@@ -5,7 +5,7 @@
 #PBS -N wm_max_aep
 #PBS -m abe
 #PBS -M kieran.ricardo@ga.gov.au
-#PBS -l walltime=0:14:00
+#PBS -l walltime=1:00:00
 #PBS -l mem=100GB,ncpus=16,jobfs=4000MB
 #PBS -W umask=0002
 #PBS -joe
