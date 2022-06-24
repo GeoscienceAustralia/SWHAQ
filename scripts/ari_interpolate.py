@@ -16,13 +16,32 @@ import hazard
 import xarray as xr
 
 
-def gdpWindSPeed(return_levels, mu, shape, scale, rate, npyr=365.25):
+def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25):
+    """
+    Calculate recurrence intervals for specified return levels for a distribution with
+    the given threshold, scale and shape parameters.
+
+    :param intervals: :class:`numpy.ndarray` or float of return levels
+              to evaluate recurrence intervals for.
+    :param float mu: Threshold parameter (also called location).
+    :param float shape: Shape parameter.
+    :param float scale: Scale parameter.
+    :param float rate: Rate of exceedances (i.e. number of observations greater
+                       than `mu`, divided by total number of observations).
+    :param float npyr: Number of observations per year.
+
+    :returns: recurrence intervals for the specified return levels.
+
+    """
+
+
     ri = np.power((return_levels - mu) * (shape / scale) + 1, 1 / shape) / (npyr * rate)
     if not np.isscalar(ri):
         ri[np.isnan(ri)] = np.inf
     elif np.isnan(ri):
         ri = np.inf
     return ri
+
 
 # load in a process synoptic and ts ARI data
 fp = os.path.join(DATA_DIR, "AllStationsSuperStation_20220622.xlsx")
@@ -88,7 +107,7 @@ rate, mu = grid_params["rate"][:, :, None], grid_params["mu"][:, :, None]
 
 print("max windspeed:", hazard.GPD.gpdReturnLevel(10_000, mu, shape, scale, rate).max())
 
-tc_aep = 1.0 / gdpWindSPeed(windspeeds[None, None, :], mu, shape, scale, rate).data
+tc_aep = 1.0 / gdp_recurrence_intervals(windspeeds[None, None, :], mu, shape, scale, rate).data
 comb_aep = 1.0 - (1.0 - syn_aep[None, None, :]) * (1.0 - ts_aep[None, None, :]) * (1.0 - tc_aep)
 
 # convert windspeed coords + AEP values to AEP coords and windspeed values
@@ -127,4 +146,3 @@ for ri, aep in zip(ris, aeps):
     ds = xr.Dataset(data_vars={'windspeed': da})
 
     ds.to_netcdf(os.path.join(DATA_DIR, "RI", f"windspeed_{ri}_yr.netcdf"))
-
