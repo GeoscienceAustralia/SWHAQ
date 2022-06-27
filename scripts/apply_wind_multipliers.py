@@ -5,7 +5,8 @@ from osgeo import osr, gdal, gdalconst
 import numpy as np
 from os.path import join as pjoin, dirname, realpath, isdir, splitext
 from osgeo.gdal_array import BandReadAsArray, CopyDatasetInfo, BandWriteArray
-
+import logging
+import time
 
 def reprojectDataset(src_file, match_filename, dst_filename,
                      resampling_method=gdalconst.GRA_Bilinear,
@@ -94,7 +95,7 @@ def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
     """
 
     rows, cols = array.shape
-    originX, originY = x[0], y[-1]
+    originX, originY = x[0], y[0]
     if filename:
         _, ext = splitext(filename)
     if filename and ext == '.tif':
@@ -123,29 +124,40 @@ def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
 in_dir = "/g/data/w85/QFES_SWHA/hazard/output/combined_aep"
 out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 
-fn = "windspeed_200_yr.nc"
+logging.basicConfig(filename=os.path.join(out_dir, "wm.log"), level=logging.DEBUG)
 
+logging.info("Loading wind multiplier file.")
+t0 = time.time()
 wm = xr.open_rasterio("/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt", chunks='auto')
 wm = wm.sel(band=1).compute()
+logging.info(f"Finished loading wm - took {time.time() - t0}s")
 
-# m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt"
-# m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
-#
-# ingust = xr.load_dataset(os.path.join(in_dir, fn))
-# arr = ingust.windspeed.data
-# dx = np.diff(ingust.lon).mean()
-# dy = np.diff(ingust.lat).mean()
-#
-# wind_raster = createRaster(arr, ingust.lon, ingust.lat, dx, dy)
-# wind_prj_file = os.path.join(out_dir, "reproj_" + fn)
-#
-# gdal.SetConfigOption('GDAL_NUM_THREADS', '4')
-# reprojectDataset(wind_raster, m4_max_file_obj, wind_prj_file)
+m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt"
+m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
 
-#
-#
-# out = ingust.windspeed.data * wm.sel(band=1).data
-# da = xr.DataArray(out, dims=ingust.dims, coords=ingust.coords)
-# ds = xr.Dataset(dict(gust=da))
-# c = ds.to_netcdf(os.path.join(out_dir, fn), compute=False)
-# c.compute(num_workers=15)
+for fn in os.listdir(in_dir):
+    t0 = time.time()
+    logging.info(f"Processing {fn}.")
+    # fn = "windspeed_200_yr.nc"
+    ingust = xr.load_dataset(os.path.join(in_dir, fn))
+    arr = ingust.windspeed.data
+    dx = np.diff(ingust.lon).mean()
+    dy = np.diff(ingust.lat).mean()
+
+    wind_raster = createRaster(arr, ingust.lon, ingust.lat, dx, dy)
+    wind_prj_file = os.path.join(out_dir, "reproj_" + fn)
+
+    gdal.SetConfigOption('GDAL_NUM_THREADS', '4')
+    reprojectDataset(wind_raster, m4_max_file_obj, wind_prj_file)
+
+    wind_prj = xr.open_rasterio(wind_prj_file, chunks='auto').sel(band=1)
+    out = wm.data * wind_prj.data.compute()
+    da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords)
+    ds = xr.Dataset(dict(gust=da))
+    ds.to_netcdf(os.path.join(out_dir, fn))
+    del ds
+    del da
+    del wind_prj
+
+    # break
+    logging.info(f"Finished processing {fn} - took {time.time() - t0}s")
