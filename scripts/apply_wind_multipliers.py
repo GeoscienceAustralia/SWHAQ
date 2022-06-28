@@ -124,7 +124,7 @@ def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
 in_dir = "/g/data/w85/QFES_SWHA/hazard/output/combined_aep"
 out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 
-logging.basicConfig(filename=os.path.join(out_dir, "wm.log"), level=logging.DEBUG)
+logging.basicConfig(filename=os.path.join(out_dir, "wm.log"), level=logging.INFO)
 
 logging.info("Loading wind multiplier file.")
 t0 = time.time()
@@ -135,7 +135,11 @@ logging.info(f"Finished loading wm - took {time.time() - t0}s")
 m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt"
 m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
 
-for fn in os.listdir(in_dir):
+for fn in sorted(os.listdir(in_dir)):
+    if fn in os.listdir(out_dir):
+        logging.info(f"Skipping {fn}.")
+        continue
+
     t0 = time.time()
     logging.info(f"Processing {fn}.")
     # fn = "windspeed_200_yr.nc"
