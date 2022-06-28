@@ -5,10 +5,13 @@ import xarray as xr
 ari = 100
 datadir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 
+# convert to low resolution
 hfp = os.path.join(datadir, f"windspeed_{ari}_yr.nc")
 lfp = os.path.join(datadir, f"windspeed_{ari}_yr_low_res.nc")
 
 os.system(f"gdal_translate -outsize 10% 10% {hfp} {lfp}")
+
+# load in an plot low resolution file
 ds = xr.load_dataset(lfp)
 extent = [ds.lon[0], ds.lon[-1], ds.lat[0], ds.lat[-1]]
 params = {'legend.fontsize': 'x-large',
@@ -20,6 +23,7 @@ params = {'legend.fontsize': 'x-large',
 plt.rcParams.update(params)
 
 plt.figure(figsize=(25, 25))
+# negative values indicate outside of wind multiplier/study domain
 plt.imshow(ds.gust.data * (ds.gust.data >= 0), extent=extent)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")

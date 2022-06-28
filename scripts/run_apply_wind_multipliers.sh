@@ -16,4 +16,11 @@ module purge
 module use /g/data/v10/public/modules/modulefiles
 module load dea/20210527
 
+SOFTWARE=/g/data/w85/software
+
+# Add PyKrige and TCRM code to the path:
+export PYTHONPATH=$SOFTWARE:$SOFTWARE/tcrm/master:$PYTHONPATH
+
+python3 $HOME/SWHAQ/scripts/ari_interpolate.py
 python3 $HOME/SWHAQ/scripts/apply_wind_multipliers.py
+python3 $HOME/SWHAQ/scripts/visualise_aep_windspeed.py

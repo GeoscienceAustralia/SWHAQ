@@ -1,7 +1,7 @@
 import os
 
-TCRM_PATH = os.path.expanduser('~/geoscience/repos/tcrm')
-DATA_DIR = os.path.expanduser('~/geoscience/data/SEQ')
+IN_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/input')
+OUT_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/output')
 
 import pandas as pd
 import numpy as np
@@ -9,9 +9,6 @@ from matplotlib import pyplot as plt
 import sys
 import geopandas as gpd
 from pykrige import OrdinaryKriging
-
-sys.path.append(TCRM_PATH)
-
 import hazard
 import xarray as xr
 
@@ -44,7 +41,7 @@ def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25)
 
 
 # load in a process synoptic and ts ARI data
-fp = os.path.join(DATA_DIR, "AllStationsSuperStation_20220622.xlsx")
+fp = os.path.join(IN_DIR, "AllStationsSuperStation_20220622.xlsx")
 df = pd.read_excel(fp, skiprows=1).iloc[9:]
 
 df["aep"] = 1.0 / df["ARI [yrs]"]
@@ -55,8 +52,8 @@ ts_aep = np.interp(windspeeds, df.Thunderstorm.values, df.aep.values)
 ts_aep[windspeeds > df.Thunderstorm.max()] = 0.0
 
 # load TC ARI curves for stations
-stnlist = gpd.read_file(os.path.join(DATA_DIR, "SEQ_station_list.shp"))
-tc_df = pd.read_csv(os.path.join(DATA_DIR, "ari_params/parameters.csv"))
+stnlist = gpd.read_file(os.path.join(IN_DIR, "stations", "SEQ_station_list.shp"))
+tc_df = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params", "parameters.csv"))
 
 tc_df.columns = [c.strip() for c in tc_df.columns]
 tc_df['longitude'] = stnlist.loc[tc_df.locId.values - 1].Longitude.values
@@ -67,7 +64,6 @@ tc_df.drop_duplicates(inplace=True)
 tc_df.set_index('locName', drop=False, inplace=True)
 
 shape, scale, rate, mu = tc_df.iloc[0][['gpd_shape', 'gpd_scale', 'gpd_rate', 'gpd_thresh']].values
-
 
 # spatially interpolate TC ARI curves
 params = []
@@ -145,4 +141,4 @@ for ri, aep in zip(ris, aeps):
     )
     ds = xr.Dataset(data_vars={'windspeed': da})
 
-    ds.to_netcdf(os.path.join(DATA_DIR, "RI", f"windspeed_{ri}_yr.netcdf"))
+    ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep", f"windspeed_{ri}_yr.nc"))
