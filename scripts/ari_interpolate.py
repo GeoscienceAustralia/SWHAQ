@@ -44,7 +44,7 @@ def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25)
 fp = os.path.join(IN_DIR, "AllStationsSuperStation_20220622.xlsx")
 df = pd.read_excel(fp, skiprows=1).iloc[9:]
 
-df["aep"] = 1.0 / df["ARI [yrs]"]
+df["aep"] = 1 - np.exp(-1 / df["ARI [yrs]"])
 windspeeds = np.linspace(20, 100, 100)
 syn_aep = np.interp(windspeeds, df.Synoptic.values, df.aep.values)
 syn_aep[windspeeds > df.Synoptic.max()] = 0.0
@@ -103,7 +103,7 @@ rate, mu = grid_params["rate"][:, :, None], grid_params["mu"][:, :, None]
 
 print("max windspeed:", hazard.GPD.gpdReturnLevel(10_000, mu, shape, scale, rate).max())
 
-tc_aep = 1.0 / gdp_recurrence_intervals(windspeeds[None, None, :], mu, shape, scale, rate).data
+tc_aep = 1.0 - np.exp(-1 / gdp_recurrence_intervals(windspeeds[None, None, :], mu, shape, scale, rate).data)
 comb_aep = 1.0 - (1.0 - syn_aep[None, None, :]) * (1.0 - ts_aep[None, None, :]) * (1.0 - tc_aep)
 
 # convert windspeed coords + AEP values to AEP coords and windspeed values
@@ -114,7 +114,7 @@ ris = np.array([
     5000, 10000]
 )
 
-aeps = 1 / ris
+aeps = 1 - np.exp(-1 / ris)
 
 comb_aep_flat = comb_aep.reshape((-1, len(windspeeds)))
 grid_idxs = np.arange(comb_aep_flat.shape[0])
