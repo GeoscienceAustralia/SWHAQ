@@ -21,6 +21,8 @@ SOFTWARE=/g/data/w85/software
 # Add PyKrige and TCRM code to the path:
 export PYTHONPATH=$SOFTWARE:$SOFTWARE/tcrm/master:$PYTHONPATH
 
-python3 $HOME/SWHAQ/scripts/ari_interpolate.py
-python3 $HOME/SWHAQ/scripts/apply_wind_multipliers.py
-python3 $HOME/SWHAQ/scripts/visualise_aep_windspeed.py
+cd $HOME/SWHAQ/scripts
+
+python3 ari_interpolate.py
+python3 apply_wind_multipliers.py
+python3 visualise_aep_windspeed.py
