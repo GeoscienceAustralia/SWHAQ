@@ -71,7 +71,7 @@ else
 fi
 
 CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/hazimp/$EVENTID.yaml
-OUTPUT=/g/data/w85/QFES_SWHA/impact/2020/$EVENTID
+OUTPUT=/g/data/w85/QFES_SWHA/impact/2021UV/$EVENTID
 
 
 if [ ! -f "$CONFIGFILE" ]; then
