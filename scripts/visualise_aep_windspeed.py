@@ -59,8 +59,6 @@ lfp = os.path.join(datadir, f"windspeed_{ari}_yr_low_res.nc")
 os.system(f"gdal_translate -outsize 10% 10% {hfp} {lfp}")
 
 # load in an plot low resolution file
-ds = xr.load_dataset(lfp)
-extent = [ds.lon[0], ds.lon[-1], ds.lat[0], ds.lat[-1]]
 params = {'legend.fontsize': 'x-large',
           'figure.figsize': (15, 5),
          'axes.labelsize': 'x-large',
@@ -69,9 +67,11 @@ params = {'legend.fontsize': 'x-large',
          'ytick.labelsize':'x-large'}
 plt.rcParams.update(params)
 
+ds = xr.load_dataset(lfp)
+gust = ds.gust[np.where(ds.lat <= -25)[0], np.where(ds.lon >= 150)[0]]
+extent = [gust.lon[0], gust.lon[-1], gust.lat.min(), gust.lat.max()]
 plt.figure(figsize=(25, 25))
-# negative values indicate outside of wind multiplier/study domain
-plt.imshow(ds.gust.data * (ds.gust.data >= 0), extent=extent)
+plt.imshow(np.flipud(gust.data * (gust.data >= 0)), extent=extent)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 

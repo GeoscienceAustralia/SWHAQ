@@ -136,9 +136,9 @@ m4_max_file = "/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-max
 m4_max_file_obj = gdal.Open(m4_max_file, gdal.GA_ReadOnly)
 
 for fn in sorted(os.listdir(in_dir)):
-    # if fn in os.listdir(out_dir):
-    #     logging.info(f"Skipping {fn}.")
-    #     continue
+    if fn in os.listdir(out_dir):
+        logging.info(f"Skipping {fn}.")
+        continue
 
     t0 = time.time()
     logging.info(f"Processing {fn}.")
