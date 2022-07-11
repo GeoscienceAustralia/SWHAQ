@@ -2,8 +2,9 @@
 
  - template: wind_nc
  
- - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_2022.xml
- - vulnerability_set: domestic_wind_2021
+ - vulnerability:
+    filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_2022.xml
+    vulnerability_set: domestic_wind_2021
  
  - load_exposure: 
     file_name: /g/data/w85/QFES_SWHA/exposure/2022/SEQ_ResidentialExposure_NEXIS_2022_M4.csv
@@ -13,7 +14,7 @@
  - hazard_raster:
      file_list: /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep/windspeed_ARI_yr.nc
      file_format: nc
-     variable: vmax
+     variable: gust
  
  - calc_struct_loss:
     replacement_value_label: REPLACEMENT_VALUE
@@ -31,7 +32,7 @@
  
  - aggregate:
      boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
-     filename: /g/data/w85/QFES_SWHA/risk/ARI/windspeed_3_yr.shp
+     filename: /g/data/w85/QFES_SWHA/risk/ARI/windspeed_ARI_yr.shp
      impactcode: SA1_CODE
      boundarycode: SA1_MAIN16
      categories: True
