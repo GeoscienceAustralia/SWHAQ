@@ -1,0 +1,50 @@
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/013-03564.yaml
+
+ - template: wind_nc
+ 
+ - vulnerability_filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_2022.xml
+ - vulnerability_set: domestic_wind_2021
+ 
+ - load_exposure: 
+    file_name: /g/data/w85/QFES_SWHA/exposure/2022/SEQ_ResidentialExposure_NEXIS_2022_M4.csv
+    exposure_latitude: LATITUDE
+    exposure_longitude: LONGITUDE  
+ 
+ - hazard_raster:
+     file_list: /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep/windspeed_ARI_yr.nc
+     file_format: nc
+     variable: vmax
+ 
+ - calc_struct_loss:
+    replacement_value_label: REPLACEMENT_VALUE
+
+ - exposure_permutation:
+    groupby: SA1_CODE
+    iterations: 100
+ 
+ - categorise:
+    field_name: 'Damage state'
+    bins: [0.0, 0.02, 0.1, 0.2, 0.5, 1.0]
+    labels: ['Negligible', 'Slight', 'Moderate', 'Extensive', 'Complete']
+    
+ - save: /g/data/w85/QFES_SWHA/risk/ARI/windspeed_ARI_yr.csv
+ 
+ - aggregate:
+     boundaries: /g/data/w85/QFES_SWHA/exposure/SA1_2016_AUST.shp
+     filename: /g/data/w85/QFES_SWHA/risk/ARI/windspeed_3_yr.shp
+     impactcode: SA1_CODE
+     boundarycode: SA1_MAIN16
+     categories: True
+     fields:
+       structural: [mean]
+       structural_upper: [mean, max]
+     
+ - aggregation:
+     groupby: SA1_CODE
+     kwargs:
+      structural: [mean, max, std]
+      structural_loss: [mean, sum]
+      structural_upper: [mean, max]
+      REPLACEMENT_VALUE: [mean, sum]
+      
+ - save_agg: /g/data/w85/QFES_SWHA/risk/ARI/windspeed_ARI_yr_agg.csv
