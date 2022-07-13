@@ -1,5 +1,6 @@
 import os
 from matplotlib import pyplot as plt
+from matplotlib import patheffects
 import xarray as xr
 import pandas as pd
 import numpy as np
@@ -9,7 +10,7 @@ import hazard
 
 datadir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 IN_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/input')
-
+pe = patheffects.withStroke(linewidth=5, foreground="white")
 # plot AEP windspeeds for one station
 
 fp = os.path.join(IN_DIR, "AllStationsSuperStation_20220622.xlsx")
@@ -33,17 +34,18 @@ comb_aep_ = 1.0 - (1.0 - syn_aep) * (1.0 - ts_aep) * (1.0 - tc_aep)
 
 plt.figure(figsize=(10, 10))
 plt.title(f"{tc_df.iloc[i].locName} AEP")
-plt.semilogy(windspeeds, comb_aep_, label="Combined")
-plt.semilogy(windspeeds, syn_aep, label="Synoptic")
-plt.semilogy(windspeeds, ts_aep, label="Thunderstorm")
-plt.semilogy(windspeeds, tc_aep, label="Tropical Cyclone")
+plt.semilogy(windspeeds, syn_aep, label="Synoptic", path_effects=[pe])
+plt.semilogy(windspeeds, ts_aep, label="Thunderstorm", path_effects=[pe])
+plt.semilogy(windspeeds, tc_aep, label="Tropical Cyclone", path_effects=[pe])
+plt.semilogy(windspeeds, comb_aep_, label="Combined", path_effects=[pe])
 plt.xlabel("Windspeed (m/s)")
 plt.ylabel("AEP")
 plt.grid()
 plt.legend()
 plt.savefig(os.path.join(datadir, f"windspeed_aep_{tc_df.iloc[i].locName}.png"))
 
-
+outdf = pd.DataFrame(np.array([windspeeds, syn_aep, ts_aep, tc_aep, comb_aep_]), columns=["windspeed", 'syn_aep', 'ts_aep', 'tc_aep', 'comb_aep'])
+breakpoint()
 #
 # plot 100 year ARI windspeed
 
