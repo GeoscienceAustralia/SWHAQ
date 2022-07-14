@@ -18,7 +18,7 @@ fp = os.path.join(IN_DIR, "AllStationsSuperStation_20220622.xlsx")
 df = pd.read_excel(fp, skiprows=1).iloc[9:]
 
 df["aep"] = 1 - np.exp(-1 / df["ARI [yrs]"])
-windspeeds = np.linspace(20, 100, 100)
+windspeeds = np.linspace(20, 100, 81)
 syn_aep = np.interp(windspeeds, df.Synoptic.values, df.aep.values)
 syn_aep[windspeeds > df.Synoptic.max()] = 0.0
 ts_aep = np.interp(windspeeds, df.Thunderstorm.values, df.aep.values)
@@ -46,6 +46,9 @@ plt.grid()
 plt.legend()
 plt.savefig(os.path.join(datadir, f"windspeed_aep_{tc_df.iloc[i].locName}.png"))
 
+outdf = pd.DataFrame(np.array([windspeeds, syn_aep, ts_aep, tc_aep, comb_aep_]).T,
+                     columns=["windspeed", 'syn_aep', 'ts_aep', 'tc_aep', 'comb_aep'])
+outdf.to_csv(os.path.join(datadir, f"windspeed_aep_{tc_df.iloc[i].locName}.csv"), index=False)
 
 #
 # plot 100 year ARI windspeed
