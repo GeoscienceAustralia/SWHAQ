@@ -11,7 +11,7 @@ pe = patheffects.withStroke(foreground="white", linewidth=5)
 
 datadir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
 IN_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/input')
-
+pe = patheffects.withStroke(linewidth=5, foreground="white")
 # plot AEP windspeeds for one station
 
 fp = os.path.join(IN_DIR, "AllStationsSuperStation_20220622.xlsx")
