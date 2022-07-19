@@ -6,7 +6,8 @@ import pandas as pd
 import numpy as np
 from ari_interpolate import gdp_recurrence_intervals
 import hazard
-
+import seaborn as sns
+sns.set_context("talk")
 pe = patheffects.withStroke(foreground="white", linewidth=5)
 
 datadir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"

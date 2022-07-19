@@ -31,6 +31,8 @@
 # Craig Arthur, craig.arthur@ga.gov.au
 # 2020-05-23
 
+umask 002
+
 module purge
 module load pbs
 module load dot
