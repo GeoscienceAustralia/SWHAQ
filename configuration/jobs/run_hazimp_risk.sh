@@ -4,11 +4,10 @@
 #PBS -N hazimp
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=02:00:00
+#PBS -lwalltime=24:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85
-#PBS -v EVENTID
 
 # This job script is used to run the `hazimp.py`
 # script on gadi. It has been tailored for use in the Severe
@@ -17,20 +16,21 @@
 #
 #  * To use: 
 #  - Ensure there is a correctly specified HazImp configuration
-#    file at /g/data/w85/QFES_SWHA/configuration/hazimp/
+#    file at /g/data/w85/QFES_SWHA/configuration/hazimp/aepimpact.yaml.template
 #  - make appropriate changes to the PBS options above, specifically
 #    consider: 
 #
 #    #PBS -M <email address>
 #    #PBS -lwalltime
 #
-#  - submit the job with the appropriate value of EVENTID, eg:
-#     `qsub -v EVENTID=001-00406 run_hazimp.sh`
+#  - submit the job:
+#     `qsub run_hazimp_risk.sh`
 # 
 # Contact:
 # Craig Arthur, craig.arthur@ga.gov.au
-# 2020-05-23
+# 2022-07-11
 
+# Fix permissions for all files/folders created so the group can access them
 umask 002
 
 module purge
@@ -64,33 +64,38 @@ cd $SOFTWARE/hazimp/
 
 DATE=`date +%Y%m%d%H%M`
 
-if [ $# -eq 0 ]; then
-    # Use an environment variable
-    EVENTID=$EVENTID
-else
-    EVENTID=$1
-    echo "Running hazimp for scenario $EVENTID"
-fi
-
-CONFIGFILE=/g/data/w85/QFES_SWHA/configuration/hazimp/$EVENTID.yaml
-OUTPUT=/g/data/w85/QFES_SWHA/impact/2021UV/$EVENTID
+TEMPLATECONFIG=/g/data/w85/QFES_SWHA/configuration/hazimp/aepimpact.yaml.template
+BASEOUTPUT=/g/data/w85/QFES_SWHA/risk
 
 
-if [ ! -f "$CONFIGFILE" ]; then
-    echo "Configuration file does not exist: $CONFIGFILE"
+if [ ! -f "$TEMPLATECONFIG" ]; then
+    echo "Configuration file does not exist: $TEMPLATECONFIG"
     exit 1
 else
-    echo $CONFIGFILE
+    echo $TEMPLATECONFIG
 fi
 
-# Ensure output directory exists. If not, create it:
-if [ ! -d "$OUTPUT" ]; then
-   mkdir $OUTPUT
+# Ensure base output directory exists. If not, create it:
+if [ ! -d "$BASEOUTPUT" ]; then
+   mkdir $BASEOUTPUT
 fi
 
-
-# Run the complete simulation:
-python3 $SOFTWARE/hazimp/hazimp/main.py -c $CONFIGFILE > $OUTPUT/$EVENTID.stdout.$DATE 2>&1
-
-cp $CONFIGFILE $OUTPUT/$EVENTID.$DATE.yaml
+FS=$IFS
+IFS=","
+YEARS="2,3,4,5,10,15,20,20,30,35,40,45,50,75,100,150,200,250,300,350,400,450,500,1000,2000,2500,5000,10000"
+for YEAR in $YEARS; do
+    echo $YEAR
+    OUTPUT=$BASEOUTPUT/$YEAR
+    if [ ! -d "$OUTPUT" ]; then
+        mkdir $OUTPUT
+    fi
+    CONFIGFILE="/g/data/w85/QFES_SWHA/configuration/hazimp/aepimpact.yaml"
+    # Use sed to modify the template config file, replacing all occurrences of
+    # "ARI" with the value of $YEAR (sed is by default case sensitive)
+    sed 's|ARI|'$YEAR'|g' $TEMPLATECONFIG > $CONFIGFILE
+    # Run HazImp using the modified configuration file:
+    python3 $SOFTWARE/hazimp/hazimp/main.py -c $CONFIGFILE > $OUTPUT/hazimp.stout.$DATE 2>&1
+    cp $CONFIGFILE $OUTPUT/aepimpact.$YEAR.yaml
+done
+IFS=$FS
 

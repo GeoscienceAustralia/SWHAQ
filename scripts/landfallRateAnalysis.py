@@ -297,20 +297,11 @@ plt.savefig(os.path.join(datapath,"mean_landfall_rate_intensity.png"), bbox_inch
 #gatedata.to_file("C:/WorkSpace/data/tcha/sim_landfall.shp")
 
 
-# In[14]:
-
-
 gatedata
-
-
-# In[15]:
-
 
 gatedata_nogeom = pd.DataFrame(gatedata.drop(columns='geometry'))
 gatedata_nogeom.to_csv(os.path.join(datapath,"sim_landfall.csv"), index=False)
 
-
-# In[ ]:
 
 
 
