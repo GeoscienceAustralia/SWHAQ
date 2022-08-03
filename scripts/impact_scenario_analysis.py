@@ -31,6 +31,7 @@ import matplotlib
 matplotlib.use("Agg")
 import os 
 import sys
+import datetime
 from os.path import join as pjoin
 import numpy as np
 import pandas as pd
@@ -56,11 +57,11 @@ sns.set_palette(palette)
 # directory, and are stored as csv files.
 
 data_path = "../data/impact"
-data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\NEXISV12_LIS"
+data_path = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\impact\NEXISV12UV"
 
 events = ['007-02914', '016-04518', '011-01326']
 events = ['020-07522', '004-08495', '003-00562', '010-08276', '014-01920']
-events = ['004-08495']
+#events = ['004-08495']
 
 res = 600
 context='paper'
@@ -71,13 +72,20 @@ fmt = "png"
 for event_num in events:
     print("Processing event {0}".format(event_num))
 
-    output_path = pjoin(data_path, event_num, 'paper')
+    output_path = pjoin(data_path, event_num, context)
     try:
         os.makedirs(output_path)
     except:
         pass
 
     event_file = pjoin(data_path, event_num, f"QFES_{event_num}.csv")
+    print(f"{event_file}")
+    try:
+        mtime = os.path.getmtime(event_file)
+    except OSError:
+        mtime = 0
+    lmd = datetime.datetime.fromtimestamp(mtime)
+
 
     YEAR_ORDER = ['Pre 1914', '1914 - 1946', '1947 - 1961',
                   '1962 - 1981', '1982 - 1996', '1997 - present']
@@ -92,7 +100,7 @@ for event_num in events:
         print(f"Cannot find {event_file}")
         print("Check the file path is correct")
         sys.exit()
-
+    print(f"File last modified: {lmd.strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Start with plotting the structural loss ratio against 10m wind
     # speed. This should intuitively follow the vulnerability functions
@@ -191,6 +199,19 @@ for event_num in events:
             dropna().\
             to_csv(pjoin(output_path, f"{event_num}_mean_dmg_windspeed_SA1.{LGA}.csv"),
                      float_format="%0.3f")
+        # Save a table of number of buildings in each damage state per LGA at meshblock resolution:
+        pdf = tmpdf.pivot_table(index='MB_CODE', 
+                                columns=['Damage state'], 
+                                aggfunc={'Damage state':'size'}, 
+                                fill_value=0)
+        oldcols = pdf.columns.to_flat_index()
+        vdf = tmpdf[['MB_CODE', 'structural']].\
+            groupby('MB_CODE').\
+            agg({'structural':np.mean}) 
+        outdf = pdf.join(vdf).rename(columns=dict(zip(oldcols, labels)))
+        outdf.to_csv(pjoin(output_path, f"{event_num}_damage_state_mb.{LGA}.csv"))
+        
+
 
     fields = ['SA1_CODE', 'Damage state', 'WIND_VULNERABILITY_FUNCTION_ID']
     df.groupby(fields).\
