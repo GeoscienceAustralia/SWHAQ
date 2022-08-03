@@ -23,13 +23,21 @@ states = cfeature.NaturalEarthFeature(
 datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\raw\from_wz"
 ds = xr.open_rasterio(pjoin(datapath, "lightning-density-wztln-au-201510_202103.tif"))
 
+dempath = r"X:\georisk\HaRIA_B_Wind\projects\multipliers\data\raw\elevation\Mosaic\dems1sv1_0_Clip.tif"
+demds = xr.open_rasterio(dempath)
+
 stationfile = r"X:\georisk\HaRIA_B_Wind\projects\multipliers\AWS_QLD\AWS_sites_location.csv"
 stndf = pd.read_csv(stationfile)
 ax = plt.axes(projection=ccrs.PlateCarree())
 ax.figure.set_size_inches(15,12)
 ds[0, :, :].plot.contourf(ax=ax, transform=ccrs.PlateCarree(), 
-                 levels=np.arange(0, 101, 5), extend='max', cmap='hot_r',
+                 levels=np.arange(0, 101, 2.5), extend='max', cmap='hot_r',
                  cbar_kwargs=cbar_kwargs )
+
+demds[0, :, :].plot.contour(ax=ax, transform=ccrs.PlateCarree(),
+                levels=np.arange(0, 1501, 100), colors='k', linewidths=0.5,
+                alpha=0.5)
+
 for idx, stn in stndf.iterrows():
     ax.plot(stn.Longitude, stn.Latitude, 
             transform=ccrs.PlateCarree(),
@@ -42,8 +50,8 @@ ax.add_feature(states, edgecolor='0.15', linestyle='--')
 gl = ax.gridlines(draw_labels=True, linestyle=":")
 gl.top_labels = False
 gl.right_labels = False
-ax.set_extent((151.0, 154.25, -29.0, -25.5))
+ax.set_extent((151.0, 154.25, -30.0, -25.5))
 ax.set_title("Mean annual lightning density")
 fig = plt.gcf()
 plt.text(0.0, -0.05, f"Source: {SOURCE}", transform=ax.transAxes, fontsize='xx-small', ha='left',)
-plt.savefig(pjoin(datapath, "lightning-density-SEQ.png"), bbox_inches='tight')
+plt.savefig(pjoin(datapath, "lightning-density-SEQ-2.png"), bbox_inches='tight')
