@@ -4,7 +4,7 @@
 #PBS -N landfall
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=2:00:00
+#PBS -lwalltime=12:00:00
 #PBS -lmem=32GB,ncpus=16,jobfs=4000MB
 #PBS -joe
 #PBS -lstorage=gdata/w85+scratch/w85
