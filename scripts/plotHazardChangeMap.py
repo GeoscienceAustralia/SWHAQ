@@ -15,6 +15,7 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 
 datapath = '/scratch/w85/swhaq/hazard/output/QLD'
+datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\hazard\projections"
 groups = ['GROUP1', 'GROUP2']
 rcps = ['RCP45', 'RCP85']
 periods = ['2021-2040', '2041-2060', '2061-2080', '2081-2100']
@@ -42,10 +43,12 @@ for g in groups:
             ds = xr.open_dataset(fname)
             for ari in aris:
                 fig, ax = plt.subplots(1, 1, subplot_kw={'projection':prj})
-                title = f"{ari}-year ARI difference - {p}"
-                ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
-                subplot_kws=dict(projection=prj), add_labels=True,
-                ax=ax)
+                title = f"1:{ari} AEP difference - {p}"
+                ds.wspd.sel({'ari':ari}).plot.contourf(
+                    levels=levels, extend='both',
+                    add_labels=True,
+                    cbar_kwargs={'label':"Relative change in AEP wind speed [%]"},
+                    ax=ax)
                 ax.coastlines(resolution='10m')
                 ax.add_feature(borders, edgecolor='k', linewidth=0.5)
                 gl = ax.gridlines(draw_labels=True, linestyle='--')
@@ -71,13 +74,12 @@ for p in periods:
         ax = axes.flatten()
         for i, (g, r) in enumerate(product(groups, rcps)):
             print(f"Plotting hazard change for {g} - {r} - {p} - {ari}")
-            suptitle = f"Change in {ari}-ARI wind speed - {p}"
+            suptitle = f"Change in 1:{ari} AEP wind speed - {p}"
             scenario = f"{g}_{r}_{p}"
             fname = os.path.join(datapath, scenario, 'hazard', 'hazard_change.nc')
             ds = xr.open_dataset(fname)
             title = f"{g} {rlabels[r]}"
             im = ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
-                                                   subplot_kws=dict(projection=prj),
                                                    add_labels=True, add_colorbar=False,
                                                    ax=ax[i])
             ax[i].coastlines(resolution='10m')
@@ -92,7 +94,7 @@ for p in periods:
             ax[i].set_title(title, fontsize='small')
         fig.subplots_adjust(right=0.85, wspace=0.1, hspace=0.05, top=0.95)
         cbar_ax = fig.add_axes([0.9, 0.15, 0.025, 0.7])
-        cbarlabel = "Change in ARI wind speed [m/s]"
+        cbarlabel = "Change in AEP wind speed [m/s]"
         fig.colorbar(im, cax=cbar_ax, label=cbarlabel)
         #plt.tight_layout()
         fig.suptitle(suptitle)
