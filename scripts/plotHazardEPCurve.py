@@ -43,7 +43,7 @@ def plotLocation(locName, locLon, locLat, g, r):
         scenario = f'{g}_{r}_{p}'
         ds = xr.open_dataset(os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc'))
         ari = ds.ari.values
-        aep = 1./ari
+        aep = 1 - np.exp(-1./ari)
         locDict = dict(lon=locLon, lat=locLat)
         wspd = ds.sel(locDict, method='nearest')['wspd'].values.flatten()
         ax.semilogy(wspd, aep, color=c, label=p)

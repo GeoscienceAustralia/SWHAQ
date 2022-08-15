@@ -8,8 +8,6 @@ import xarray as xr
 from matplotlib import pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-from scipy.ndimage import median_filter
-import pdb
 
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
