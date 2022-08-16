@@ -53,7 +53,7 @@ def plotLocation(locName, locLon, locLat, g, r):
     ax.yaxis.set_minor_formatter(NullFormatter())
     ax.legend(title="Time period", fontsize='x-small')
     ax.set_ylabel("Annual exceedance probability")
-    ax.set_xlabel("Wind speed (m/s)")
+    ax.set_xlabel("Wind speed [m/s]")
     ax.set_xlim((0, 100))
     ax.set_title(locName)
     ax.grid()
