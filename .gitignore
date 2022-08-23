@@ -10,6 +10,7 @@ hazard/
 data/
 figures/
 risk/
+risk_pp/
 scripts/.Rhistory
 .ipynb_checkpoints/
 
