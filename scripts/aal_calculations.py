@@ -46,7 +46,11 @@ LGA_codes = df[df['LGA_NAME'].isin(LGAs_6)]
 
 # calculating aep (probability) from ari (average recurrence)
 def probability(ari):
-    """Return an annual probability given a return period"""
+    """
+    Return an annual probability given a return period
+
+    :param ari: `float` or `np.ndarray` of floats representing avrage recurrence intervals
+    """
     aep = 1.0 - np.exp(-1.0/ari)
     return aep
 
@@ -136,9 +140,36 @@ for ARI in ARIS:
     lossdf.drop(LOSSFIELD, axis=1, inplace=True)
 lossdf[1] = 0
 
+
+def calculateAAL(df: pd.DataFrame, aeps: np.ndarray) -> pd.Series:
+    """
+    Calculate average annual loss based on the losses for each AEP. The AAL is the integral of the expected loss curve, which is defined as the product of the loss and the probability of the loss
+
+    EP_i = L_i * p_i
+
+    AAL = \int_{0}^{1} L*p \,dp
+
+    :param df: `pd.DataFrame` containing losses at defined AEPs. Each row represents an asset (could be a region, or individual asset).
+    :param aeps: Array of annual exceedance probability values. Must be monotonically descending.
+
+    :returns: `pd.Series` of AAL values
+    """
+    if (np.max(aeps) > 1.0) or (np.min(aeps) < 0.0):
+        raise ValueError("AEP values not in range [0, 1]")
+    if np.any(np.diff(aeps) > 0):
+        raise ("AEP values are not monotonically descending")
+
+    # Define expected loss values
+    ep = df*aeps
+
+    # Perform the integration - we negate the AEPs, as they should be
+    # monotonically descending
+    aal = ep.apply(simpson, axis=1, x=-1*aeps)
+    return aal
+
 # calculating average annualised loss
 aeps = probability(np.array(lossdf.columns.to_list()))
-lossdf['AAL'] = (lossdf*aeps).apply(simpson, axis=1, x=-1*aeps)
+lossdf['AAL'] = calculateAAL(lossdf, aeps)
 lossdf.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_SA1.csv"))
 aeps_save = pd.DataFrame(aeps)
 aeps_save.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_aeps.csv"))
@@ -152,16 +183,14 @@ plt.xlim(left=0)
 ax.set_xlabel('AAL')
 ax.set_ylabel('Count')
 ax.set_title('SA1 aggregate')
-plt.savefig(pjoin(OUTPATH, TYPE,
-                f"{LOSSFIELD}_SA1"))
+plt.savefig(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_SA1"))
 
 # grouping by LGA
 lossdf_LGA = lossdf.join(df)
 lossdf_LGA = lossdf_LGA.drop(['LGA_NAME','AAL'], axis=1)
 fields = ['LGA_CODE']
-lossdf_LGA = lossdf_LGA.groupby(fields).\
-    mean()
-lossdf_LGA['AAL'] = (lossdf_LGA*aeps).apply(simpson, axis=1, x=-1*aeps)
+lossdf_LGA = lossdf_LGA.groupby(fields).mean()
+lossdf_LGA['AAL'] = calculateAAL(lossdf_LGA, aeps)
 lossdf_LGA.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_LGA.csv"))
 
 # plotting count against AAL (structural loss ratio)
@@ -172,8 +201,7 @@ plt.xlim(left=0)
 ax.set_xlabel('AAL')
 ax.set_ylabel('Count')
 ax.set_title('LGA aggregate')
-plt.savefig(pjoin(OUTPATH, TYPE,
-                f"{LOSSFIELD}_LGA"))
+plt.savefig(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_LGA"))
 
 # seperating the 6 LGAs of interest
 #creating count plot and prob plot
@@ -204,8 +232,7 @@ ax.set_xlabel('Structural Loss Ratio')
 ax.set_ylabel('Annual Probability')
 ax.set_title('SA1 aggregate')
 ax.fill_between(lossdf, aeps, alpha=0.2)
-plt.savefig(pjoin(OUTPATH, TYPE,
-                f"{LOSSFIELD}_SA1_probability_loss"))
+plt.savefig(pjoin(OUTPATH, TYPE, f"{LOSSFIELD}_SA1_probability_loss"))
 
 # finding mean of structural loss ratio mean
 # to create AAL prob plot
@@ -241,7 +268,7 @@ for ARI in ARIS:
 lossdf2[1] = 0
 
 aeps = probability(np.array(lossdf2.columns.to_list()))
-lossdf2['AAL'] = lossdf2.apply(simpson, axis=1, x=-1*aeps)
+lossdf2['AAL'] = calculateAAL(lossdf2, aeps)
 lossdf2.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD2}_SA1.csv"))
 lossdf2 = lossdf2.div(1000000)
 
@@ -258,9 +285,8 @@ plt.savefig(pjoin(OUTPATH, TYPE,
 lossdf2_LGA = lossdf2.join(df)
 lossdf2_LGA = lossdf2_LGA.drop(['LGA_NAME','AAL'], axis=1)
 fields = ['LGA_CODE']
-lossdf2_LGA = lossdf2_LGA.groupby(fields).\
-    sum()
-lossdf2_LGA['AAL'] = lossdf2_LGA.apply(simpson, axis=1, x=-1*aeps)
+lossdf2_LGA = lossdf2_LGA.groupby(fields).sum()
+lossdf2_LGA['AAL'] = calculateAAL(lossdf2_LGA, aeps)
 lossdf2_LGA.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD2}_LGA.csv"))
 
 # plotting count against AAL (structural loss ratio)
