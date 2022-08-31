@@ -50,9 +50,10 @@ for g in groups:
             ds = xr.open_dataset(fname)
             for ari in aris:
                 fig, ax = plt.subplots(1, 1, subplot_kw={'projection':prj})
-                title = f"{ari}-year ARI wind speed - {p}"
+                title = f"1:{ari} AEP wind speed - {p}"
                 ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
-                subplot_kws=dict(projection=prj), add_labels=True, cmap=cmap,
+                add_labels=True, cmap=cmap,
+                cbar_kwargs={'label':"AEP wind speed [m/s]"},
                 ax=ax)
                 ax.coastlines(resolution='10m')
                 ax.add_feature(borders, edgecolor='k', linewidth=0.5)
@@ -77,13 +78,12 @@ for p in periods:
         ax = axes.flatten()
         for i, (g, r) in enumerate(product(groups, rcps)):
             print(f"Plotting hazard for {g} - {r} - {p} - {ari}")
-            suptitle = f"{ari}-ARI wind speed - {p}"
+            suptitle = f"1:{ari} AEP wind speed - {p}"
             scenario = f"{g}_{r}_{p}"
             fname = os.path.join(datapath, scenario, 'hazard', 'hazard_rel_hist.nc')
             ds = xr.open_dataset(fname)
             title = f"{g} {rlabel[r]}"
             im = ds.wspd.sel({'ari':ari}).plot.contourf(levels=levels, extend='both',
-                                                   subplot_kws=dict(projection=prj),
                                                    add_labels=True, add_colorbar=False,
                                                    cmap=cmap, ax=ax[i])
             ax[i].coastlines(resolution='10m')
@@ -98,7 +98,7 @@ for p in periods:
             ax[i].set_title(title, fontsize='small')
         fig.subplots_adjust(right=0.85, wspace=0.1, hspace=0.05, top=0.95)
         cbar_ax = fig.add_axes([0.9, 0.15, 0.025, 0.7])
-        cbarlabel = "ARI wind speed [m/s]"
+        cbarlabel = "AEP wind speed [m/s]"
         fig.colorbar(im, cax=cbar_ax, label=cbarlabel)
         #plt.tight_layout()
         fig.suptitle(suptitle)
