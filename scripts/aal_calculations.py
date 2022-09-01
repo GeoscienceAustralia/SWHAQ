@@ -37,7 +37,8 @@ df.drop(df.columns.difference(['SA1_CODE','LGA_CODE','LGA_NAME']), axis=1, inpla
 df.drop_duplicates(subset=['SA1_CODE'], inplace=True)
 df.set_index('SA1_CODE', inplace=True)
 
-LGAs_6 = ['Noosa (S)', 'Sunshine Coast (R)', 'Moreton Bay (R)', 'Brisbane (C)', 'Gold Coast (C)', 'Redland (C)']
+LGAs_6 = ['Noosa (S)', 'Sunshine Coast (R)', 'Moreton Bay (R)',
+          'Brisbane (C)', 'Gold Coast (C)', 'Redland (C)']
 LGAs = df[df['LGA_NAME'].isin(LGAs_6)]
 LGAs = LGAs.drop_duplicates(subset=['LGA_NAME'])
 LGAs = LGAs.reset_index()
@@ -49,7 +50,10 @@ def probability(ari):
     """
     Return an annual probability given a return period
 
-    :param ari: `float` or `np.ndarray` of floats representing avrage recurrence intervals
+    $$AEP = 1 - \exp{-1/ARI}$$
+
+    :param ari: `float` or `np.array` of floats representing avrage recurrence
+        intervals.
     """
     aep = 1.0 - np.exp(-1.0/ari)
     return aep
@@ -143,14 +147,18 @@ lossdf[1] = 0
 
 def calculateAAL(df: pd.DataFrame, aeps: np.ndarray) -> pd.Series:
     """
-    Calculate average annual loss based on the losses for each AEP. The AAL is the integral of the expected loss curve, which is defined as the product of the loss and the probability of the loss
+    Calculate average annual loss based on the losses for each AEP. The AAL is
+    the integral of the expected loss curve, which is defined as the product
+    of the loss and the probability of the loss
 
-    EP_i = L_i * p_i
+    $$EP_i = L_i * p_i$$
 
-    AAL = \int_{0}^{1} L*p \,dp
+    $$AAL = \int_{0}^{1} L*p \,dp$$
 
-    :param df: `pd.DataFrame` containing losses at defined AEPs. Each row represents an asset (could be a region, or individual asset).
-    :param aeps: Array of annual exceedance probability values. Must be monotonically descending.
+    :param df: `pd.DataFrame` containing losses at defined AEPs. Each row
+        represents an asset (could be a region, or individual asset).
+    :param aeps: Array of annual exceedance probability values. Must be
+        monotonically descending.
 
     :returns: `pd.Series` of AAL values
     """
@@ -162,7 +170,7 @@ def calculateAAL(df: pd.DataFrame, aeps: np.ndarray) -> pd.Series:
     # Define expected loss values
     ep = df*aeps
 
-    # Perform the integration - we negate the AEPs, as they should be
+    # Perform the integration - we negate the AEPs, we expect them to be
     # monotonically descending
     aal = ep.apply(simpson, axis=1, x=-1*aeps)
     return aal
