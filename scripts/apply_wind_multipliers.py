@@ -122,9 +122,11 @@ def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
 
 
 in_dir = "/g/data/w85/QFES_SWHA/hazard/output/combined_aep"
-out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep"
+out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep_pp"
 
-logging.basicConfig(filename=os.path.join(out_dir, "wm.log"), level=logging.INFO)
+logging.basicConfig(filename=os.path.join(out_dir, "wm_pp.log"), level=logging.INFO,
+                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s', 
+                    datefmt='%y-%m-%d %H:%M:%s')
 
 logging.info("Loading wind multiplier file.")
 t0 = time.time()

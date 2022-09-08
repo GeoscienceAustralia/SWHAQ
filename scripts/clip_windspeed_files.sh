@@ -5,7 +5,7 @@
 
 module load nco
 
-cd /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep
+cd /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep_pp
 
 for FILE in windspeed_*_yr.nc; do
     OUTFILE=${FILE//.nc/_clip.nc}

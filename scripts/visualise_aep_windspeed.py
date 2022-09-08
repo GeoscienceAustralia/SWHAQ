@@ -62,14 +62,14 @@ for idx, row in tc_df.iterrows():
     plt.semilogy(x, syn_aep, label="Synoptic", path_effects=[pe])
     plt.semilogy(x, ts_aep, label="Thunderstorm", path_effects=[pe])
     #plt.semilogy(x, tc_aep, label="Tropical Cyclone", path_effects=[pe])
-    plt.semilogy(x, tc_aep_pp, label="TC (PP)", path_effects=[pe])
+    plt.semilogy(x, tc_aep_pp, label="TC", path_effects=[pe], linestyle=":")
 
     #plt.semilogy(x, comb_aep_, label="Combined", path_effects=[pe], linestyle='-.')
-    plt.semilogy(x, comb_aep_pp, label="Combined (PP)", path_effects=[pe], linestyle='-.')
+    plt.semilogy(x, comb_aep_pp, label="Combined", path_effects=[pe], linestyle='-.')
     #if row.locName.lstrip() in obsdict:
     #    obsppaep = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"ppari_{obsdict[row.locName.lstrip()]}.csv"))
     #    plt.scatter(obsppaep['gust']*3.6*1.1, obsppaep['ppaep'], marker="*", s=30, c='k', zorder=100)
-    plt.xlabel(f"Wind speed [{units}]")
+    plt.xlabel(f"0.2-sec gust wind speed [{units}]")
     plt.ylabel("Annual exceedance probability")
     plt.ylim((10e-5, 1))
     ax.yaxis.set_major_locator(majloc)

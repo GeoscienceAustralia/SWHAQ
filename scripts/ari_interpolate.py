@@ -41,7 +41,7 @@ def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25)
 def interpgrid(data, windspeeds, aeps):
     """
     Interpolate wind speeds to defined AEPs. We treat the exceedance
-    probabilities as the 
+    probabilities as the
 
     :param data: :class:`np.ndarray` of the combined AEP at defined wind speeds
         across the domain.
@@ -49,7 +49,7 @@ def interpgrid(data, windspeeds, aeps):
         length as data.shape[-1]
     :param aeps: :class:`np.array` containing the target exceedance
         probabilities
-    
+
     :returns: :class:`np.ndarray` of the wind speeds at the defined AEPs over
         the grid
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     tc_aep_pp = np.zeros((len(tc_df), len(windspeeds)))
     for i, (idx, row) in enumerate(tc_df.iterrows()):
         tc_aep_df =  pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
-        finterp = interp1d(tc_aep_df.wspd.values, tc_aep_df.AEP.values, 
+        finterp = interp1d(tc_aep_df.wspd.values, tc_aep_df.AEP.values,
                    bounds_error=False, fill_value=tc_aep_df.AEP.min())
         tc_aep_pp[i, :] = finterp(windspeeds)
 
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     # convert windspeed coords + AEP values to AEP coords and windspeed values
     # funky code to quickly linearly interpolate (a for loop + numpy interpolate was much much slower)
     ris = np.array([
-        2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100,
+        1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100,
         150, 200, 250, 300, 350, 400, 450, 500, 1000, 2000, 2500,
         5000, 10000]
     )
@@ -186,8 +186,8 @@ if __name__ == "__main__":
         w2 /= w
 
         aep_ws = w1 * windspeeds[idxs] + w2 * windspeeds[idxs + 1]
-        
-        
+
+
         da = xr.DataArray(
             aep_ws.reshape(comb_aep.shape[:-1]),
             coords=dict(lon=longs, lat=lats),
