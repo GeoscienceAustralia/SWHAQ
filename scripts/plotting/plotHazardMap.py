@@ -75,7 +75,7 @@ borders = cfeature.NaturalEarthFeature(
 
 palette = [(1, 1, 1),
            (0.000, 0.627, 0.235),
-           (0.412, 0.627, 0.235), 
+           (0.412, 0.627, 0.235),
            (0.663, 0.780, 0.282),
            (0.957, 0.812, 0.000),
            (0.925, 0.643, 0.016),
@@ -83,6 +83,7 @@ palette = [(1, 1, 1),
            (0.780, 0.086, 0.118)]
 cmap = sns.blend_palette(palette, as_cmap=True)
 levels = np.arange(30, 101., 5.)
+levelskmh = np.arange(50, 301, 25.)
 
 for g in groups:
     for r in rcps:
@@ -136,7 +137,7 @@ for p in periods:
             lons = ds.lon.sel(lon=slice(extent[0], extent[1])).values
             lat, lon = np.meshgrid(lats, lons)
             sdata = smooth(data, int(1/dx))
-            cs = ax[i].contourf(lon, lat, sdata.T, levels=levels, extend='both', cmap=cmap)
+            cs = ax[i].contourf(lon, lat, 3.6*sdata.T, levels=levelskmh, extend='both', cmap=cmap)
             title = f"{g} {rlabel[r]}"
             ax[i].set_extent(extent)
             ax[i].coastlines(resolution='10m')
@@ -151,11 +152,11 @@ for p in periods:
             ax[i].text(0.5, 0.95, title, ha='center', va='center', fontsize='small',transform=ax[i].transAxes, bbox=bbox)
         fig.subplots_adjust(right=0.875, wspace=0.1, hspace=0.05, top=0.95)
         cbar_ax = fig.add_axes([0.9, 0.15, 0.025, 0.7])
-        cbarlabel = "AEP wind speed [m/s]"
+        cbarlabel = "AEP wind speed [km/h]"
         fig.colorbar(cs, cax=cbar_ax, label=cbarlabel)
         #plt.tight_layout()
         fig.suptitle(suptitle)
-        outputfile = os.path.join(datapath, f'hazard.{ari}.{p}.mps.png')
+        outputfile = os.path.join(datapath, f'hazard.{ari}.{p}.kmh.png')
         plt.savefig(outputfile, bbox_inches='tight')
         plt.close(fig)
 
@@ -174,8 +175,8 @@ for ari in aris:
     title = f"1:{ari} AEP wind speed - 1981-2010"
     data = subset(ds.wspd.sel({'ari': ari}), extent)
     sdata = smooth(data, int(1/dx))
-    cs = ax.contourf(lon, lat, sdata.T, levels=levels, extend='both', cmap=cmap)
-    plt.colorbar(cs, extend='both', label="AEP wind speed [m/s]", ax=ax)
+    cs = ax.contourf(lon, lat, 3.6*sdata.T, levels=levelskmh, extend='both', cmap=cmap)
+    plt.colorbar(cs, extend='both', label="AEP wind speed [km/h]", ax=ax)
     ax.set_extent(extent)
     ax.coastlines(resolution='10m')
     ax.add_feature(borders, edgecolor='k', linewidth=0.5)
@@ -188,6 +189,6 @@ for ari in aris:
     gl.ylabel_style = {'size': 'x-small'}
     ax.set_title(title)
     plt.tight_layout()
-    outputfile = os.path.join(datapath, 'HISTORICAL_1981-2010', 'plots', f'hazard.{ari}.mps.png')
+    outputfile = os.path.join(datapath, 'HISTORICAL_1981-2010', 'plots', f'hazard.{ari}.kmh.png')
     plt.savefig(outputfile, bbox_inches='tight')
     plt.close(fig)
