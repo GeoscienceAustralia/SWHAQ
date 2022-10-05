@@ -83,7 +83,7 @@ palette = [(1, 1, 1),
            (0.780, 0.086, 0.118)]
 cmap = sns.blend_palette(palette, as_cmap=True)
 levels = np.arange(30, 101., 5.)
-levelskmh = np.arange(50, 301, 25.)
+levelskmh = np.arange(50, 351, 25.)
 
 for g in groups:
     for r in rcps:
