@@ -27,7 +27,8 @@ module load cdo
 
 FS=$IFS
 
-BASEPATH=/scratch/w85/swhaq/hazard/output/QLD
+#BASEPATH=/scratch/w85/swhaq/hazard/output/QLD
+BASEPATH=/g/data/w85/QFES_SWHA/hazard/output
 TCHAPATH=$BASEPATH/HISTORICAL_1981-2010/hazard/hazard.nc
 GROUPLIST="GROUP1,GROUP2"
 PERIODS="2021-2040,2041-2060,2061-2080,2081-2100"
@@ -46,7 +47,7 @@ for P in $PERIODS; do
 
             # Apply relative change:
             cdo -L -mul \
-                -setrtomiss,0,20 \
+                -setrtomiss,0,5 \
                 -sellonlatbox,135,160,-30,-5 \
                 -selvar,wspd ${TCHAPATH} \
                 -addc,1 -divc,100 \

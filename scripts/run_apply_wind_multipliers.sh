@@ -17,8 +17,6 @@ SOFTWARE=/g/data/w85/software
 export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master
 module purge
 
-#module use /g/data/v10/public/modules/modulefiles
-#module load dea/20210527
 module use /g/data/hh5/public/modules
 module load conda/analysis3
 
