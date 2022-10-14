@@ -20,13 +20,13 @@ sns.set_context('talk')
 
 LOSSFIELD = "structural_mean"
 LOSSFIELD2 = "structural_loss_sum"
-BASEPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\risk_pp_retro2pt5"
+BASEPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\risk_pp_baseline"
 OUTPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\AAL\test"
-TYPE = "pp_retro_2pt5"
+TYPE = "pp_baseline"
 ARIS = os.listdir(BASEPATH)
 ARIS = list(map(int, ARIS))
 ARIS = sorted(ARIS)
-ARIS = [1] + ARIS
+ARIS = [0.5] + ARIS
 __eps__ = 1.0e-6
 lossdf = pd.DataFrame(columns=["SA1_CODE", *ARIS])
 lossdf2 = pd.DataFrame(columns=["SA1_CODE", *ARIS])
@@ -136,24 +136,23 @@ lossdf.set_index('SA1_CODE', inplace=True)
 
 # importing all ari output flies
 for ARI in ARIS:
-    if ARI == 1: continue
+    if ARI == 0.5: continue
     tmpdf = pd.read_csv(os.path.join(BASEPATH, f"{ARI:d}\windspeed_{ARI:d}_yr_agg.csv"))
     tmpdf.set_index('SA1_CODE_', inplace=True)
     lossdf = lossdf.join(tmpdf[LOSSFIELD])
     lossdf[ARI] = lossdf[LOSSFIELD]
     lossdf.drop(LOSSFIELD, axis=1, inplace=True)
-lossdf[1] = 0
+lossdf[0.5] = 0
 
 
 def calculateAAL(df: pd.DataFrame, aeps: np.ndarray) -> pd.Series:
     """
     Calculate average annual loss based on the losses for each AEP. The AAL is
-    the integral of the expected loss curve, which is defined as the product
-    of the loss and the probability of the loss
+    the integral of the loss exceedance probablity curve
 
     $$EP_i = L_i * p_i$$
 
-    $$AAL = \int_{0}^{1} L*p \,dp$$
+    $$AAL = \int_{0}^{1} L \,dp$$
 
     :param df: `pd.DataFrame` containing losses at defined AEPs. Each row
         represents an asset (could be a region, or individual asset).
@@ -167,12 +166,10 @@ def calculateAAL(df: pd.DataFrame, aeps: np.ndarray) -> pd.Series:
     if np.any(np.diff(aeps) > 0):
         raise ("AEP values are not monotonically descending")
 
-    # Define expected loss values
-    ep = df*aeps
-
     # Perform the integration - we negate the AEPs, we expect them to be
-    # monotonically descending
-    aal = ep.apply(simpson, axis=1, x=-1*aeps)
+    # monotonically descending. The order of the integration is transposed,
+    # as we `apply` the integration along rows (not columns)
+    aal = df.apply(simpson, axis=1, x=-1*aeps)
     return aal
 
 # calculating average annualised loss
@@ -267,18 +264,18 @@ lossdf2['SA1_CODE'] = firstdf2['SA1_CODE_']
 lossdf2.set_index('SA1_CODE', inplace=True)
 
 for ARI in ARIS:
-    if ARI == 1: continue
+    if ARI == 0.5: continue
     tmpdf2 = pd.read_csv(os.path.join(BASEPATH, f"{ARI:d}\windspeed_{ARI:d}_yr_agg.csv"))
     tmpdf2.set_index('SA1_CODE_', inplace=True)
     lossdf2 = lossdf2.join(tmpdf2[LOSSFIELD2])
     lossdf2[ARI] = lossdf2[LOSSFIELD2]
     lossdf2.drop(LOSSFIELD2, axis=1, inplace=True)
-lossdf2[1] = 0
+lossdf2[0.5] = 0
 
 aeps = probability(np.array(lossdf2.columns.to_list()))
 lossdf2['AAL'] = calculateAAL(lossdf2, aeps)
 lossdf2.to_csv(pjoin(OUTPATH, TYPE, f"{LOSSFIELD2}_SA1.csv"))
-lossdf2 = lossdf2.div(1000000)
+lossdf2 = lossdf2.div(1_000_000)
 
 fig, ax = plt.subplots(figsize=(12, 8))
 sns.histplot(lossdf2['AAL'], ax=ax)
@@ -321,7 +318,7 @@ for index, LGA_code in LGAs.iterrows():
 
 lossdf2 = lossdf2.sum(axis=0)
 lossdf2 = lossdf2.drop(['AAL'])
-lossdf2 = lossdf2.div(1000)
+lossdf2 = lossdf2.div(1_000)
 
 fig, ax = plt.subplots(figsize=(12, 8))
 sns.lineplot(x=lossdf2, y=aeps, ax=ax)
