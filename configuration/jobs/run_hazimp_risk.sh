@@ -3,10 +3,11 @@
 #PBS -qnormal
 #PBS -N hazimp
 #PBS -m ae
-#PBS -M nicole.allen@ga.gov.au
+#PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=24:00:00
 #PBS -lmem=16GB,ncpus=16,jobfs=4000MB
 #PBS -joe
+#PBS -W umask=0002
 #PBS -lstorage=gdata/w85
 
 # This job script is used to run the `hazimp.py`
@@ -65,7 +66,7 @@ cd $SOFTWARE/hazimp/
 DATE=`date +%Y%m%d%H%M`
 
 TEMPLATECONFIG=/g/data/w85/QFES_SWHA/configuration/hazimp/aepimpact.yaml.template
-BASEOUTPUT=/g/data/w85/QFES_SWHA/risk_pp
+BASEOUTPUT=/g/data/w85/QFES_SWHA/risk_pp/risk_pp_retro5_eligible
 
 
 if [ ! -f "$TEMPLATECONFIG" ]; then
@@ -82,7 +83,7 @@ fi
 
 FS=$IFS
 IFS=","
-YEARS="2,3,4,5,10,15,20,20,30,35,40,45,50,75,100,150,200,250,300,350,400,450,500,1000,2000,2500,5000,10000"
+YEARS="1,2,3,4,5,10,15,20,20,30,35,40,45,50,75,100,150,200,250,300,350,400,450,500,1000,2000,2500,5000,10000"
 for YEAR in $YEARS; do
     echo "Processing impact for $YEAR-year ARI wind speed"
     OUTPUT=$BASEOUTPUT/$YEAR
