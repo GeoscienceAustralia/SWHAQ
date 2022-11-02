@@ -158,6 +158,7 @@ for fn in sorted(os.listdir(in_dir)):
 
     wind_prj = xr.open_rasterio(wind_prj_file, chunks='auto').sel(band=1)
     out = wm.data * wind_prj.data.compute()
+    wind_prj = wind_prj.rename({'x': 'longitude', 'y':'latitude'})
     da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords)
     ds = xr.Dataset(dict(gust=da))
     ds.to_netcdf(os.path.join(out_dir, fn))

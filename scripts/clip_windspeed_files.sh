@@ -10,5 +10,5 @@ cd /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep_pp
 for FILE in windspeed_*_yr.nc; do
     OUTFILE=${FILE//.nc/_clip.nc}
     echo $OUTFILE
-    ncks -O -d x,151.,154. -d y,-30.,-24. $FILE $OUTFILE
+    ncks -O -d longitude,151.,154. -d latitude,-30.,-24. $FILE $OUTFILE
 done
