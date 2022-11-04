@@ -4,26 +4,27 @@
 #PBS -N tcrm
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=12:00:00
-#PBS -lmem=192GB,ncpus=48,jobfs=400MB
+#PBS -lwalltime=1:00:00
+#PBS -lmem=284GB,ncpus=96,jobfs=400MB
 #PBS -joe
 #PBS -lstorage=gdata/w85+scratch/w85
 #PBS -v CONFIGFILE
 #PBS -o /g/data/w85/QFES_SWHA/logs/tcrm/hazard
 #PBS -e /g/data/w85/QFES_SWHA/logs/tcrm/hazard
+#PBS -W umask=0002
 
-# This job script is used to run `tcrm.py`on gadi. It has been  
+# This job script is used to run `tcrm.py`on gadi. It has been
 # tailored for use in the Severe Wind Hazard Assessment project
-# for Queensland, which means some of the paths and file names 
+# for Queensland, which means some of the paths and file names
 # are specific to that project
 #
-#  * To use: 
+#  * To use:
 #  - Ensure there is a correctly specified configuration file
-#    for `tcrm.py`. 
+#    for `tcrm.py`.
 #  - make appropriate changes to the PBS options above
 #  - submit the job with the appropriate value of CONFIGFILE, eg:
 #     `qsub -v CONFIGFILE=tcrm.ini run_tcrm.sh`
-# 
+#
 # Contact:
 # Craig Arthur, craig.arthur@ga.gov.au
 # 2020-06-22
@@ -40,7 +41,7 @@ module load proj/6.2.1
 module load gdal/3.0.2
 module load openmpi/4.0.3
 
-# Need to ensure we get the correct paths to access the local version of gdal bindings. 
+# Need to ensure we get the correct paths to access the local version of gdal bindings.
 # The module versions are compiled against Python3.6
 export PYTHONPATH=/g/data/w85/.local/lib/python3.7/site-packages:$PYTHONPATH
 
@@ -56,12 +57,12 @@ DATE=`date +%Y%m%d%H%M`
 
 OUTPUTBASE=/g/data/w85/QFES_SWHA/hazard/tcrm
 
-# Add path to where TCRM is installed. 
+# Add path to where TCRM is installed.
 SOFTWARE=/g/data/w85/software
 
 # Add to the Python path. e need to ensure we set the paths in the correct order
 # to access the locally installed version of the GDAL bindings
-export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/master:$SOFTWARE/tcrm/master/Utilities
+export PYTHONPATH=$PYTHONPATH:$SOFTWARE/tcrm/develop:$SOFTWARE/tcrm/develop/Utilities
 
 # Suppresses an error related to HDF5 libraries:
 export HDF5_DISABLE_VERSION_CHECK=2
@@ -86,7 +87,7 @@ fi
 if [ ! -f $CONFIGFILE ]; then
     echo "$CONFIGFILE is missing - aborting"
     exit 1
-fi    
+fi
 
 
 if [ ! -d "$OUTPUTBASE" ]; then
@@ -98,7 +99,7 @@ if [ ! -d "$OUTPUTBASE/stdout" ]; then
 fi
 
 # Run the complete simulation:
-mpirun -np $PBS_NCPUS python3 $SOFTWARE/tcrm/master/tcrm.py -c $CONFIGFILE > $OUTPUTBASE/stdout/TCRM.stdout.$DATE 2>&1
+mpirun -np $PBS_NCPUS python3 $SOFTWARE/tcrm/develop/tcrm.py -c $CONFIGFILE > $OUTPUTBASE/stdout/TCRM.stdout.$DATE 2>&1
 
 if [[ $? -ne 0 ]]; then
     echo "TCRM simulation using $CONFIGFILE has failed unexpectedly"
