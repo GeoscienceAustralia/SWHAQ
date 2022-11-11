@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Run an iterative version of hazimp, where we randomly select a subset of
+# building for a virtual retrofit. 
+#
+# This script takes an ARI as a command line argument, which determines the
+# required hazard file to read in. It is passed directly to the python script 
+
 pid=$(grep ^Pid /proc/self/status)
 corelist=$(grep Cpus_allowed_list: /proc/self/status | awk '{print $2}')
 host=$(hostname | sed 's/.gadi.nci.org.au//g')
