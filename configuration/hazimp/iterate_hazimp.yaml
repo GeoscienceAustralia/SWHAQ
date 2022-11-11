@@ -1,0 +1,23 @@
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/EVENTID.yaml
+
+ - template: wind_nc
+
+ - vulnerability:
+    filename: /g/data/w85/QFES_SWHA/vulnerability/domestic_wind_vul_curves_2022_RF_all_all.xml
+    vulnerability_set: domestic_wind_2021
+    vulnerability_method: 'mean'
+
+ - load_exposure:
+    file_name: /home/547/cxa547/gdata/QFES_SWHA/exposure/2022/SEQ_Residential_Wind_Exposure_2021_TCRM_2022_VulnCurves_AS4055_M4_updated.csv
+    exposure_latitude: LATITUDE
+    exposure_longitude: LONGITUDE
+
+ - hazard_raster:
+     file_list: /g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep/windspeed_EVENTID_yr_clip.tif
+     file_format: nc
+     variable: gust
+
+ - calc_struct_loss:
+     replacement_value_label: REPLACEMENT_VALUE
+
+ - save: /g/data/w85/QFES_SWHA/impact/wm_combined_aep/windspeed_EVENTID/windspeed_EVENTID.csv
