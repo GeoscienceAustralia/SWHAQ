@@ -68,3 +68,4 @@ if [ ! -d "$BASEOUTPUT/$EVENTID" ]; then
 fi
 
 python3 iterate_vulnerability_scenario.py $EVENTID > $BASEOUTPUT/$EVENTID/hazimp_retrofit_event.stdout.$DATE 2>&1
+python3 retrofit_impact_analysis.py $EVENTID >> $BASEOUTPUT/$EVENTID/hazimp_retrofit_event.stdout.$DATE 2>&1
