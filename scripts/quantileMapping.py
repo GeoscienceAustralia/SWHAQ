@@ -7,7 +7,7 @@
 
 .. module:: quantileMapping
     :synopsis: Use quantile delta mapping to scale intensity of TCLVs to
-    observed distribution of intensity. 
+    observed distribution of intensity.
 
 .. moduleauthor:: Craig Arthur, <craig.arthur@ga.gov.au
 
@@ -16,27 +16,27 @@ $p_{oci}$ is the pressure of the outermost closed isobar (sometimes also
 referred to as environmental pressure $p_{env}$) and $p_c$ is the minimum
 central pressure. We use $\Delta p_c$, as this is the variable used in TCRM to
 model intensity. $p_c$ is also more widely recorded in the Australian region,
-for reasons that I'll not go into here. 
+for reasons that I'll not go into here.
 
 Irrespective of the variable chosen, regionally downscaled climate models, even
 at 10 km grid spacing, do not sufficiently resolve the dynamics that drive TC
-intensity. To accurately simulate maximum intensity (represented by surface wind
-speed) arguably requires a convection-allowing model, which usually entails grid
-spacings less than 2 km (e.g. Gentry and Lackmann, 2010; Walsh _et al_., 2013).
-Such modelling efforts are beyond the scope of this project, so we rely on
-scaling the intensity to address the issue.
+intensity. To accurately simulate maximum intensity (represented by surface
+wind speed) arguably requires a convection-allowing model, which usually
+entails grid spacings less than 2 km (e.g. Gentry and Lackmann, 2010;
+Walsh _et al_., 2013). Such modelling efforts are beyond the scope of this
+project, so we rely on scaling the intensity to address the issue.
 
 We use a quantile mapping approach to adjust the $\Delta p_c$ of the TCLVs
 extracted for future climate projections which does not _a priori_ assume a
-stationary relationship in the scaling function (as we have previously done, for
-example, in Arthur and Woolf, 2015). Cannon _et al._ (2015) describe a method
-for bias correction of climate variables that conserves relative changes in
-quantiles between current and future climate regimes. Called Quantile Delta
-Mapping (QDM), the method ensures that climate sensitivity of the underlying
-climate model remains unaffected by the correction process. The concepts
-described in Cannon _et al._ have been applied to a range of other climate
-variables - e.g. Bhatia _et al._ (2019) have applied QDM to intensity changes of
-simulated TCs in high-resolution simulations.
+stationary relationship in the scaling function (as we have previously done,
+for example, in Arthur and Woolf, 2015). Cannon _et al._ (2015) describe a
+method for bias correction of climate variables that conserves relative
+changes in quantiles between current and future climate regimes. Called 
+Quantile Delta Mapping (QDM), the method ensures that climate sensitivity of
+the underlying climate model remains unaffected by the bias correction process.
+The concepts described in Cannon _et al._ have been applied to a range of other
+climate variables - e.g. Bhatia _et al._ (2019) have applied QDM to intensity
+changes of simulated TCs in high-resolution simulations.
 
 Changes in frequency and track behavoiur - both key factors in understanding
 likelihood of extreme winds - are drawn directly from the TCLV data and are
@@ -53,21 +53,15 @@ import re
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import datetime as dt
 import cartopy.crs as ccrs
 import cartopy.feature as feature
-import statsmodels.api as sm
-from datetime import timedelta, datetime
-
-import shapely.geometry as sg
 from shapely.geometry import box as sbox
 from shapely.geometry import LineString
+from git import Repo, InvalidGitRepositoryError
 
-from scipy.optimize import curve_fit
 import scipy.stats as stats
 
 from qdm import qdm
-import pdb
 
 # From TCRM codebase
 from Utilities.loadData import maxWindSpeed
@@ -75,8 +69,6 @@ from Utilities.loadData import maxWindSpeed
 from builtins import str
 sns.set_style('whitegrid')
 sns.set_context("talk")
-
-from git import Repo, InvalidGitRepositoryError
 
 
 try:
@@ -87,9 +79,9 @@ except InvalidGitRepositoryError:
 
 LOGGER = logging.getLogger()
 logFormat = "%(asctime)s: %(funcName)s: %(message)s"
-logging.basicConfig(level='INFO', 
+logging.basicConfig(level='INFO',
                     format=logFormat,
-                    filename='quantileMapping.log', 
+                    filename='quantileMapping.log',
                     filemode='w',
                     datefmt="%Y-%m-%d %H:%M:%S")
 console = logging.StreamHandler(sys.stdout)
@@ -102,13 +94,13 @@ LOGGER.info(f"Started {sys.argv[0]} (pid {os.getpid()})")
 LOGGER.info(f"Code version: {commit}")
 
 LABELS = ['TD', 'TC1', 'TC2', 'TC3', 'TC4', 'TC5']
-CATPAL = sns.blend_palette([(0.000, 0.627, 0.235), (0.412, 0.627, 0.235), 
-                            (0.663, 0.780, 0.282), (0.957, 0.812, 0.000), 
+CATPAL = sns.blend_palette([(0.000, 0.627, 0.235), (0.412, 0.627, 0.235),
+                            (0.663, 0.780, 0.282), (0.957, 0.812, 0.000),
                             (0.925, 0.643, 0.016), (0.835, 0.314, 0.118),
                             (0.780, 0.086, 0.118)], 6)
 
 # This section defines a number of functions that are used to load and filter
-# the track data generated by the regional downscaling simulations. 
+# the track data generated by the regional downscaling simulations.
 #
 # Filters are applied to eliminate spurious tracks that have a short lifetime.
 # These spurious tracks are picked up by the detection and tracking method, but
@@ -125,13 +117,14 @@ CATPAL = sns.blend_palette([(0.000, 0.627, 0.235), (0.412, 0.627, 0.235),
 # not be as well resolved, which will affect the distribution of intensity in
 # simulated events.
 
+
 def load_track_file(filename):
     """
-    Load a TCLV file into a :class:`pandas.DataFrame`, and add a field 
+    Load a TCLV file into a :class:`pandas.DataFrame`, and add a field
     representing the age of each TCLV in hours, and the pressure difference.
-    
+
     :param str filename: Path to a TCLV data file
-    
+
     :returns: :class:`pandas.DataFrame`
     """
     # This assumes the format of the TCLV files is identical
@@ -159,40 +152,43 @@ def load_track_file(filename):
     df['ni'] = df.pdiff / df.groupby('num').pdiff.transform(np.max)
     return df
 
+
 def filter_tracks(df, start_year=1980, end_year=2010, zeta=0, age=36):
     """
-    Takes a `DataFrame` and filters on the basis of a prescribed vorticity 
+    Takes a `DataFrame` and filters on the basis of a prescribed vorticity
     threshold, lifetime and a given time period.
-    
+
     :param df: :class:`pandas.DataFrame` that holds the TCLV data
     :param int start_year: Starting year of the time period to filter
     :param int end_year: End year of the period to filter
-    :param float zeta: Vorticity threshold to filter the TCLV data. 
+    :param float zeta: Vorticity threshold to filter the TCLV data.
                        This can be a positive value, as we filter on the
                        absolute value of the field.
     :param int age: Minimum age of the TCLVs in hours
-    
+
     """
     tracks = df.groupby('num')
-    filterdf = tracks.filter(lambda x: (x['datetime'].dt.year.min() >= start_year) &
-                             (x['datetime'].dt.year.max() <= end_year) &
-                             (x['age'].max() >= age) &
-                             (np.abs(x['vorticity'].min()) > zeta))
+    filterdf = tracks.filter(
+        lambda x: (x['datetime'].dt.year.min() >= start_year) &
+        (x['datetime'].dt.year.max() <= end_year) &
+        (x['age'].max() >= age) &
+        (np.abs(x['vorticity'].min()) > zeta))
     return filterdf
+
 
 def filter_tracks_domain(df, minlon=90, maxlon=180, minlat=-40, maxlat=0):
     """
     Takes a `DataFrame` and filters on the basis of whether the track interscts
-    the given domain, which is specified by the minimum and maximum longitude and 
-    latitude.
-    
-    NOTE: This assumes the tracks and bounding box are in the same geographic 
-    coordinate system (i.e. generally a latitude-longitude coordinate system). 
+    the given domain, which is specified by the minimum and maximum longitude
+    and latitude.
+
+    NOTE: This assumes the tracks and bounding box are in the same geographic
+    coordinate system (i.e. generally a latitude-longitude coordinate system).
     It will NOT support different projections (e.g. UTM data for the bounds and
     geographic for the tracks).
-    
-    NOTE: This doesn't work if there is only one point for the track. 
-    
+
+    NOTE: This doesn't work if there is only one point for the track.
+
     :param df: :class:`pandas.DataFrame` that holds the TCLV data
     :param float minlon: minimum longitude of the bounding box
     :param float minlat: minimum latitude of the bounding box
@@ -203,8 +199,11 @@ def filter_tracks_domain(df, minlon=90, maxlon=180, minlat=-40, maxlat=0):
     domain = sbox(minlon, minlat, maxlon, maxlat, ccw=False)
     tracks = df.groupby('num')
     tempfilter = tracks.filter(lambda x: len(x) > 1)
-    filterdf = tempfilter.groupby('num').filter(lambda x: LineString(zip(x['lon'], x['lat'])).intersects(domain))
+    filterdf = (tempfilter.groupby('num')
+                .filter(lambda x: LineString(zip(x['lon'], x['lat']))
+                .intersects(domain)))
     return filterdf
+
 
 def calculateMaxWind(df, dtname='ISO_TIME'):
     """
@@ -212,19 +211,24 @@ def calculateMaxWind(df, dtname='ISO_TIME'):
     and the wind-pressure relation defined in Holland (2008). This uses the
     function defined in the TCRM code base, and simply passes the correct
     variables from the data frame to the function.
-    
-    This returns a `DataFrame` with an additional column (`vmax`), which represents an estimated
-    1-minute sustained wind speed.
+
+    This returns a `DataFrame` with an additional column (`vmax`), which
+    represents an estimated 1-minute sustained wind speed.
     """
     LOGGER.debug("Calculating maximum wind speed")
     idx = df.num.values
     varidx = np.ones(len(idx))
-    varidx[1:][idx[1:]==idx[:-1]] = 0
-    
-    dt = (df[dtname] - df[dtname].shift()).fillna(pd.Timedelta(seconds=0)).apply(lambda x: x / np.timedelta64(1,'h')).astype('int64') % (24*60)
+    varidx[1:][idx[1:] == idx[:-1]] = 0
+
+    dt = ((df[dtname] - df[dtname].shift())
+          .fillna(pd.Timedelta(seconds=0))
+          .apply(lambda x: x / np.timedelta64(1, 'h'))
+          .astype('int64') % (24*60)
+          )
     df['vmax'] = maxWindSpeed(varidx, dt.values, df.lon.values, df.lat.values,
                               df.pmin.values, df.poci.values, gustfactor=1.0)
     return df
+
 
 def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
     """
@@ -234,38 +238,42 @@ def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
     (2015) and Heo _et al._ (2019), where the relative change in quantiles 
     between a reference period and the future period are preserved.
 
-    $\delta_{fut} = \dfrac{Q_{fut}}{F_{ref}^{-1}\left[ F_{fut} ( Q_{fut} ) \right]} $ 
+    $\delta_{fut} =
+        \dfrac{Q_{fut}}{F_{ref}^{-1}\left[ F_{fut} ( Q_{fut} ) \right]} $
 
-    $Q_{futb} = F_{obs}^{-1} \left[ F_{fut} (Q_{fut}) \right] \times \delta_{fut} $
-    
-    $\delta_{fut}$ is the relative change in the quantiles between the simulated
-    reference data ('sreftclv') and the simulated future data ('sfuttclv').
+    $Q_{futb} =
+        F_{obs}^{-1} \left[ F_{fut} (Q_{fut}) \right] \times \delta_{fut} $
+
+    $\delta_{fut}$ is the relative change in the quantiles between the
+    simulated reference data ('sreftclv') and the simulated future data
+    ('sfuttclv').
     $Q_{fut}$ is the quantile of the simulated future data. $F_{fut}$ and
     $F_{ref}^{-1}$ are a CDF of the simulated future data and an inverse CDF of
     the simulated reference data respectively. Finally, $F_{obs}^{-1}$ is the
-    inverse CDF of the observed data, and $Q_{futb}$ are the corrected quantiles
-    of the future data.
+    inverse CDF of the observed data, and $Q_{futb}$ are the corrected
+    quantiles of the future data.
 
     In this framework, the algorithm is independent of the selection of
     distribution, which would be data-dependent, and more generally specific to
     the variable that is being corrected. We begin by fitting a lognormal
-    distribution to the $\Delta p_c$ values in each of the observed, reference and
-    future collections. 
+    distribution to the $\Delta p_c$ values in each of the observed, reference
+    and future collections.
 
     :param vobs: `numpy.array` of observed values 
-    :param vref: `numpy.array` of reference period values (simulated) 
-    :param vfut: `numpy.array` of future period values (simulated) 
+    :param vref: `numpy.array` of reference period values (simulated)
+    :param vfut: `numpy.array` of future period values (simulated)
     :param func dist: Distribution function to use.
-    This must have `fit`, `pdf`, `cdf` and `ppf` methods defined, as used in
-    `scipy.stats.rv_continuous` distributions. Default is `scipy.stats.lognorm`.
+    This must have `fit`, `pdf`, `cdf` and `ppf` methods defined, as used
+    in `scipy.stats.rv_continuous` distributions. Default is
+    `scipy.stats.lognorm`.
 
     :returns: `vfutb` a `numpy.array` of bias corrected future values.
-    
-    NOTE: This does not precisely mimic the R function `MBC.QDM`. 
+
+    NOTE: This does not precisely mimic the R function `MBC.QDM`.
     """
 
     if not isinstance(vobs, (list, np.ndarray,)):
-        raise TypeError("Incorrect input type for observed values") 
+        raise TypeError("Incorrect input type for observed values")
     if not isinstance(vref, (list, np.ndarray,)):
         raise TypeError("Incorrect input type for reference period values")
     if not isinstance(vfut, (list, np.ndarray,)):
@@ -276,7 +284,7 @@ def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
     if any(np.isnan(vref)):
         raise ValueError("Input reference array contains NaN values")
     if any(np.isnan(vfut)):
-        raise ValueError("Input future array contains NaN values") 
+        raise ValueError("Input future array contains NaN values")
 
     pobs = dist.fit(vobs, loc=0, scale=1)
     pref = dist.fit(vref, loc=0, scale=1)
@@ -294,6 +302,7 @@ def pyqdm(vobs, vref, vfut, dist=stats.lognorm):
     vfutb = dist.ppf(Fsf, *pobs) * delta
 
     return vfutb
+
 
 def loadTCLVdata(dataPath, start_year, end_year, domain):
     """
@@ -330,7 +339,7 @@ def loadTCLVdata(dataPath, start_year, end_year, domain):
             label = f"{model} {rcp.upper()}"
             datadict[label] = df
         else:
-            LOGGER.debug(f"{fname} does not match the expected pattern. Skipping...")
+            LOGGER.debug(f"{fname} does not match the expected pattern.")
             continue
     # Create an ensemble set of data as well:
     datadict['ENS RCP45'] = pd.concat(ens45, ignore_index=True)
@@ -338,19 +347,22 @@ def loadTCLVdata(dataPath, start_year, end_year, domain):
 
     return datadict
 
+
 def calculateFitParams(datadict, params, start, end, bc, dist=stats.lognorm):
     """
-    Calculate the fit parameters to a given distribution for a dataset. 
+    Calculate the fit parameters to a given distribution for a dataset.
 
     :param datadict: :class:`dict` of `pandas.DataFrame`, with keys of model
     name/scenario
     :param params: A `pd.DataFrame` to hold the fit parameters
     :param int start: Start year of the period
     :param int end: End year of the period
-    :param bool bc: True if the datadict contains bias-corrected data, False otherwise
+    :param bool bc: True if the datadict contains bias-corrected data, False
+    otherwise
     :param func dist: Distribution function to use.
     This must have `fit`, `pdf`, `cdf` and `ppf` methods defined, as used in
-    `scipy.stats.rv_continuous` distributions. Default is `scipy.stats.lognorm`.
+    `scipy.stats.rv_continuous` distributions. Default is
+    `scipy.stats.lognorm`.
 
     :returns: a `pandas.DataFrame` of the parameters for the fitted
     distribution.
@@ -362,13 +374,15 @@ def calculateFitParams(datadict, params, start, end, bc, dist=stats.lognorm):
         model, rcp = m.split(' ')
         popt = dist.fit(df.pdiff, loc=0, scale=1)
         h, b = np.histogram(df.pdiff, bins=bins, density=True)
-        histdict = {b:h for b, h in zip(b, h)}
-        params = params.append({'Model':model, 'RCP':rcp,
-                    'period': f"{start}-{end}", 'bc': bc,
-                    'mu':popt[0], 'sigma':popt[1],
-                    'zeta':popt[2], **histdict},
-                    ignore_index=True)
+        histdict = {b: h for b, h in zip(b, h)}
+        params = params.append(
+            {'Model': model, 'RCP': rcp,
+             'period': f"{start}-{end}", 'bc': bc,
+             'mu': popt[0], 'sigma': popt[1],
+             'zeta': popt[2], **histdict},
+            ignore_index=True)
     return params
+
 
 def loadObsData(obsfile, domain):
     """
@@ -384,14 +398,15 @@ def loadObsData(obsfile, domain):
                        usecols=[0, 6, 8, 9, 11, 95, 113],
                        na_values=[' '],
                        parse_dates=[1])
-    best.rename(columns={'SID':'num', 'LAT': 'lat', 'LON':'lon',
-                         'WMO_PRES':'pmin', 'BOM_WIND':'vmax',
-                         'BOM_POCI':'poci'}, inplace=True)
+    best.rename(columns={'SID': 'num', 'LAT': 'lat', 'LON': 'lon',
+                         'WMO_PRES': 'pmin', 'BOM_WIND': 'vmax',
+                         'BOM_POCI': 'poci'}, inplace=True)
     best = best[best.poci.notnull() & best.pmin.notnull()]
     best['pdiff'] = best.poci - best.pmin
     best = best[best.pdiff > 1]
     obstc = filter_tracks_domain(best, *domain)
     return obstc
+
 
 def plotDistribution(data, plotpath, title, start, end):
     # We assume the number of required panels is 24, made up of 11 models, plus
@@ -409,16 +424,33 @@ def plotDistribution(data, plotpath, title, start, end):
         ax[i].set_title("{0}\n({1:.4f}, {2:.4f}, {3:.4f})".format(m, *popt))
 
     fig.tight_layout()
-    plt.savefig(pjoin(plotpath, 
-        f"{title}_distribution.{start}-{end}.png"),
+    plt.savefig(
+        pjoin(plotpath,
+              f"{title}_distribution.{start}-{end}.png"),
         bbox_inches='tight')
 
+
 def plotDistByScenario(data, obs, scenario, start, end, plotpath, title):
+    """
+    Plot distribution of intensity for a TCLV dataset (either uncorrected or
+    bias corrected) alongside the observed distribution.
+
+    :param data: `pd.DataFrame` of parameters of a fitted (lognormal)
+        distribution for a set of TCLV data
+    :param obs: `tuple` of parameters for a fitted lognormal distribtion for
+        observed TC data
+    :param str scenario: Name of the RCP scenario
+    :param start: `int` or `str` for the start of the TCLV period
+    :param end: `int` or `str` for the end of the TCLV period
+    :param str plotpath: Path of location to store plots
+    :param str title: Title of the plots
+
+    """
     LOGGER.info(f"Plotting distribution for {scenario}, {start}-{end}, {title}")
     fig, ax = plt.subplots(1, 1, figsize=(6, 5))
     x = np.arange(0, 100)
 
-    for index, row in data[data['RCP']==scenario].iterrows():
+    for index, row in data[data['RCP'] == scenario].iterrows():
         popt = (row.mu, row.sigma, row.zeta)
         fitline = stats.lognorm.pdf(x, *popt)
         if index == 1:
@@ -436,15 +468,26 @@ def plotDistByScenario(data, obs, scenario, start, end, plotpath, title):
     fig.tight_layout()
     plt.savefig(pjoin(plotpath, f"raw_distribution_{scenario}_{title}.{start}-{end}.png"), bbox_inches='tight')
 
+
 def plotQuantiles(refdata, futdata, scenario, start, end, plotpath, title):
     """
     Plot the quantiles for a reference and future dataset.
+
+    :param refdata: `pd.DataFrame` containing TCLV data for reference period
+    :param futdata: `pd.DataFrame` containing TCLV data for future period
+    :param str scenario: RCP scenario abbreviation
+    :param start: `int` or `str` for the start of the future period
+    :param end: `int` or `str` for the end of the future period
+    :param str plotpath: Path of location to store plots
+    :param str title: Title of the plots
+
+    :returns: None - plots are saved to file.
     """
     fig, axes = plt.subplots(3, 4, figsize=(20, 20), sharex=True, sharey=True)
     ax = axes.flatten()
     x = np.linspace(0, 1, 101)
 
-    tempref = {k:v for k, v in refdata.items() if scenario in k}
+    tempref = {k: v for k, v in refdata.items() if scenario in k}
     for i, (m, refdf) in enumerate(tempref.items()):
         futdf = futdata[m]
         model, rcp = m.split(' ')
@@ -453,7 +496,7 @@ def plotQuantiles(refdata, futdata, scenario, start, end, plotpath, title):
         srefq = np.quantile(srefdata, x)
         sfutq = np.quantile(sfutdata, x)
         ax[i].scatter(srefq, sfutq, alpha=0.5)
-        ax[i].plot([0, 50], [0,50], '--', color='k', alpha=0.5)
+        ax[i].plot([0, 50], [0, 50], '--', color='k', alpha=0.5)
         ax[i].set_title(m, size='small')
         ax[i].set_xlim((0, 50))
         ax[i].set_ylim((0, 50))
@@ -461,18 +504,30 @@ def plotQuantiles(refdata, futdata, scenario, start, end, plotpath, title):
 
     fig.tight_layout()
     fig.text(0.5, 0.01, "Reference quantiles [hPa]", ha='center', va='center')
-    fig.text(0.01, 0.5, "Future quantiles [hPa]", ha='center', va='center', rotation='vertical')
+    fig.text(0.01, 0.5, "Future quantiles [hPa]", ha='center', va='center',
+             rotation='vertical')
     plt.savefig(pjoin(plotpath, f'ref_fut_quantiles.{title}.{scenario}.{start}-{end}.png'), bbox_inches='tight')
+
 
 def plotQuantileDelta(refdata, futdata, scenario, start, end, plotpath, title):
     """
-    Plot the quantiles for a reference and future dataset.
+    Plot the delta values of quantiles for a reference and future dataset.
+
+    :param refdata: `pd.DataFrame` containing TCLV data for reference period
+    :param futdata: `pd.DataFrame` containing TCLV data for future period
+    :param str scenario: RCP scenario abbreviation
+    :param start: `int` or `str` for the start of the future period
+    :param end: `int` or `str` for the end of the future period
+    :param str plotpath: Path of location to store plots
+    :param str title: Title of the plots
+
+    :returns: None - plots are saved to file.
     """
     fig, axes = plt.subplots(3, 4, figsize=(20, 15), sharex=True, sharey=True)
     ax = axes.flatten()
     x = np.linspace(0, 1, 101)
 
-    tempref = {k:v for k, v in refdata.items() if scenario in k}
+    tempref = {k: v for k, v in refdata.items() if scenario in k}
     for i, (m, refdf) in enumerate(tempref.items()):
         futdf = futdata[m]
         model, rcp = m.split(' ')
@@ -490,8 +545,10 @@ def plotQuantileDelta(refdata, futdata, scenario, start, end, plotpath, title):
     fig.tight_layout()
     plt.subplots_adjust(left=0.05)
     fig.text(0.5, 0.01, "Quantile", ha='center', va='center')
-    fig.text(0.01, 0.5, r"$\delta_{fut}$", ha='center', va='center', rotation='vertical')
+    fig.text(0.01, 0.5, r"$\delta_{fut}$", ha='center', va='center',
+             rotation='vertical')
     plt.savefig(pjoin(plotpath, f'ref_fut_delta.{title}.{scenario}.{start}-{end}.png'), bbox_inches='tight')
+
 
 if __name__ == '__main__':
 
@@ -531,14 +588,15 @@ if __name__ == '__main__':
                             'period': '1981-2019', 'bc': False,
                             "mu": obsparams[0], "sigma": obsparams[1],
                             "zeta": obsparams[2], **histdict},
-                            ignore_index=True)
+                           ignore_index=True)
 
     # Plot the tracks of all the historical tracks that enter the selected domain
     # and have a $p_{oci}$ defined in the historical record. This variable was not
     # widely reported, and then only those events that are in the Bureau of
     # Meteorology's area of responsibility have this field (this leads to the
-    # artificial boundary at 160$^\circ$E). 
-    fig = plt.figure(figsize=(12,12))
+    # artificial boundary at 160$^\circ$E).
+
+    fig = plt.figure(figsize=(12, 12))
     ax = plt.axes(projection=ccrs.PlateCarree())
     ax.coastlines(resolution='10m', color='black', linewidth=1)
     ax.add_feature(feature.BORDERS)
@@ -547,12 +605,12 @@ if __name__ == '__main__':
     for k, v in obstc.groupby('num'):
         ax.plot(v['lon'], v['lat'])
 
-    ax.add_patch(mpatches.Rectangle(xy=[135, -25], width=25, height=15,
-                                    fill=False, edgecolor='k', linewidth=3,
-                                    transform=ccrs.PlateCarree())
-                )
+    ax.add_patch(mpatches.Rectangle(
+        xy=[135, -25], width=25, height=15,
+        fill=False, edgecolor='k', linewidth=3,
+        transform=ccrs.PlateCarree())
+        )
     plt.savefig(pjoin(plotpath, "observed_tracks.png"), bbox_inches='tight')
-
 
     # First we explore the distribution of $\Delta p_c$ for the reference period
     # (1981-2010) in each of the models, and the best track archive. The figure
@@ -564,8 +622,8 @@ if __name__ == '__main__':
 
     plotDistribution(refdata, plotpath, "reference", 1981, 2010)
 
-    #plotDistByScenario(refparams, obsparams, "RCP45", 1981, 2010, plotpath, "reference")
-    #plotDistByScenario(refparams, obsparams, "RCP85", 1981, 2010, plotpath, "reference")
+    # plotDistByScenario(refparams, obsparams, "RCP45", 1981, 2010, plotpath, "reference")
+    # plotDistByScenario(refparams, obsparams, "RCP85", 1981, 2010, plotpath, "reference")
 
     # Many of the models produce $\Delta p_c$ distributions that follow a lognormal
     # distribution, but all are markedly different from the IBTrACS distribution
@@ -575,7 +633,6 @@ if __name__ == '__main__':
     # to be two families of models, but I'm yet to explore which is which, and
     # further to that, whether these are consistent between the reference period and
     # the future period (but we could do that based on figures below).
-    #
 
     # We now load up the data for a future period and look at the distributions of
     # $\Delta p_c$ for the future data. For this demonstration, the future period is
@@ -588,8 +645,8 @@ if __name__ == '__main__':
     params = calculateFitParams(futdata, params, start, end, bc=False)
     plotDistribution(futdata, plotpath, "future", start, end)
 
-    #plotDistByScenario(futparams, obsparams, "RCP45", start, end, plotpath, "future")
-    #plotDistByScenario(futparams, obsparams, "RCP85", start, end, plotpath, "future")
+    # plotDistByScenario(futparams, obsparams, "RCP45", start, end, plotpath, "future")
+    # plotDistByScenario(futparams, obsparams, "RCP85", start, end, plotpath, "future")
 
     # When looking at the mean parameter fits for the two representative
     # concentration pathways (RCPs), there is a larger different between the two, as
@@ -598,7 +655,7 @@ if __name__ == '__main__':
     # Following are the $\delta_{fut}$ values for each individual model - i.e. the
     # relationship between the quantiles in the reference period and the quantiles
     # in the future period. It is here where we can see the range of outcomes across
-    # the suite of models, and between the two selected emission scenarios. 
+    # the suite of models, and between the two selected emission scenarios.
     #
     # Some models (e.g. ACCESS1-0, MPI-ESM-LRQ) show little difference between
     # reference and future quantiles, and also between the emission scenarios. The
@@ -616,7 +673,7 @@ if __name__ == '__main__':
     plotQuantileDelta(refdata, futdata, 'RCP85', start, end, plotpath, "raw")
 
     # ### Applying the QDM
-    # 
+    #
     # We begin by running the QDM algorithm for the reference period. 
     # This should give $\delta = 1$, as the 'reference' and 'future' 
     # data are the same. This should simplify down to a regular quantile 
@@ -626,7 +683,7 @@ if __name__ == '__main__':
     # observed data.
 
 
-    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True)
     ax = axes.flatten()
     brefpdiff = {}
     brefparams = pd.DataFrame(columns=['Model', 'RCP', 'mu', 'sigma', 'zeta'])
@@ -637,10 +694,10 @@ if __name__ == '__main__':
 
         srefdata = refdf.pdiff.values
         brefpdiff[m] = qdm(obsdata, srefdata, srefdata)[1]
-        #popt = stats.lognorm.fit(brefpdiff[m], loc=0, scale=1)
-        #params = params.append({'Model':model, 'RCP':rcp, bc:True,
-        #                        'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
-        #                        ignore_index=True)
+        # popt = stats.lognorm.fit(brefpdiff[m], loc=0, scale=1)
+        # params = params.append({'Model':model, 'RCP':rcp, bc:True,
+        #                         'mu':popt[0], 'sigma':popt[1], 'zeta':popt[2]},
+        #                         ignore_index=True)
         ax[i].scatter(srefdata, brefpdiff[m], alpha=0.5)
         ax[i].plot([-5, 100], [-5, 100], '--')
         ax[i].set_xlabel("raw-tclv (hPa)")
@@ -648,15 +705,13 @@ if __name__ == '__main__':
         ax[i].set_title(m)
         ax[i].set_xlim((-5, 100))
         ax[i].set_ylim((-5, 200))
-        
+
     fig.tight_layout()
-
-
 
     # Now we apply the QDM algorithm to the future data to determine the bias
     # corrections for each individual model. 
 
-    fig, axes = plt.subplots(6,4, figsize=(20,20), sharex=True)
+    fig, axes = plt.subplots(6, 4, figsize=(20, 20), sharex=True)
     ax = axes.flatten()
     bfutpdiff = {}
 
@@ -674,27 +729,26 @@ if __name__ == '__main__':
         ax[i].set_title(m)
         ax[i].set_xlim((-5, 100))
         ax[i].set_ylim((-5, 200))
-        
+
     fig.tight_layout()
 
-
     # ### Applying the correction to derive new $p_c$ values
-    # 
+    #
     # In this section, we insert the updated $\Delta p_c$ values back into the
     # source data. This will allow us to use the simulated data as an input to
     # the hazard modelling stage.  
-    # 
+    #
     # At the same time, we calculate an estimate of the maximum sustained wind
     # speed $v_{max}$ for each record. $v_{max}$ is caluclated in the manner
     # described in Holland (2008):
     # 
     # $ b_s = -4.4 \times 10^{-5} \Delta p^2 + 0.01\Delta p + 0.03
     # \dfrac{\partial p_c}{\partial t} - 0.014 \phi + 0.15 v_t^x +1.0 $
-    # 
+    #
     # $ x = 0.6 ( \,1 - \dfrac{\Delta p}{215} ) \,$, and
-    # 
+    #
     # $ v_m = ( \,\!\dfrac{b_s}{\rho e}\, \Delta p) \, ^{0.5} $
-    # 
+    #
     # Air density, $\rho$, is derived from the virtual temperature and pressure
     # in the region of maximum winds ($R_{mw}$). $v_t$ is the translation speed
     # of the TC and $\phi$ is the absolute latitude in degrees.
@@ -708,10 +762,14 @@ if __name__ == '__main__':
         refdf['pdiff'] = brefpdiff[m]
         refdf = calculateMaxWind(refdf, 'datetime')
         brefdata[m] = refdf
-        fname = pjoin(outputPath, fileTemplate.format(m.replace(' ', '_')))
+        fname = pjoin(
+            outputPath,
+            fileTemplate.format(m.replace(' ', '_'))
+            )
         refdf.to_csv(fname, sep=',', float_format="%.3f", index=False)
 
-    # Now for the future data. Need a different file template so we can include the time period
+    # Now for the future data. Need a different file template 
+    # so we can include the time period
     futfileTemplate = "{0}_{1}-{2}_bc.dat"
     bfutdata = {}
     for i, (m, futdf) in enumerate(futdata.items()):
@@ -719,9 +777,11 @@ if __name__ == '__main__':
         futdf['pdiff'] = bfutpdiff[m]
         futdf = calculateMaxWind(futdf, 'datetime')
         bfutdata[m] = futdf
-        fname = pjoin(outputPath, futfileTemplate.format(m.replace(' ', '_'), start, end))
+        fname = pjoin(
+            outputPath,
+            futfileTemplate.format(m.replace(' ', '_'), start, end)
+            )
         futdf.to_csv(fname, sep=',', float_format="%.3f", index=False)
-
 
     params = calculateFitParams(brefdata, params, 1981, 2010, bc=True)
     params = calculateFitParams(bfutdata, params, start, end, bc=True)
@@ -733,25 +793,31 @@ if __name__ == '__main__':
     plotQuantileDelta(brefdata, bfutdata, 'RCP85', start, end, plotpath, "bc")
 
     # The left panel shows the distribution of bias-corrected $\Delta p_c$
-    # values for the reference period (1981-2010, black) and the distribution 
-    # of the IBTrACS data (red). The corrected model distributions very 
-    # closely line up to the observed distrbution, as is the intention of the algorithm. 
-    # 
-    # The right panel shows the corresponding distributions for the future 
-    # period bias-corrected $\Delta p_c$ values. There is a significant 
-    # variation of the projected distributions of $\Delta p_c$. 
+    # values for the reference period (1981-2010, black) and the distribution
+    # of the IBTrACS data (red). The corrected model distributions very
+    # closely line up to the observed distrbution, as is the intention of 
+    # the algorithm.
+    #
+    # The right panel shows the corresponding distributions for the future
+    # period bias-corrected $\Delta p_c$ values. There is a significant
+    # variation of the projected distributions of $\Delta p_c$.
 
     #plotDistByScenario(brefparams, obsparams, "RCP45", 1981, 2010, plotpath, "bcreference")
     #plotDistByScenario(brefparams, obsparams, "RCP85", 1981, 2010, plotpath, "bcreference")
     #plotDistByScenario(bfutparams, obsparams, "RCP85", 2081, 2100, plotpath, "bcfuture")
     #plotDistByScenario(bfutparams, obsparams, "RCP85", 2081, 2100, plotpath, "bcfuture")
 
-    # Now let's unpack the two families and see what the projections of each look like.
+    # Now let's unpack the two families and see what the projections of each
+    # look like.
 
-    group145 = ['ACCESS1-3Q RCP45', 'CSIRO-Mk3-6-0Q RCP45', 'GFDL-ESM2MQ RCP45', 'HadGEM2Q RCP45', 'MIROC5Q RCP45']
-    group185 = ['ACCESS1-3Q RCP85', 'CSIRO-Mk3-6-0Q RCP85', 'GFDL-ESM2MQ RCP85', 'HadGEM2Q RCP85', 'MIROC5Q RCP85']
-    group245 = ['ACCESS1-0Q RCP45', 'CCSM4Q RCP45', 'CNRM-CM5Q RCP45', 'GFDL-CM3Q RCP45', 'MPI-ESM-LRQ RCP45', 'NorESM1-MQ RCP45', ]
-    group285 = ['ACCESS1-0Q RCP85', 'CCSM4Q RCP85', 'CNRM-CM5Q RCP85', 'GFDL-CM3Q RCP85', 'MPI-ESM-LRQ RCP85', 'NorESM1-MQ RCP85', ]
+    group145 = ['ACCESS1-3Q RCP45', 'CSIRO-Mk3-6-0Q RCP45',
+                'GFDL-ESM2MQ RCP45', 'HadGEM2Q RCP45', 'MIROC5Q RCP45']
+    group185 = ['ACCESS1-3Q RCP85', 'CSIRO-Mk3-6-0Q RCP85',
+                'GFDL-ESM2MQ RCP85', 'HadGEM2Q RCP85', 'MIROC5Q RCP85']
+    group245 = ['ACCESS1-0Q RCP45', 'CCSM4Q RCP45', 'CNRM-CM5Q RCP45',
+                'GFDL-CM3Q RCP45', 'MPI-ESM-LRQ RCP45', 'NorESM1-MQ RCP45', ]
+    group285 = ['ACCESS1-0Q RCP85', 'CCSM4Q RCP85', 'CNRM-CM5Q RCP85',
+                'GFDL-CM3Q RCP85', 'MPI-ESM-LRQ RCP85', 'NorESM1-MQ RCP85', ]
 
     refgrpdata = {}
     futgrpdata = {}
@@ -759,25 +825,41 @@ if __name__ == '__main__':
     brefgrpdata = {}
     bfutgrpdata = {}
 
-    refgrpdata['Group1 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group145], ignore_index=True)
-    refgrpdata['Group1 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group185], ignore_index=True)
-    futgrpdata['Group1 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group145], ignore_index=True)
-    futgrpdata['Group1 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group185], ignore_index=True)
+    refgrpdata['Group1 RCP45'] = pd.concat(
+        [v for k, v in refdata.items() if k in group145], ignore_index=True)
+    refgrpdata['Group1 RCP85'] = pd.concat(
+        [v for k, v in refdata.items() if k in group185], ignore_index=True)
+    futgrpdata['Group1 RCP45'] = pd.concat(
+        [v for k, v in futdata.items() if k in group145], ignore_index=True)
+    futgrpdata['Group1 RCP85'] = pd.concat(
+        [v for k, v in futdata.items() if k in group185], ignore_index=True)
 
-    refgrpdata['Group2 RCP45'] = pd.concat([v for k, v in refdata.items() if k in group245], ignore_index=True)
-    refgrpdata['Group2 RCP85'] = pd.concat([v for k, v in refdata.items() if k in group285], ignore_index=True)
-    futgrpdata['Group2 RCP45'] = pd.concat([v for k, v in futdata.items() if k in group245], ignore_index=True)
-    futgrpdata['Group2 RCP85'] = pd.concat([v for k, v in futdata.items() if k in group285], ignore_index=True)
+    refgrpdata['Group2 RCP45'] = pd.concat(
+        [v for k, v in refdata.items() if k in group245], ignore_index=True)
+    refgrpdata['Group2 RCP85'] = pd.concat(
+        [v for k, v in refdata.items() if k in group285], ignore_index=True)
+    futgrpdata['Group2 RCP45'] = pd.concat(
+        [v for k, v in futdata.items() if k in group245], ignore_index=True)
+    futgrpdata['Group2 RCP85'] = pd.concat(
+        [v for k, v in futdata.items() if k in group285], ignore_index=True)
     
-    brefgrpdata['Group1 RCP45'] = pd.concat([v for k, v in brefdata.items() if k in group145], ignore_index=True)
-    brefgrpdata['Group1 RCP85'] = pd.concat([v for k, v in brefdata.items() if k in group185], ignore_index=True)
-    bfutgrpdata['Group1 RCP45'] = pd.concat([v for k, v in bfutdata.items() if k in group145], ignore_index=True)
-    bfutgrpdata['Group1 RCP85'] = pd.concat([v for k, v in bfutdata.items() if k in group185], ignore_index=True)
+    brefgrpdata['Group1 RCP45'] = pd.concat(
+        [v for k, v in brefdata.items() if k in group145], ignore_index=True)
+    brefgrpdata['Group1 RCP85'] = pd.concat(
+        [v for k, v in brefdata.items() if k in group185], ignore_index=True)
+    bfutgrpdata['Group1 RCP45'] = pd.concat(
+        [v for k, v in bfutdata.items() if k in group145], ignore_index=True)
+    bfutgrpdata['Group1 RCP85'] = pd.concat(
+        [v for k, v in bfutdata.items() if k in group185], ignore_index=True)
 
-    brefgrpdata['Group2 RCP45'] = pd.concat([v for k, v in brefdata.items() if k in group245], ignore_index=True)
-    brefgrpdata['Group2 RCP85'] = pd.concat([v for k, v in brefdata.items() if k in group285], ignore_index=True)
-    bfutgrpdata['Group2 RCP45'] = pd.concat([v for k, v in bfutdata.items() if k in group245], ignore_index=True)
-    bfutgrpdata['Group2 RCP85'] = pd.concat([v for k, v in bfutdata.items() if k in group285], ignore_index=True)
+    brefgrpdata['Group2 RCP45'] = pd.concat(
+        [v for k, v in brefdata.items() if k in group245], ignore_index=True)
+    brefgrpdata['Group2 RCP85'] = pd.concat(
+        [v for k, v in brefdata.items() if k in group285], ignore_index=True)
+    bfutgrpdata['Group2 RCP45'] = pd.concat(
+        [v for k, v in bfutdata.items() if k in group245], ignore_index=True)
+    bfutgrpdata['Group2 RCP85'] = pd.concat(
+        [v for k, v in bfutdata.items() if k in group285], ignore_index=True)
 
     refgrpparams = calculateFitParams(refgrpdata, params, 1981, 2010, bc=False)
     futgrpparams = calculateFitParams(futgrpdata, params, 2081, 2100, bc=False)
@@ -789,7 +871,6 @@ if __name__ == '__main__':
     futgrpparams.to_csv(pjoin(plotpath, "futgrpfitparameters.csv"), index=False)
     brefgrpparams.to_csv(pjoin(plotpath, "brefgrpfitparameters.csv"), index=False)
     bfutgrpparams.to_csv(pjoin(plotpath, "bfutgrpfitparameters.csv"), index=False)
-
 
     """
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
@@ -839,7 +920,6 @@ if __name__ == '__main__':
     """
     obstc=calculateMaxWind(obstc, 'ISO_TIME')
     obstc['category'] = pd.cut(obstc['vmax'], [0, 25, 35, 46, 62, 77, 200], labels=LABELS)
-
 
     # Following are histograms of TC intensity categories for each model, as
     # well as the observed record (lower right panel). Once again there is

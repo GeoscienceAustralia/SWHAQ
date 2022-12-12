@@ -37,6 +37,7 @@ Craig Arthur
 import os
 import pandas as pd
 
+
 def buildingClass(df, classes, thresholds, AS1170='C'):
     """
     Assign a site classification (AS4055) based on wind loading region
@@ -61,15 +62,15 @@ def buildingClass(df, classes, thresholds, AS1170='C'):
                labels=classes)
     return df
 
+
 datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\exposure\2021"
 datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\exposure\2022"
 filename = "SEQ_Residential_Wind_Exposure_2021_TCRM_2022_VulnCurves_AS4055_M4.csv"
-#filename = "SEQ_ResidentialExposure_NEXIS_2021_M4.csv"
+# filename = "SEQ_ResidentialExposure_NEXIS_2021_M4.csv"
 df = pd.read_csv(os.path.join(datapath, filename), low_memory=False)
 
 # Set any data < 0 to default value - assume N2 classification
 df.loc[df['M4'] < 0., 'M4'] = 0.8
-#df.drop('M42', axis=1, inplace=True)
 
 # Apply a basic AS4055 class, based on the M4 value
 thresholds = [0.0, 0.8413, 1.0018, 1.2668, 1.5997, 2.]
@@ -80,10 +81,9 @@ df = buildingClass(df, classes, thresholds, 'A')
 thresholds = [0.0, 0.8109, 1.0063, 1.2209, 1.4334, 2.]
 classes = ['N2', 'N3', 'N4', 'N5', 'N6']
 
-# Only working with Region B in this case. If there's any region A buildings, we leave them alone.
+# Only working with Region B in this case. If there's any region A buildings,
+# leave them alone.
 df = buildingClass(df, classes, thresholds, 'B')
-
-
 
 # THIS ONLY COVERS A LIMITED SET OF ROOF AND WALL TYPES OBSERVED IN THE DATA
 # ALSO EXCLUDES pre-1980's CONSTRUCTION
@@ -126,18 +126,19 @@ df2.drop('idx', axis=1, inplace=True)
 df2 = df2.reset_index([1, 2]).reset_index()
 
 ### Now do the legacy buildings:
-df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) & \
-        df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) & \
-        df2.WALL_TYPE.isin(['Brick Veneer', 'Double Brick']), 'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw352'
+df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
+        df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) &
+        df2.WALL_TYPE.isin(['Brick Veneer', 'Double Brick']),
+        'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw352'
 
 df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
-       (df2.ROOF_TYPE=='Tiles'),
-       'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw351'
+        (df2.ROOF_TYPE == 'Tiles'),
+        'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw351'
 
 df2.loc[~df2.YEAR_BUILT.isin(['1997 - present', '1982 - 1996']) &
-       df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) &
-       df2.WALL_TYPE.isin(['Timber', 'Fibro / asbestos cement sheeting']),
-       'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw350'
+        df2.ROOF_TYPE.isin(['Metal Sheeting', 'Fibro / asbestos cement sheeting']) &
+        df2.WALL_TYPE.isin(['Timber', 'Fibro / asbestos cement sheeting']),
+        'WIND_VULNERABILITY_FUNCTION_ID'] = 'dw350'
 
 df2['TMPFUNC'] = df2.apply(lambda x: f"dw{x.WIND_VULNERABILITY_MODEL_NUMBER}", axis=1)
 df2.WIND_VULNERABILITY_FUNCTION_ID.fillna(df2.TMPFUNC, inplace=True)

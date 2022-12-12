@@ -1,8 +1,14 @@
 #!/bin/python3
+"""
+merge_tracks.py - merge (bias-corrected) TCLV track datasets into two groups
 
+The individual TCLV datasets are merged into two ensembles. The groups are
+hard-coded here, but could readily be updated as needed. 
+
+Author: Craig Arthur
+Date: 2022-11-30
+"""
 from os.path import join as pjoin
-import csv
-from dateutil.parser import parse
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
@@ -21,6 +27,17 @@ OUTPUT_FOLDER = Path(r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\T
 
 
 def belongs(group, emission_scenario, time, f):
+    """
+    Determine if a given file name matches the required group, emission scenario
+    and time period combination.
+
+    :param list group: List of ensemble member names
+    :param str emission_scenario: Either "RCP45" or "RCP85"
+    :param str time: A string like "2021-2040"
+    :param f: `str` or `Path` object representing the file
+
+    :returns: :class:`bool` - True if it matches, False otherwise
+    """
     try:
         g, es, t, *_ = f.stem.split('_')
     except ValueError as verr:
@@ -39,6 +56,9 @@ def belongs(group, emission_scenario, time, f):
 
 
 def find_missing():
+    """
+    Redundant function
+    """
     for f in INPUT_FOLDER.iterdir():
         found = False
 
@@ -53,6 +73,20 @@ def find_missing():
 
 
 def merge_tracks(group, emission_scenario, time):
+    """
+    Given a list of ensemble members, the emission scenario and the time period,
+    merge all the relevant files into a single file. The function loops over all
+    files in the `INPUT_FOLDER`, evaluates if it belongs to the group based on
+    the list of members, emission scenario and time period (this info is
+    contained in the file name). If it belongs in the ensemble, then it reads
+    the data, does some manipulation of the dates and finally writes the full
+    ensemble to a csv file. 
+
+    :param list group: List of ensemble member names
+    :param str emission_scenario: Either "RCP45" or "RCP85"
+    :param str time: A string like "2021-2040"
+    """
+
     output_file = '{}_{}_{}.dat'.format(group, emission_scenario, time)
     HEADER = None
 
