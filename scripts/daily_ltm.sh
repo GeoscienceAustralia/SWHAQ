@@ -10,6 +10,14 @@
 #PBS -joe
 #PBS -lstorage=gdata/w85
 
+# Create daily long term mean (DLTM) climatologies of input 6-hourly
+# RCM output files. This is used to create DLTM MSLP (or PI) files 
+# for use in TCRM. The script will create DLTM values for all variables
+# provided in the input files.
+#
+# RCM data was provided by Dep't of Environment and Science (QLD)
+# as part of the SHWA-Q project (2018-2021)
+
 module purge
 module load pbs
 module load dot

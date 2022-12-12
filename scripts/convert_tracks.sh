@@ -9,6 +9,16 @@
 #PBS -joe
 #PBS -lstorage=gdata/w85+scratch/w85
 
+# Bash script to convert track files from TCRM format to CSV format for a
+# full hazard simulation (hence the PBS job script)
+# 
+# The script iterates through a collection of output directories
+# corresponding to group, RCP and time period scenarios and calls the
+# tracks2csv.py script to convert all track files in a given input path
+# to csv format. 
+# 
+# CSV files for each group/RCP/time period are then packed into gzipped
+# tar files to be sent to other users.
 module purge
 module load pbs
 module load dot
