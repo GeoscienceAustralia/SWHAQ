@@ -17,6 +17,13 @@
 # This script takes an event id number as either a command line argument or
 # a n environment variable, which determines the required hazard file to read
 # in. It is passed directly to the python script
+#
+# The script calls two pyhton scripts: the first runs the HazImp calculations
+# for predetermined iterations of randomly applied retrofit vulnerability
+# functions. The second script does some simple aggregations using pivot tables
+#
+# Craig Arthur
+# 2022-12-19
 
 
 # Fix permissions for all files/folders created so the group can access them

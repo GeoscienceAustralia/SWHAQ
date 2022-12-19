@@ -4,7 +4,16 @@
 # building for a virtual retrofit. 
 #
 # This script takes an ARI as a command line argument, which determines the
-# required hazard file to read in. It is passed directly to the python script 
+# required hazard file to read in. It is passed directly to the python script
+#
+# This shell script is not intended to be run directly. It is called by
+# another script `run_hazimp_prob.sh`, which is designed to spawn a number of
+# shell scripts in an MPI environment. See the comments in `run_hazimp_prob.sh`
+#
+# Craig Arthur
+# 2022-12-19
+
+
 
 pid=$(grep ^Pid /proc/self/status)
 corelist=$(grep Cpus_allowed_list: /proc/self/status | awk '{print $2}')

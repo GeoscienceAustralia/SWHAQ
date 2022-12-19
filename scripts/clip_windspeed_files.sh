@@ -2,6 +2,9 @@
 # to a smaller extent. Initial steps of processing covered all of Queensland,
 # but to ensure efficient processing of subsequent steps we clip to a smaller
 # region over southeast Queensland
+#
+# Craig Arthur
+# 2022-12-19
 
 module load nco
 
