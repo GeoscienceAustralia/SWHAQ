@@ -35,6 +35,7 @@ gatts = {"repository": URL,
          "commit": commit.hexsha,
          "history": history_msg}
 
+
 def gdp_recurrence_intervals(return_levels, mu, shape, scale,
                              rate, npyr=365.25):
     """
@@ -54,12 +55,14 @@ def gdp_recurrence_intervals(return_levels, mu, shape, scale,
 
     """
 
-    ri = np.power((return_levels - mu) * (shape / scale) + 1, 1 / shape) / (npyr * rate)
+    ri = np.power((return_levels - mu) * (shape / scale) + 1,
+                  1 / shape) / (npyr * rate)
     if not np.isscalar(ri):
         ri[np.isnan(ri)] = np.inf
     elif np.isnan(ri):
         ri = np.inf
     return ri
+
 
 def interpgrid(data, windspeeds, aeps):
     """
@@ -87,6 +90,7 @@ def interpgrid(data, windspeeds, aeps):
             out[x, y, :] = f(aeps)
     return out
 
+
 if __name__ == "__main__":
 
     # load in a process synoptic and TS ARI data - provided by UQ (Matt Mason)
@@ -101,8 +105,10 @@ if __name__ == "__main__":
     ts_aep[windspeeds > df.Thunderstorm.max()] = 0.0
 
     # load TC ARI curves for stations:
-    stnlist = gpd.read_file(os.path.join(IN_DIR, "stations", "SEQ_station_list.shp"))
-    tc_df = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", "parameters.csv"))
+    stnlist = gpd.read_file(os.path.join(
+        IN_DIR, "stations", "SEQ_station_list.shp"))
+    tc_df = pd.read_csv(os.path.join(
+        IN_DIR, "tc_ari_params_", "parameters.csv"))
 
     tc_df.columns = [c.strip() for c in tc_df.columns]
     tc_df['longitude'] = stnlist.loc[tc_df.locId.values - 1].Longitude.values
@@ -112,12 +118,14 @@ if __name__ == "__main__":
     tc_df.drop_duplicates(inplace=True)
     tc_df.set_index('locName', drop=False, inplace=True)
 
-    shape, scale, rate, mu = tc_df.iloc[0][['gpd_shape', 'gpd_scale', 'gpd_rate', 'gpd_thresh']].values
+    shape, scale, rate, mu = tc_df.iloc[0][
+        ['gpd_shape', 'gpd_scale', 'gpd_rate', 'gpd_thresh']].values
 
     # spatially interpolate TC ARI curves
     params = []
     for i in range(len(tc_df)):
-        shape, scale, rate, mu = tc_df.iloc[i][['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
+        shape, scale, rate, mu = tc_df.iloc[i][
+            ['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
         params.append([shape, scale, rate, mu])
     params = np.array(params)
     # SEQ grid
@@ -195,7 +203,6 @@ if __name__ == "__main__":
         da.rio.write_crs(7844, inplace=True)
         ds = xr.Dataset(data_vars={'windspeed': da})
         ds.attrs.update(**gatts)
-        breakpoint()
         ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep",
                                   f"windspeed_{ri}_yr.nc"))
 

@@ -5,7 +5,7 @@ import rioxarray
 import xarray as xr
 from osgeo import osr, gdal, gdalconst
 import numpy as np
-from os.path import join as pjoin, dirname, realpath, isdir, splitext
+from os.path import splitext
 import logging
 import time
 from datetime import datetime
@@ -27,6 +27,7 @@ gatts = {"repository": URL,
          "commit_date": COMMITDATE,
          "commit": commit.hexsha,
          "history": history_msg}
+
 
 def reprojectDataset(src_file, match_filename, dst_filename,
                      resampling_method=gdalconst.GRA_Bilinear,

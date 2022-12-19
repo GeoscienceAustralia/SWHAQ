@@ -25,4 +25,4 @@ module load conda/analysis3
 cd /g/data/w85/QFES_SWHA/scripts
 python3 ari_interpolate.py
 python3 apply_wind_multipliers.py
-python3 visualise_aep_windspeed.py
+#python3 visualise_aep_windspeed.py
