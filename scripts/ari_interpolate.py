@@ -1,10 +1,15 @@
 import os
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
 import sys
 import geopandas as gpd
+import rioxarray
 import xarray as xr
+import time
+from datetime import datetime
+
+from git import Repo
+
 from scipy.interpolate import interp1d
 from pykrige import OrdinaryKriging
 
@@ -12,11 +17,28 @@ import hazard
 
 IN_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/input')
 OUT_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/output')
+repo = Repo(path='', search_parent_directories=True)
 
-def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25):
+commit = repo.commit()
+AUTHOR = commit.author.name
+COMMITDATE = time.strftime("%Y-%m-%d %H:%M:%S",
+                           time.gmtime(commit.committed_date))
+URL = list(repo.remotes[0].urls)[0]
+now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
+history_msg = f"{now}: {(' ').join(sys.argv)}"
+
+# Global attributes:
+gatts = {"repository": URL,
+         "author": AUTHOR,
+         "commit_date": COMMITDATE,
+         "commit": commit.hexsha,
+         "history": history_msg}
+
+def gdp_recurrence_intervals(return_levels, mu, shape, scale,
+                             rate, npyr=365.25):
     """
-    Calculate recurrence intervals for specified return levels for a distribution with
-    the given threshold, scale and shape parameters.
+    Calculate recurrence intervals for specified return levels for a
+    distribution with the given threshold, scale and shape parameters.
 
     :param intervals: :class:`numpy.ndarray` or float of return levels
               to evaluate recurrence intervals for.
@@ -59,7 +81,8 @@ def interpgrid(data, windspeeds, aeps):
 
     for x in range(nx):
         for y in range(ny):
-            f = interp1d(data[x, y, :], windspeeds, bounds_error=False, fill_value="extrapolate")
+            f = interp1d(data[x, y, :], windspeeds, bounds_error=False,
+                         fill_value="extrapolate")
             out[x, y, :] = f(aeps)
     return out
 
@@ -152,7 +175,8 @@ if __name__ == "__main__":
     comb_aep = 1.0 - (1.0 - syn_aep[None, None, :]) * (1.0 - ts_aep[None, None, :]) * (1.0 - tc_aep_grid)
 
     # convert windspeed coords + AEP values to AEP coords and windspeed values
-    # funky code to quickly linearly interpolate (a for loop + numpy interpolate was much much slower)
+    # funky code to quickly linearly interpolate (a for loop + numpy
+    # interpolate was much much slower)
     ris = np.array([
         1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100,
         150, 200, 250, 300, 350, 400, 450, 500, 1000, 2000, 2500,
@@ -163,12 +187,16 @@ if __name__ == "__main__":
     outda = interpgrid(comb_aep, windspeeds, aeps)
     for idx, (ri, aep) in enumerate(zip(ris, aeps)):
         da = xr.DataArray(
-            outda[:,:,idx],
-            coords=dict(lon=longs, lat=lats),
-            dims=["lat", "lon"]
+            outda[:, :, idx],
+            coords=dict(longitude=longs, latitude=lats),
+            dims=["latitude", "longitude"]
         )
+        da.rio.write_crs(7844, inplace=True)
         ds = xr.Dataset(data_vars={'windspeed': da})
-        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep", f"windspeed_{ri}_yr.nc"))
+        ds.attrs.update(**gatts)
+        breakpoint()
+        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep",
+                                  f"windspeed_{ri}_yr.nc"))
 
 """
     comb_aep_flat = comb_aep.reshape((-1, len(windspeeds)))
