@@ -22,11 +22,13 @@ now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
 history_msg = f"{now}: {(' ').join(sys.argv)}"
 
 # Global attributes:
-gatts = {"repository": URL,
+gatts = {"title": "Local wind hazard data",
+         "repository": URL,
          "author": AUTHOR,
          "commit_date": COMMITDATE,
          "commit": commit.hexsha,
-         "history": history_msg}
+         "history": history_msg,
+         "creation_date": now}
 
 
 def reprojectDataset(src_file, match_filename, dst_filename,
@@ -170,10 +172,12 @@ for fn in sorted(os.listdir(in_dir)):
     logging.info(f"Processing {fn}.")
     # fn = "windspeed_200_yr.nc"
     ingust = xr.load_dataset(os.path.join(in_dir, fn), decode_coords="all")
-    arr = ingust.windspeed.data
+    arr = ingust.wind_speed_of_gust.data
+    ari = ingust.wind_speed_of_gust.attrs['recurrence_interval']
+    aep = ingust.wind_speed_of_gust.attrs['exceedance_probability']
     dx = np.diff(ingust.longitude).mean()
     dy = np.diff(ingust.latitude).mean()
-    epsg = ingust.windspeed.rio.crs.to_epsg()
+    epsg = ingust.wind_speed_of_gust.rio.crs.to_epsg()
     logging.debug(f"Hazard layer has CRS with EPSG {epsg}")
     wind_raster = createRaster(arr, ingust.longitude, ingust.latitude,
                                dx, dy, epsg)
@@ -185,9 +189,31 @@ for fn in sorted(os.listdir(in_dir)):
     wind_prj = rioxarray.open_rasterio(wind_prj_file, chunks='auto').sel(band=1)
     out = wm.data * wind_prj.data.compute()
     wind_prj = wind_prj.rename({'x': 'longitude', 'y': 'latitude'})
-    da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords)
+    da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords,
+                      attrs={'standard_name': 'wind_speed_of_gust',
+                             'long_name': 'Maximum local gust wind speed',
+                             'units': 'm s-1',
+                             'missing_value': -9999.,
+                             'recurrence_interval': ari,
+                             'exceedance_probability': aep})
     da.rio.write_crs(epsg, inplace=True)
-    ds = xr.Dataset(dict(gust=da))
+    ds = xr.Dataset(dict(wind_speed_of_gust=da))
+
+    # Update attributes of the dimension variables
+    ds.longitude.attrs.update(
+        standard_name='longitude',
+        long_name="Longitude",
+        units='degrees_east',
+        axis='X'
+    )
+    ds.latitude.attrs.update(
+        standard_name='latitude',
+        long_name="Latitude",
+        units='degrees_north',
+        axis='Y'
+    )
+
+    # Update global attributes
     ds.attrs.update(**gatts)
 
     ds.to_netcdf(os.path.join(out_dir, fn))

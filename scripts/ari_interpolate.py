@@ -29,11 +29,13 @@ now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
 history_msg = f"{now}: {(' ').join(sys.argv)}"
 
 # Global attributes:
-gatts = {"repository": URL,
+gatts = {"title": "Combined regional wind hazard data",
+         "repository": URL,
          "author": AUTHOR,
          "commit_date": COMMITDATE,
          "commit": commit.hexsha,
-         "history": history_msg}
+         "history": history_msg,
+         "created_on": now}
 
 
 def gdp_recurrence_intervals(return_levels, mu, shape, scale,
@@ -198,39 +200,27 @@ if __name__ == "__main__":
         da = xr.DataArray(
             outda[:, :, idx],
             coords=dict(longitude=longs, latitude=lats),
-            dims=["latitude", "longitude"]
+            dims=["latitude", "longitude"],
+            attrs={'recurrence_interval': ri,
+                   'exceedance_probability': aep,
+                   'standard_name': 'wind_speed_of_gust',
+                   'units': 'm s-1'}
         )
         da.rio.write_crs(7844, inplace=True)
-        ds = xr.Dataset(data_vars={'windspeed': da})
+        ds = xr.Dataset(data_vars={'wind_speed_of_gust': da})
+        # Update attributes of the dimension variables
+        ds.longitude.attrs.update(
+            standard_name='longitude',
+            long_name="Longitude",
+            units='degrees_east',
+            axis='X'
+        )
+        ds.latitude.attrs.update(
+            standard_name='latitude',
+            long_name="Latitude",
+            units='degrees_north',
+            axis='Y'
+        )
         ds.attrs.update(**gatts)
         ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep",
                                   f"windspeed_{ri}_yr.nc"))
-
-"""
-    comb_aep_flat = comb_aep.reshape((-1, len(windspeeds)))
-    grid_idxs = np.arange(comb_aep_flat.shape[0])
-    aep_windspeed_grid = []
-    for ri, aep in zip(ris, aeps):
-
-        mask = comb_aep >= aep
-        idxs = np.where(np.diff(mask))[2]
-        print(ri, aep, len(idxs), idxs.min(), idxs.max())
-        w1 = comb_aep_flat[grid_idxs, idxs] - aep
-        w2 = aep - comb_aep_flat[grid_idxs, idxs + 1]
-        w = w1 + w2
-        w1 /= w
-        w2 /= w
-
-        aep_ws = w1 * windspeeds[idxs] + w2 * windspeeds[idxs + 1]
-
-
-        da = xr.DataArray(
-            aep_ws.reshape(comb_aep.shape[:-1]),
-            coords=dict(lon=longs, lat=lats),
-            dims=["lat", "lon"]
-        )
-
-        ds = xr.Dataset(data_vars={'windspeed': da})
-
-        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep", f"windspeed_{ri}_yr.nc"))
-"""
