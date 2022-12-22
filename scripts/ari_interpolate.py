@@ -1,10 +1,16 @@
 import os
+import sys
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
 import sys
 import geopandas as gpd
+import rioxarray
 import xarray as xr
+import time
+from datetime import datetime
+
+from git import Repo
+
 from scipy.interpolate import interp1d
 from pykrige import OrdinaryKriging
 
@@ -12,11 +18,31 @@ import hazard
 
 IN_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/input')
 OUT_DIR = os.path.expanduser('/g/data/w85/QFES_SWHA/hazard/output')
+repo = Repo(path='', search_parent_directories=True)
 
-def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25):
+commit = repo.commit()
+AUTHOR = commit.author.name
+COMMITDATE = time.strftime("%Y-%m-%d %H:%M:%S",
+                           time.gmtime(commit.committed_date))
+URL = list(repo.remotes[0].urls)[0]
+now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
+history_msg = f"{now}: {(' ').join(sys.argv)}"
+
+# Global attributes:
+gatts = {"title": "Combined regional wind hazard data",
+         "repository": URL,
+         "author": AUTHOR,
+         "commit_date": COMMITDATE,
+         "commit": commit.hexsha,
+         "history": history_msg,
+         "created_on": now}
+
+
+def gdp_recurrence_intervals(return_levels, mu, shape, scale,
+                             rate, npyr=365.25):
     """
-    Calculate recurrence intervals for specified return levels for a distribution with
-    the given threshold, scale and shape parameters.
+    Calculate recurrence intervals for specified return levels for a
+    distribution with the given threshold, scale and shape parameters.
 
     :param intervals: :class:`numpy.ndarray` or float of return levels
               to evaluate recurrence intervals for.
@@ -31,12 +57,14 @@ def gdp_recurrence_intervals(return_levels, mu, shape, scale, rate, npyr=365.25)
 
     """
 
-    ri = np.power((return_levels - mu) * (shape / scale) + 1, 1 / shape) / (npyr * rate)
+    ri = np.power((return_levels - mu) * (shape / scale) + 1,
+                  1 / shape) / (npyr * rate)
     if not np.isscalar(ri):
         ri[np.isnan(ri)] = np.inf
     elif np.isnan(ri):
         ri = np.inf
     return ri
+
 
 def interpgrid(data, windspeeds, aeps):
     """
@@ -59,9 +87,11 @@ def interpgrid(data, windspeeds, aeps):
 
     for x in range(nx):
         for y in range(ny):
-            f = interp1d(data[x, y, :], windspeeds, bounds_error=False, fill_value="extrapolate")
+            f = interp1d(data[x, y, :], windspeeds, bounds_error=False,
+                         fill_value="extrapolate")
             out[x, y, :] = f(aeps)
     return out
+
 
 if __name__ == "__main__":
 
@@ -77,8 +107,10 @@ if __name__ == "__main__":
     ts_aep[windspeeds > df.Thunderstorm.max()] = 0.0
 
     # load TC ARI curves for stations:
-    stnlist = gpd.read_file(os.path.join(IN_DIR, "stations", "SEQ_station_list.shp"))
-    tc_df = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", "parameters.csv"))
+    stnlist = gpd.read_file(os.path.join(
+        IN_DIR, "stations", "SEQ_station_list.shp"))
+    tc_df = pd.read_csv(os.path.join(
+        IN_DIR, "tc_ari_params_", "parameters.csv"))
 
     tc_df.columns = [c.strip() for c in tc_df.columns]
     tc_df['longitude'] = stnlist.loc[tc_df.locId.values - 1].Longitude.values
@@ -88,12 +120,14 @@ if __name__ == "__main__":
     tc_df.drop_duplicates(inplace=True)
     tc_df.set_index('locName', drop=False, inplace=True)
 
-    shape, scale, rate, mu = tc_df.iloc[0][['gpd_shape', 'gpd_scale', 'gpd_rate', 'gpd_thresh']].values
+    shape, scale, rate, mu = tc_df.iloc[0][
+        ['gpd_shape', 'gpd_scale', 'gpd_rate', 'gpd_thresh']].values
 
     # spatially interpolate TC ARI curves
     params = []
     for i in range(len(tc_df)):
-        shape, scale, rate, mu = tc_df.iloc[i][['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
+        shape, scale, rate, mu = tc_df.iloc[i][
+            ['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
         params.append([shape, scale, rate, mu])
     params = np.array(params)
     # SEQ grid
@@ -152,7 +186,8 @@ if __name__ == "__main__":
     comb_aep = 1.0 - (1.0 - syn_aep[None, None, :]) * (1.0 - ts_aep[None, None, :]) * (1.0 - tc_aep_grid)
 
     # convert windspeed coords + AEP values to AEP coords and windspeed values
-    # funky code to quickly linearly interpolate (a for loop + numpy interpolate was much much slower)
+    # funky code to quickly linearly interpolate (a for loop + numpy
+    # interpolate was much much slower)
     ris = np.array([
         1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100,
         150, 200, 250, 300, 350, 400, 450, 500, 1000, 2000, 2500,
@@ -163,38 +198,29 @@ if __name__ == "__main__":
     outda = interpgrid(comb_aep, windspeeds, aeps)
     for idx, (ri, aep) in enumerate(zip(ris, aeps)):
         da = xr.DataArray(
-            outda[:,:,idx],
-            coords=dict(lon=longs, lat=lats),
-            dims=["lat", "lon"]
+            outda[:, :, idx],
+            coords=dict(longitude=longs, latitude=lats),
+            dims=["latitude", "longitude"],
+            attrs={'recurrence_interval': ri,
+                   'exceedance_probability': aep,
+                   'standard_name': 'wind_speed_of_gust',
+                   'units': 'm s-1'}
         )
-        ds = xr.Dataset(data_vars={'windspeed': da})
-        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep", f"windspeed_{ri}_yr.nc"))
-
-"""
-    comb_aep_flat = comb_aep.reshape((-1, len(windspeeds)))
-    grid_idxs = np.arange(comb_aep_flat.shape[0])
-    aep_windspeed_grid = []
-    for ri, aep in zip(ris, aeps):
-
-        mask = comb_aep >= aep
-        idxs = np.where(np.diff(mask))[2]
-        print(ri, aep, len(idxs), idxs.min(), idxs.max())
-        w1 = comb_aep_flat[grid_idxs, idxs] - aep
-        w2 = aep - comb_aep_flat[grid_idxs, idxs + 1]
-        w = w1 + w2
-        w1 /= w
-        w2 /= w
-
-        aep_ws = w1 * windspeeds[idxs] + w2 * windspeeds[idxs + 1]
-
-
-        da = xr.DataArray(
-            aep_ws.reshape(comb_aep.shape[:-1]),
-            coords=dict(lon=longs, lat=lats),
-            dims=["lat", "lon"]
+        da.rio.write_crs(7844, inplace=True)
+        ds = xr.Dataset(data_vars={'wind_speed_of_gust': da})
+        # Update attributes of the dimension variables
+        ds.longitude.attrs.update(
+            standard_name='longitude',
+            long_name="Longitude",
+            units='degrees_east',
+            axis='X'
         )
-
-        ds = xr.Dataset(data_vars={'windspeed': da})
-
-        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep", f"windspeed_{ri}_yr.nc"))
-"""
+        ds.latitude.attrs.update(
+            standard_name='latitude',
+            long_name="Latitude",
+            units='degrees_north',
+            axis='Y'
+        )
+        ds.attrs.update(**gatts)
+        ds.to_netcdf(os.path.join(OUT_DIR, "combined_aep",
+                                  f"windspeed_{ri}_yr.nc"))

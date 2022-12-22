@@ -14,9 +14,9 @@ import pandas as pd
 datapath = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\derived\exposure\2021"
 filename = "SEQ_ResidentialExposure_NEXIS_2021_M4_updated_v2.csv"
 df = pd.read_csv(os.path.join(datapath, filename))
-df.drop(['Unnamed: 0', 'MB_CAT', 'SA3_CODE','SA3_NAME','SA4_CODE','SA4_NAME',
-         'UCL_CODE','UCL_NAME','GCC_CODE','GCC_NAME','POSTCODE',
-         'CONSTRUCTION_TYPE', 'CONTENTS_VALUE',
+df.drop(['Unnamed: 0', 'MB_CAT', 'SA3_CODE', 'SA3_NAME', 'SA4_CODE',
+         'SA4_NAME', 'UCL_CODE', 'UCL_NAME', 'GCC_CODE', 'GCC_NAME',
+         'POSTCODE', 'CONSTRUCTION_TYPE', 'CONTENTS_VALUE',
          'WIND_VULNERABILITY_MODEL_NUMBER', 'M42'], axis=1, inplace=True)
 # read in retrofit eligability data
 datapath2 = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\8. USERS\u12161\retrofit"
@@ -25,9 +25,14 @@ df2 = pd.read_csv(os.path.join(datapath2, filename2),)
 df2.set_index(["SA2_MAIN16"], inplace=True)
 
 # merge df and df2
-# Rather than an inner join, we use an outer join to merge the dataframes - this covers the situation where there are duplicate
+# Rather than an inner join, we use an outer join to merge the dataframes
+# - this covers the situation where there are duplicate
 # SA2_MAIN16 values in the eligibility data.
-df_retro = pd.merge(df, df2[[ "Targeted_Retrofit"]], left_on=["SA2_CODE"], right_index=True, how="outer", sort=False)
+df_retro = pd.merge(df, df2[["Targeted_Retrofit"]], 
+                    left_on=["SA2_CODE"],
+                    right_index=True,
+                    how="outer",
+                    sort=False)
 df_retro = df_retro.sort_values("Targeted_Retrofit").drop_duplicates()
 df_retro = df_retro[~df_retro['Targeted_Retrofit'].isna()]
 
@@ -89,7 +94,11 @@ list_retrofit = list(rc1)
 list_retrofit2 = list(rc2)
 
 for i in range(10):
-    df_retro = pd.merge(df, df2[[TRC]], left_on=["SA2_CODE"], right_index=True, how="outer", sort=False)
+    df_retro = pd.merge(df, df2[[TRC]],
+                        left_on=["SA2_CODE"],
+                        right_index=True,
+                        how="outer",
+                        sort=False)
     df_retro = df_retro.sort_values(TRC).drop_duplicates()
     df_retro = df_retro[~df_retro[TRC].isna()]
 

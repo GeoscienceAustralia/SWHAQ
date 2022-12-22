@@ -53,7 +53,7 @@ tc_df.columns = tc_df.columns.str.strip()
 for idx, row in tc_df.iterrows():
     print(row.locName)
 
-    tc_aep_df =  pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
+    tc_aep_df =  d.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
     shape, scale, rate, mu = row[['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
     tc_aep = 1.0 - np.exp(-1.0 / gdp_recurrence_intervals(windspeeds, mu, shape, scale, rate))
 
@@ -114,17 +114,22 @@ os.system(f"gdal_translate -outsize 10% 10% {hfp} {lfp}")
 # load in an plot low resolution file
 params = {'legend.fontsize': 'x-large',
           'figure.figsize': (15, 5),
-         'axes.labelsize': 'x-large',
-         'axes.titlesize':'x-large',
-         'xtick.labelsize':'x-large',
-         'ytick.labelsize':'x-large'}
+          'axes.labelsize': 'x-large',
+          'axes.titlesize': 'x-large',
+          'xtick.labelsize': 'x-large',
+          'ytick.labelsize': 'x-large'}
 plt.rcParams.update(params)
 
 ds = xr.load_dataset(lfp)
-gust = ds.gust[np.where(ds.y <= -25)[0], np.where(ds.x >= 150)[0]]
-extent = [gust.x[0], gust.x[-1], gust.y.min(), gust.y.max()]
+gust = ds.wind_speed_of_gust[
+    np.where(ds.latitude <= -25)[0],
+    np.where(ds.longitude >= 150)[0]
+    ]
+extent = [gust.longitude[0], gust.longitude[-1],
+          gust.latitude.min(), gust.latitude.max()]
 plt.figure(figsize=(25, 25))
-plt.imshow(np.flipud(gust.data * (gust.data >= 0)), extent=extent)
+plt.imshow(np.flipud(gust.data * (gust.data >= 0)),
+           extent=extent)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 

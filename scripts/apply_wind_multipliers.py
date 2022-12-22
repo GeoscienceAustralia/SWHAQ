@@ -1,12 +1,35 @@
-import xarray as xr
+
 import os
-from netCDF4 import Dataset
+import sys
+import rioxarray
+import xarray as xr
 from osgeo import osr, gdal, gdalconst
 import numpy as np
-from os.path import join as pjoin, dirname, realpath, isdir, splitext
-from osgeo.gdal_array import BandReadAsArray, CopyDatasetInfo, BandWriteArray
+from os.path import splitext
 import logging
 import time
+from datetime import datetime
+from git import Repo
+
+repo = Repo(path='', search_parent_directories=True)
+
+commit = repo.commit()
+AUTHOR = commit.author.name
+COMMITDATE = time.strftime("%Y-%m-%d %H:%M:%S",
+                           time.gmtime(commit.committed_date))
+URL = list(repo.remotes[0].urls)[0]
+now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
+history_msg = f"{now}: {(' ').join(sys.argv)}"
+
+# Global attributes:
+gatts = {"title": "Local wind hazard data",
+         "repository": URL,
+         "author": AUTHOR,
+         "commit_date": COMMITDATE,
+         "commit": commit.hexsha,
+         "history": history_msg,
+         "creation_date": now}
+
 
 def reprojectDataset(src_file, match_filename, dst_filename,
                      resampling_method=gdalconst.GRA_Bilinear,
@@ -60,7 +83,8 @@ def reprojectDataset(src_file, match_filename, dst_filename,
     dstBand.SetNoDataValue(-9999)
 
     # Do the work
-    gdal.ReprojectImage(src, dst, src_proj, match_proj, resampling_method, WarpMemoryLimit=warp_memory_limit)
+    gdal.ReprojectImage(src, dst, src_proj, match_proj, resampling_method,
+                        WarpMemoryLimit=warp_memory_limit)
 
     del dst  # Flush
     if isinstance(match_filename, str):
@@ -71,7 +95,8 @@ def reprojectDataset(src_file, match_filename, dst_filename,
     return
 
 
-def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
+def createRaster(array, x, y, dx, dy, epsg=4326,
+                 filename=None, nodata=-9999):
     """
     Create an in-memory raster for processing. By default, we assume
     the input array is in geographic coordinates, using WGS84 spatial
@@ -124,13 +149,14 @@ def createRaster(array, x, y, dx, dy, epsg = 4326, filename=None, nodata=-9999):
 in_dir = "/g/data/w85/QFES_SWHA/hazard/output/combined_aep"
 out_dir = "/g/data/w85/QFES_SWHA/hazard/output/wm_combined_aep_pp"
 
-logging.basicConfig(filename=os.path.join(out_dir, "wm_pp.log"), level=logging.INFO,
-                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s', 
-                    datefmt='%y-%m-%d %H:%M:%s')
+logging.basicConfig(filename=os.path.join(out_dir, "wm_pp.log"),
+                    level=logging.INFO,
+                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
+                    datefmt='%y-%m-%d %H:%M:%S')
 
 logging.info("Loading wind multiplier file.")
 t0 = time.time()
-wm = xr.open_rasterio("/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt", chunks='auto')
+wm = rioxarray.open_rasterio("/g/data/w85/QFES_SWHA/multipliers/output/QLD/wind-multipliers-maxima.vrt", chunks='auto')
 wm = wm.sel(band=1).compute()
 logging.info(f"Finished loading wm - took {time.time() - t0}s")
 
@@ -145,26 +171,56 @@ for fn in sorted(os.listdir(in_dir)):
     t0 = time.time()
     logging.info(f"Processing {fn}.")
     # fn = "windspeed_200_yr.nc"
-    ingust = xr.load_dataset(os.path.join(in_dir, fn))
-    arr = ingust.windspeed.data
-    dx = np.diff(ingust.lon).mean()
-    dy = np.diff(ingust.lat).mean()
-
-    wind_raster = createRaster(arr, ingust.lon, ingust.lat, dx, dy)
+    ingust = xr.load_dataset(os.path.join(in_dir, fn), decode_coords="all")
+    arr = ingust.wind_speed_of_gust.data
+    ari = ingust.wind_speed_of_gust.attrs['recurrence_interval']
+    aep = ingust.wind_speed_of_gust.attrs['exceedance_probability']
+    dx = np.diff(ingust.longitude).mean()
+    dy = np.diff(ingust.latitude).mean()
+    epsg = ingust.wind_speed_of_gust.rio.crs.to_epsg()
+    logging.debug(f"Hazard layer has CRS with EPSG {epsg}")
+    wind_raster = createRaster(arr, ingust.longitude, ingust.latitude,
+                               dx, dy, epsg)
     wind_prj_file = os.path.join(out_dir, "reproj_" + fn)
 
     gdal.SetConfigOption('GDAL_NUM_THREADS', '4')
     reprojectDataset(wind_raster, m4_max_file_obj, wind_prj_file)
 
-    wind_prj = xr.open_rasterio(wind_prj_file, chunks='auto').sel(band=1)
+    wind_prj = rioxarray.open_rasterio(wind_prj_file, chunks='auto').sel(band=1)
     out = wm.data * wind_prj.data.compute()
-    wind_prj = wind_prj.rename({'x': 'longitude', 'y':'latitude'})
-    da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords)
-    ds = xr.Dataset(dict(gust=da))
+    wind_prj = wind_prj.rename({'x': 'longitude', 'y': 'latitude'})
+    da = xr.DataArray(out, dims=wind_prj.dims, coords=wind_prj.coords,
+                      attrs={'standard_name': 'wind_speed_of_gust',
+                             'long_name': 'Maximum local gust wind speed',
+                             'units': 'm s-1',
+                             'missing_value': -9999.,
+                             'recurrence_interval': ari,
+                             'exceedance_probability': aep})
+    da.rio.write_crs(epsg, inplace=True)
+    ds = xr.Dataset(dict(wind_speed_of_gust=da))
+
+    # Update attributes of the dimension variables
+    ds.longitude.attrs.update(
+        standard_name='longitude',
+        long_name="Longitude",
+        units='degrees_east',
+        axis='X'
+    )
+    ds.latitude.attrs.update(
+        standard_name='latitude',
+        long_name="Latitude",
+        units='degrees_north',
+        axis='Y'
+    )
+
+    # Update global attributes
+    ds.attrs.update(**gatts)
+
     ds.to_netcdf(os.path.join(out_dir, fn))
     del ds
     del da
     del wind_prj
+    os.unlink(wind_prj_file)
 
     # break
     logging.info(f"Finished processing {fn} - took {time.time() - t0}s")
