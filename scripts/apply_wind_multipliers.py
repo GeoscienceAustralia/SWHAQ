@@ -10,6 +10,7 @@ import logging
 import time
 from datetime import datetime
 from git import Repo
+from pyproj import CRS
 
 repo = Repo(path='', search_parent_directories=True)
 
@@ -20,14 +21,24 @@ COMMITDATE = time.strftime("%Y-%m-%d %H:%M:%S",
 URL = list(repo.remotes[0].urls)[0]
 now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
 history_msg = f"{now}: {(' ').join(sys.argv)}"
+comment = ("This research was undertaken with the assistance of "
+           "resources from the National Computational Infrastructure "
+           "(NCI Australia), an NCRIS enabled capability supported by "
+           "the Australian Government. Funding for the project was "
+           "provided by the Commonwealth Government of Australia and "
+           "Queensland Government through the Queensland Resilience and "
+           "Risk Reduction Fund")
 
 # Global attributes:
 gatts = {"title": "Local wind hazard data",
+         "institution": "Geoscience Australia",
          "repository": URL,
          "author": AUTHOR,
          "commit_date": COMMITDATE,
          "commit": commit.hexsha,
          "history": history_msg,
+         "comment": comment,
+         "references": "http://pid.geoscience.gov.au/dataset/ga/147446",
          "creation_date": now}
 
 
@@ -197,8 +208,9 @@ for fn in sorted(os.listdir(in_dir)):
                              'recurrence_interval': ari,
                              'exceedance_probability': aep})
     da.rio.write_crs(epsg, inplace=True)
+    crs_name = CRS.from_epsg(epsg).name
     ds = xr.Dataset(dict(wind_speed_of_gust=da))
-
+    ds.spatial_ref.attrs.update(horizontal_datum_name=crs_name)
     # Update attributes of the dimension variables
     ds.longitude.attrs.update(
         standard_name='longitude',
