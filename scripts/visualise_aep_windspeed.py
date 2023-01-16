@@ -53,7 +53,7 @@ tc_df.columns = tc_df.columns.str.strip()
 for idx, row in tc_df.iterrows():
     print(row.locName)
 
-    tc_aep_df =  d.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
+    tc_aep_df = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
     shape, scale, rate, mu = row[['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
     tc_aep = 1.0 - np.exp(-1.0 / gdp_recurrence_intervals(windspeeds, mu, shape, scale, rate))
 
