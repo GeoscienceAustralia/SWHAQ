@@ -53,13 +53,17 @@ tc_df.columns = tc_df.columns.str.strip()
 for idx, row in tc_df.iterrows():
     print(row.locName)
 
-    tc_aep_df = pd.read_csv(os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
-    shape, scale, rate, mu = row[['it_shape', 'it_scale', 'it_rate', 'it_thresh']].values
-    tc_aep = 1.0 - np.exp(-1.0 / gdp_recurrence_intervals(windspeeds, mu, shape, scale, rate))
+    tc_aep_df = pd.read_csv(
+        os.path.join(IN_DIR, "tc_ari_params_", f"{row.locId}.csv"))
+    shape, scale, rate, mu = row[['it_shape',
+                                  'it_scale',
+                                  'it_rate', 'it_thresh']].values
+    tc_aep = 1.0 - np.exp(-1.0 / gdp_recurrence_intervals(windspeeds, mu,
+                                                          shape, scale, rate))
 
     tc_aep[windspeeds <= hazard.GPD.gpdReturnLevel(1, mu, shape, scale, rate)] = 0.0
     finterp = interp1d(tc_aep_df.wspd.values, tc_aep_df.AEP.values,
-                    bounds_error=False, fill_value=tc_aep_df.AEP.min())
+                       bounds_error=False, fill_value=tc_aep_df.AEP.min())
     tc_aep_pp = finterp(windspeeds)
     comb_aep_ = 1.0 - (1.0 - syn_aep) * (1.0 - ts_aep) * (1.0 - tc_aep)
     comb_aep_pp = 1.0 - (1.0 - syn_aep) * (1.0 - ts_aep) * (1.0 - tc_aep_pp)
@@ -68,21 +72,23 @@ for idx, row in tc_df.iterrows():
 
     if units == "km/h":
         x = windspeeds * 3.6
-    else: # Assume m/s
+    else:  # Assume m/s
         x = windspeeds
     plt.semilogy(x, syn_aep, label="Synoptic", path_effects=[pe])
     plt.semilogy(x, ts_aep, label="Thunderstorm", path_effects=[pe])
-    #plt.semilogy(x, tc_aep, label="Tropical Cyclone", path_effects=[pe])
+    # plt.semilogy(x, tc_aep, label="Tropical Cyclone", path_effects=[pe])
     plt.semilogy(x, tc_aep_pp, label="TC", path_effects=[pe], linestyle=":")
 
-    #plt.semilogy(x, comb_aep_, label="Combined", path_effects=[pe], linestyle='-.')
-    plt.semilogy(x, comb_aep_pp, label="Combined", path_effects=[pe], linestyle='-.')
+    # plt.semilogy(x, comb_aep_, label="Combined", path_effects=[pe],
+    #              linestyle='-.')
+    plt.semilogy(x, comb_aep_pp, label="Combined", path_effects=[pe],
+                 linestyle='-.')
     if row.locName.lstrip() in obsdict:
         obsppaep = pd.read_csv(
            os.path.join(OBSDIR, f"{obsdict[row.locName.lstrip()]}.ep.csv"),
-           names = ['gust', 'ppaep'], index_col=False)
+           names=['gust', 'ppaep'], index_col=False)
         plt.scatter(obsppaep['gust']*3.6, obsppaep['ppaep'], marker="^", s=30,
-        c='k', zorder=100, label="Observations")
+                    c='k', zorder=100, label="Observations")
     plt.xlabel(f"0.2-sec gust wind speed [{units}]")
     plt.ylabel("Annual exceedance probability")
     plt.ylim((10e-5, 1))
@@ -93,12 +99,16 @@ for idx, row in tc_df.iterrows():
     plt.grid(which='minor', linestyle='--', linewidth=1)
     plt.legend()
     fig.tight_layout()
-    plt.savefig(os.path.join(datadir, f"windspeed_aep_{row.locName.strip()}.obs.png"))
+    plt.savefig(os.path.join(datadir,
+                             f"windspeed_aep_{row.locName.strip()}.obs.png"))
     plt.close(fig)
 
-    outdf = pd.DataFrame(np.array([windspeeds, syn_aep, ts_aep, tc_aep_pp, comb_aep_pp]).T,
-                        columns=["windspeed", 'syn_aep', 'ts_aep', 'tc_aep', 'comb_aep'])
-    outdf.to_csv(os.path.join(datadir, f"windspeed_aep_{row.locName.strip()}.csv"), index=False)
+    outdf = pd.DataFrame(
+        np.array([windspeeds, syn_aep, ts_aep, tc_aep_pp, comb_aep_pp]).T,
+                 columns=["windspeed", 'syn_aep', 'ts_aep',
+                          'tc_aep', 'comb_aep'])
+    outdf.to_csv(os.path.join(
+        datadir, f"windspeed_aep_{row.locName.strip()}.csv"), index=False)
 
 #
 # plot 100 year ARI windspeed
@@ -135,4 +145,3 @@ plt.ylabel("Latitude")
 
 plt.colorbar()
 plt.savefig(os.path.join(datadir, f"windspeed_{ari}_yr_low_res.png"))
-
