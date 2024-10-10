@@ -20,13 +20,13 @@ sns.set_context('talk')
 
 LOSSFIELD = "structural_mean"
 LOSSFIELD2 = "structural_loss_sum"
-BASEPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\risk_pp_retro5_eligible"
+BASEPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\risk_pp_baseline"
 OUTPATH = r"X:\georisk\HaRIA_B_Wind\projects\qfes_swha\data\DRAFT DATA STRUCTURES\1. Work Unit Assessment\SOUTH EAST QUEENSLAND\Risk\AAL"
-TYPE = "pp_retro5_eligible"
+TYPE = "pp_baseline_li"
 ARIS = os.listdir(BASEPATH)
 ARIS = list(map(int, ARIS))
 ARIS = sorted(ARIS)
-ARIS = [1] + ARIS
+#ARIS = [1] + ARIS
 __eps__ = 1.0e-6
 lossdf = pd.DataFrame(columns=["SA1_CODE", *ARIS])
 lossdf2 = pd.DataFrame(columns=["SA1_CODE", *ARIS])
@@ -38,7 +38,8 @@ df.drop_duplicates(subset=['SA1_CODE'], inplace=True)
 df.set_index('SA1_CODE', inplace=True)
 
 LGAs_6 = ['Noosa (S)', 'Sunshine Coast (R)', 'Moreton Bay (R)',
-          'Brisbane (C)', 'Gold Coast (C)', 'Redland (C)']
+          'Brisbane (C)', 'Gold Coast (C)', 'Redland (C)', 'Logan (C)',
+          'Ipswich (C)']
 LGAs = df[df['LGA_NAME'].isin(LGAs_6)]
 LGAs = LGAs.drop_duplicates(subset=['LGA_NAME'])
 LGAs = LGAs.reset_index()
