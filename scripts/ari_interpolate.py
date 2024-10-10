@@ -8,7 +8,7 @@ import rioxarray
 import xarray as xr
 import time
 from datetime import datetime
-
+from pyproj import CRS
 from git import Repo
 
 from scipy.interpolate import interp1d
@@ -27,14 +27,24 @@ COMMITDATE = time.strftime("%Y-%m-%d %H:%M:%S",
 URL = list(repo.remotes[0].urls)[0]
 now = datetime.now().strftime("%a %b %d %H:%M:%S %Y")
 history_msg = f"{now}: {(' ').join(sys.argv)}"
+comment = ("This research was undertaken with the assistance of "
+           "resources from the National Computational Infrastructure "
+           "(NCI Australia), an NCRIS enabled capability supported by "
+           "the Australian Government. Funding for the project was "
+           "provided by the Commonwealth Government of Australia and "
+           "Queensland Government through the Queensland Resilience and "
+           "Risk Reduction Fund")
 
 # Global attributes:
 gatts = {"title": "Combined regional wind hazard data",
+         "institution": "Geoscience Australia",
          "repository": URL,
          "author": AUTHOR,
          "commit_date": COMMITDATE,
          "commit": commit.hexsha,
          "history": history_msg,
+         "comment": comment,
+         "references": "http://pid.geoscience.gov.au/dataset/ga/147446",
          "created_on": now}
 
 
@@ -207,8 +217,10 @@ if __name__ == "__main__":
                    'units': 'm s-1'}
         )
         da.rio.write_crs(7844, inplace=True)
+        crs_name = CRS.from_epsg(7844).name
         ds = xr.Dataset(data_vars={'wind_speed_of_gust': da})
         # Update attributes of the dimension variables
+        ds.spatial_ref.attrs.update(horizontal_datum_name=crs_name)
         ds.longitude.attrs.update(
             standard_name='longitude',
             long_name="Longitude",
